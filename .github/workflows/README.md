@@ -4,14 +4,24 @@ This directory contains GitHub Actions workflows for automated building and rele
 
 ## Workflows
 
-### 🚀 release.yml - Build and Release
+### 🚀 ci-cd.yml - Continuous Integration and Deployment
 
 **Triggers:**
-- Push to `main` branch
+- Pull requests to `main` branch
+- Pushes to any branch
 - Push of version tags (e.g., `v1.0.0`)
 - Manual workflow dispatch
 
 **What it does:**
+
+#### Build Job (runs on all triggers)
+1. Builds the project in Debug configuration
+2. Builds the project in Release configuration with NativeAOT
+3. Verifies the executable was created successfully
+4. Shows the executable size
+5. Uploads the build artifact for 7 days
+
+#### Release Job (only runs on pushes to `main`)
 1. Builds the NativeAOT executable for Windows x64
 2. Extracts version number from `CHANGELOG.md`
 3. Creates a release package with:
@@ -30,23 +40,12 @@ This directory contains GitHub Actions workflows for automated building and rele
 - The first version in `CHANGELOG.md` must follow the format: `## [X.Y.Z] - YYYY-MM-DD`
 - Repository must have `contents: write` permissions (already configured)
 
-### ✅ build.yml - Build and Test
-
-**Triggers:**
-- Pull requests to `main` branch
-- Pushes to any branch except `main`
-
-**What it does:**
-1. Builds the project in Debug configuration
-2. Builds the project in Release configuration with NativeAOT
-3. Verifies the executable was created successfully
-4. Shows the executable size
-5. Uploads the build artifact for 7 days
-
-**Purpose:**
-- Ensures code builds successfully before merging
-- Validates NativeAOT compilation works
-- Provides build artifacts for testing
+**Benefits of consolidation:**
+- Single workflow file to maintain
+- Build always runs before release (ensures quality)
+- Automatic release creation on every push to `main`
+- PR and feature branch testing still works
+- No duplicate build steps
 
 ## Usage
 
