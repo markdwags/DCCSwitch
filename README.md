@@ -1,4 +1,4 @@
-﻿# DDCSwitch
+﻿﻿# DDCSwitch
 
 A Windows command-line utility to control monitor input sources via DDC/CI (Display Data Channel Command Interface). Switch between HDMI, DisplayPort, DVI, and VGA inputs without touching physical buttons.
 
@@ -9,7 +9,8 @@ A Windows command-line utility to control monitor input sources via DDC/CI (Disp
 - 🖥️ **List all DDC/CI capable monitors** with their current input sources
 - 🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
 - 🎯 **Simple CLI interface** perfect for scripts, shortcuts, and hotkeys
-- ⚡ **Fast and lightweight** - single executable, no dependencies
+- ⚡ **Fast and lightweight** - NativeAOT compiled for instant startup
+- 📦 **True native executable** - No .NET runtime dependency required
 - 🪟 **Windows-only** - uses native Windows DDC/CI APIs (use ddcutil on Linux)
 
 ## Installation
@@ -23,6 +24,9 @@ Download the latest release from the [Releases](../../releases) page and extract
 Requirements:
 - .NET 10.0 SDK or later
 - Windows (x64)
+- **For NativeAOT**: Visual Studio 2022 with "Desktop development with C++" workload (or equivalent C++ build tools)
+
+#### Standard Build
 
 ```powershell
 git clone https://github.com/yourusername/DDCSwitch.git
@@ -31,6 +35,36 @@ dotnet publish -c Release
 ```
 
 The compiled executable will be in `DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.exe`.
+
+#### NativeAOT Build (Recommended)
+
+This project is configured for **NativeAOT compilation**, which produces a native executable with:
+- ⚡ **Faster startup time** - No JIT compilation required
+- 💾 **Lower memory usage** - Smaller runtime footprint
+- 📦 **Smaller deployment** - Fully self-contained native binary
+- 🚀 **No .NET runtime dependency** - True native executable
+
+**Prerequisites for NativeAOT:**
+- Visual Studio 2022 with "Desktop development with C++" workload
+- Or install [C++ Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022) standalone
+
+**Build command:**
+
+```powershell
+git clone https://github.com/yourusername/DDCSwitch.git
+cd DDCSwitch
+dotnet publish -c Release
+```
+
+The project is pre-configured with `<PublishAot>true</PublishAot>`, so the standard publish command will automatically use NativeAOT compilation.
+
+The native executable will be in `DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.exe`.
+
+**Build output:**
+- **Standard build**: ~8-12 MB (with .NET runtime)
+- **NativeAOT build**: ~3-5 MB (native, trimmed, optimized)
+
+> **Note:** The first NativeAOT build may take longer (2-5 minutes) as it performs ahead-of-time compilation and optimization. Subsequent builds are faster.
 
 ## Usage
 
@@ -301,6 +335,17 @@ DDCSwitch uses the Windows DXVA2 API to communicate with monitors via DDC/CI pro
 1. Enumerates physical monitors using `EnumDisplayMonitors`
 2. Gets physical monitor handles via `GetPhysicalMonitorsFromHMONITOR`
 3. Reads/writes VCP (Virtual Control Panel) feature 0x60 (Input Source) using `GetVCPFeatureAndVCPFeatureReply` and `SetVCPFeature`
+
+### NativeAOT Compatibility
+
+This project is fully compatible with .NET NativeAOT compilation:
+
+- **JSON Serialization**: Uses source generators (`JsonSerializerContext`) instead of reflection
+- **P/Invoke**: All native Windows API calls use `DllImport` (fully supported in NativeAOT)
+- **No Dynamic Code**: Zero reflection or dynamic code generation
+- **Trimming-Safe**: All code is statically analyzable and trim-friendly
+
+The codebase follows NativeAOT best practices, ensuring reliable ahead-of-time compilation without runtime surprises.
 
 ### VCP Codes
 

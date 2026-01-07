@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace DDCSwitch;
 
@@ -85,3 +86,4 @@ internal static class NativeMethods
 
     public const uint MONITORINFOF_PRIMARY = 0x00000001;
 }
+
