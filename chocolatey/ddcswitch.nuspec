@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>ddcswitch</id>
+    <version>__VERSION__</version>
+    <packageSourceUrl>https://github.com/markdwags/DDCSwitch</packageSourceUrl>
+    <owners>markdwags</owners>
+    <title>DDCSwitch</title>
+    <authors>markdwags</authors>
+    <projectUrl>https://github.com/markdwags/DDCSwitch</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/markdwags/DDCSwitch@main/icon.png</iconUrl>
+    <licenseUrl>https://github.com/markdwags/DDCSwitch/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/markdwags/DDCSwitch</projectSourceUrl>
+    <docsUrl>https://github.com/markdwags/DDCSwitch#readme</docsUrl>
+    <bugTrackerUrl>https://github.com/markdwags/DDCSwitch/issues</bugTrackerUrl>
+    <tags>ddcswitch ddc-ci monitor display cli input-switching brightness contrast vcp-features admin</tags>
+    <summary>Control monitor settings via DDC/CI from the command line</summary>
+    <description><![CDATA[
+# ddcswitch
+
+A Windows command-line utility to control monitor settings via DDC/CI (Display Data Channel Command Interface). Control input sources, brightness, contrast, and other VCP features without touching physical buttons.
+
+## Features
+
+- 🖥️ **List all DDC/CI capable monitors** with their current input sources
+- 🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
+- 🔆 **Control brightness and contrast** with percentage values (0-100%)
+- 🎛️ **Comprehensive VCP feature support** - Access all MCCS standardized monitor controls
+- 🏷️ **Feature categories and discovery** - Browse VCP features by category (Image, Color, Geometry, Audio, etc.)
+- 🔍 **VCP scanning** to discover all supported monitor features
+- 🎯 **Simple CLI interface** perfect for scripts, shortcuts, and hotkeys
+- 📊 **JSON output support** - Machine-readable output for automation and integration
+- ⚡ **Fast and lightweight** - NativeAOT compiled for instant startup
+- 📦 **True native executable** - No .NET runtime dependency required
+
+## Notes
+
+- Requires Windows (uses native Windows DDC/CI APIs)
+- Some monitors may not support all DDC/CI features
+- Administrator privileges may be required for some operations
+]]></description>
+    <releaseNotes>https://github.com/markdwags/DDCSwitch/blob/main/CHANGELOG.md</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

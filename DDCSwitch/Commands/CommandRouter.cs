@@ -68,7 +68,7 @@ internal static class CommandRouter
         else
         {
             ConsoleOutputFormatter.WriteError($"Unknown command: {command}");
-            ConsoleOutputFormatter.WriteInfo("Run DDCSwitch help for usage information.");
+            ConsoleOutputFormatter.WriteInfo("Run ddcswitch help for usage information.");
         }
 
         return 1;
