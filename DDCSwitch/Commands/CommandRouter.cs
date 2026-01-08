@@ -20,9 +20,7 @@ internal static class CommandRouter
         bool verboseOutput = filteredArgs.Contains("--verbose", StringComparer.OrdinalIgnoreCase);
         filteredArgs = filteredArgs.Where(a => !a.Equals("--verbose", StringComparison.OrdinalIgnoreCase)).ToArray();
 
-        // Check for --scan flag
-        bool scanOutput = filteredArgs.Contains("--all", StringComparer.OrdinalIgnoreCase);
-        filteredArgs = filteredArgs.Where(a => !a.Equals("--alll", StringComparison.OrdinalIgnoreCase)).ToArray();
+
 
         if (filteredArgs.Length == 0)
         {
@@ -36,7 +34,7 @@ internal static class CommandRouter
         {
             return command switch
             {
-                "list" or "ls" => ListCommand.Execute(jsonOutput, verboseOutput, scanOutput),
+                "list" or "ls" => ListCommand.Execute(jsonOutput, verboseOutput),
                 "get" => GetCommand.Execute(filteredArgs, jsonOutput),
                 "set" => SetCommand.Execute(filteredArgs, jsonOutput),
                 "version" or "-v" or "--version" => HelpCommand.ShowVersion(jsonOutput),

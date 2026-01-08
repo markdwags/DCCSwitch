@@ -18,9 +18,32 @@ internal static class GetCommand
             {
                 ConsoleOutputFormatter.WriteError("Monitor identifier required.");
                 AnsiConsole.WriteLine("Usage: DDCSwitch get <monitor> [feature]");
+                AnsiConsole.WriteLine("       DDCSwitch get all");
             }
 
             return 1;
+        }
+
+        // Check if the monitor identifier is "all"
+        if (args[1].Equals("all", StringComparison.OrdinalIgnoreCase))
+        {
+            // "get all" should only scan all monitors, no specific feature
+            if (args.Length > 2)
+            {
+                if (jsonOutput)
+                {
+                    var error = new ErrorResponse(false, "Feature specification not supported with 'get all'");
+                    Console.WriteLine(JsonSerializer.Serialize(error, JsonContext.Default.ErrorResponse));
+                }
+                else
+                {
+                    ConsoleOutputFormatter.WriteError("Feature specification not supported with 'get all'.");
+                    AnsiConsole.WriteLine("Usage: DDCSwitch get all");
+                }
+                return 1;
+            }
+
+            return GetAllMonitors(jsonOutput);
         }
 
         // If no feature is specified, perform VCP scan
@@ -59,6 +82,44 @@ internal static class GetCommand
         }
 
         return result;
+    }
+
+    private static int GetAllMonitors(bool jsonOutput)
+    {
+        List<Monitor> monitors;
+
+        if (!jsonOutput)
+        {
+            monitors = null!;
+            AnsiConsole.Status()
+                .Start("Enumerating monitors...", ctx =>
+                {
+                    ctx.Spinner(Spinner.Known.Dots);
+                    ctx.SpinnerStyle(Style.Parse("cyan"));
+                    monitors = MonitorController.EnumerateMonitors();
+                });
+        }
+        else
+        {
+            monitors = MonitorController.EnumerateMonitors();
+        }
+
+        if (monitors.Count == 0)
+        {
+            if (jsonOutput)
+            {
+                var error = new ErrorResponse(false, "No DDC/CI capable monitors found");
+                Console.WriteLine(JsonSerializer.Serialize(error, JsonContext.Default.ErrorResponse));
+            }
+            else
+            {
+                ConsoleOutputFormatter.WriteError("No DDC/CI capable monitors found.");
+            }
+
+            return 1;
+        }
+
+        return VcpScanCommand.ScanAllMonitors(monitors, jsonOutput);
     }
 
     private static int HandleInvalidFeature(string featureInput, bool jsonOutput)

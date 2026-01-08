@@ -167,12 +167,12 @@ DDCSwitch set 0 0x10 120
 Discover all supported VCP features on all monitors:
 
 ```powershell
-DDCSwitch list --all
+DDCSwitch get all
 ```
 
 This scans all VCP codes (0x00-0xFF) for every monitor and displays supported features with their current values, maximum values, and access types (read-only, write-only, read-write).
 
-To scan a specific monitor, use the `get` command:
+To scan a specific monitor:
 
 ```powershell
 # Scan specific monitor by index

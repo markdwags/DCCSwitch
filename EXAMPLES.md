@@ -364,7 +364,7 @@ Write-Host "Work profile activated!" -ForegroundColor Green
 
 ```powershell
 # Scan all VCP features for all monitors
-DDCSwitch list --all
+DDCSwitch get all
 
 # Scan all VCP features for a specific monitor
 DDCSwitch get 0
@@ -1545,7 +1545,7 @@ DDCSwitch get 0
 DDCSwitch get "VG270U"
 
 # List all monitors with all VCP values
-DDCSwitch list --all
+DDCSwitch get all
 
 # Try setting to current input (should succeed instantly)
 DDCSwitch list  # Note the current input

@@ -5,7 +5,7 @@ namespace DDCSwitch.Commands;
 
 internal static class ListCommand
 {
-    public static int Execute(bool jsonOutput, bool verboseOutput, bool scanOutput)
+    public static int Execute(bool jsonOutput, bool verboseOutput)
     {
         List<Monitor> monitors;
 
@@ -13,7 +13,7 @@ internal static class ListCommand
         {
             monitors = null!;
             AnsiConsole.Status()
-                .Start(scanOutput ? "Scanning VCP features..." : "Enumerating monitors...", ctx =>
+                .Start("Enumerating monitors...", ctx =>
                 {
                     ctx.Spinner(Spinner.Known.Dots);
                     ctx.SpinnerStyle(Style.Parse("cyan"));
@@ -38,12 +38,6 @@ internal static class ListCommand
             }
 
             return 1;
-        }
-
-        // If scan mode is enabled, perform VCP scanning for each monitor
-        if (scanOutput)
-        {
-            return VcpScanCommand.ScanAllMonitors(monitors, jsonOutput);
         }
 
         if (jsonOutput)
