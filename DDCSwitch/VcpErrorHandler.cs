@@ -156,7 +156,7 @@ public static class VcpErrorHandler
         else
         {
             suggestions.Add($"VCP code 0x{feature.Code:X2} may not be supported by this monitor");
-            suggestions.Add("Use 'DDCSwitch list --scan' to see all supported VCP codes");
+            suggestions.Add("Use 'ddcswitch get <monitor>' to see all supported VCP codes");
         }
         
         suggestions.Add("Check that the monitor is properly connected and powered on");
@@ -184,7 +184,7 @@ public static class VcpErrorHandler
         else
         {
             suggestions.Add($"VCP code 0x{feature.Code:X2} may not support write operations on this monitor");
-            suggestions.Add("Use 'DDCSwitch list --scan' to check if this VCP code supports write operations");
+            suggestions.Add("Use 'ddcswitch get <monitor>' to see all supported VCP codes");
         }
         
         suggestions.Add("Try running as administrator if permission issues persist");
@@ -202,7 +202,7 @@ public static class VcpErrorHandler
             0x10 => "Try using your monitor's physical buttons or on-screen display (OSD) to adjust brightness",
             0x12 => "Try using your monitor's physical buttons or on-screen display (OSD) to adjust contrast", 
             0x60 => "Try using your monitor's physical input selection button or check if the monitor supports other input switching methods",
-            _ => "Use 'DDCSwitch list --scan' to see all supported VCP codes for this monitor"
+            _ => "Use 'ddcswitch get <monitor>' to see all supported VCP codes"
         };
     }
 
@@ -253,7 +253,7 @@ public static class VcpErrorHandler
         return feature.Code switch
         {
             0x60 => "For input sources, use names like 'HDMI1', 'DP1', or hex codes like '0x11'",
-            _ => $"Use 'DDCSwitch get {feature.Name}' to see the current value and valid range"
+            _ => $"Use 'ddcswitch get {feature.Name}' to see the current value and valid range"
         };
     }
 }

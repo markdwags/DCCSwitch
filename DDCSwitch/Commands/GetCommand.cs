@@ -17,8 +17,8 @@ internal static class GetCommand
             else
             {
                 ConsoleOutputFormatter.WriteError("Monitor identifier required.");
-                AnsiConsole.WriteLine("Usage: DDCSwitch get <monitor> [feature]");
-                AnsiConsole.WriteLine("       DDCSwitch get all");
+                AnsiConsole.WriteLine("Usage: ddcswitch get <monitor> [feature]");
+                AnsiConsole.WriteLine("       ddcswitch get all");
             }
 
             return 1;
@@ -38,7 +38,7 @@ internal static class GetCommand
                 else
                 {
                     ConsoleOutputFormatter.WriteError("Feature specification not supported with 'get all'.");
-                    AnsiConsole.WriteLine("Usage: DDCSwitch get all");
+                    AnsiConsole.WriteLine("Usage: ddcswitch get all");
                 }
                 return 1;
             }
@@ -177,7 +177,7 @@ internal static class GetCommand
         else
         {
             ConsoleOutputFormatter.WriteError($"Monitor '{monitorId}' not found.");
-            AnsiConsole.MarkupLine("Use [yellow]DDCSwitch list[/] to see available monitors.");
+            AnsiConsole.MarkupLine("Use [yellow]ddcswitch list[/] to see available monitors.");
         }
 
         // Cleanup

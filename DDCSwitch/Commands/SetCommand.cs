@@ -18,7 +18,7 @@ internal static class SetCommand
             else
             {
                 ConsoleOutputFormatter.WriteError("Monitor, feature, and value required.");
-                AnsiConsole.MarkupLine("Usage: [yellow]DDCSwitch set <monitor> <feature> <value>[/]");
+                AnsiConsole.MarkupLine("Usage: [yellow]ddcswitch set <monitor> <feature> <value>[/]");
             }
 
             return 1;
@@ -183,7 +183,7 @@ internal static class SetCommand
         else
         {
             ConsoleOutputFormatter.WriteError($"Monitor '{monitorId}' not found.");
-            AnsiConsole.MarkupLine("Use [yellow]DDCSwitch list[/] to see available monitors.");
+            AnsiConsole.MarkupLine("Use [yellow]ddcswitch list[/] to see available monitors.");
         }
 
         // Cleanup

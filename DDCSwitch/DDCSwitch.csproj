@@ -11,6 +11,7 @@
         <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
         <StripSymbols>true</StripSymbols>
+        <AssemblyName>ddcswitch</AssemblyName>
     </PropertyGroup>
 
     <!-- Extract version from CHANGELOG.md -->
@@ -33,7 +34,7 @@
             <FileVersion>$(Version)</FileVersion>
             <InformationalVersion>$(Version)</InformationalVersion>
         </PropertyGroup>
-        <Message Text="Building DDCSwitch version: $(Version)" Importance="high" />
+        <Message Text="Building ddcswitch version: $(Version)" Importance="high" />
     </Target>
 
     <ItemGroup>

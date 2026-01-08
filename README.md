@@ -1,4 +1,4 @@
-﻿# DDCSwitch
+﻿# ddcswitch
 
 [![GitHub Release](https://img.shields.io/github/v/release/markdwags/DDCSwitch)](https://github.com/markdwags/DDCSwitch/releases)
 [![License](https://img.shields.io/github/license/markdwags/DDCSwitch)](https://github.com/markdwags/DDCSwitch/blob/main/LICENSE)
@@ -28,7 +28,7 @@ A Windows command-line utility to control monitor settings via DDC/CI (Display D
 
 ### Pre-built Binary
 
-Download the latest release from the [Releases](../../releases) page and extract `DDCSwitch.exe` to a folder in your PATH.
+Download the latest release from the [Releases](../../releases) page and extract `ddcswitch.exe` to a folder in your PATH.
 
 ### Build from Source
 
@@ -47,7 +47,7 @@ dotnet publish -c Release
 
 The project is pre-configured with NativeAOT (`<PublishAot>true</PublishAot>`), which produces a ~3-5 MB native executable with instant startup and no .NET runtime dependency.
 
-Executable location: `DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.exe`
+Executable location: `DDCSwitch/bin/Release/net10.0/win-x64/publish/ddcswitch.exe`
 
 ## Usage
 
@@ -56,7 +56,7 @@ Executable location: `DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.ex
 Display all DDC/CI capable monitors with their current input sources:
 
 ```powershell
-DDCSwitch list
+ddcswitch list
 ```
 
 Example output:
@@ -74,7 +74,7 @@ Example output:
 Add `--verbose` to include brightness and contrast information:
 
 ```powershell
-DDCSwitch list --verbose
+ddcswitch list --verbose
 ```
 
 Example output:
@@ -94,7 +94,7 @@ Add `--json` for machine-readable output (see [EXAMPLES.md](EXAMPLES.md) for aut
 Get all VCP features for a specific monitor:
 
 ```powershell
-DDCSwitch get 0
+ddcswitch get 0
 ```
 
 This will scan and display all supported VCP features for monitor 0, showing their names, access types, current values, and maximum values.
@@ -103,25 +103,25 @@ You can also use the monitor name instead of the index (partial name matching su
 
 ```powershell
 # Get all settings by monitor name
-DDCSwitch get "VG270U P"
-DDCSwitch get "Generic PnP"
+ddcswitch get "VG270U P"
+ddcswitch get "Generic PnP"
 ```
 
 Get a specific feature:
 
 ```powershell
 # Get current input source
-DDCSwitch get 0 input
+ddcswitch get 0 input
 
 # Get brightness as percentage
-DDCSwitch get 0 brightness
+ddcswitch get 0 brightness
 
 # Get contrast as percentage  
-DDCSwitch get 0 contrast
+ddcswitch get 0 contrast
 
 # Works with monitor names too
-DDCSwitch get "VG270U P" brightness
-DDCSwitch get "Generic PnP" input
+ddcswitch get "VG270U P" brightness
+ddcswitch get "Generic PnP" input
 ```
 
 Output: `Monitor: Generic PnP Monitor` / `Brightness: 75% (120/160)`
@@ -132,20 +132,20 @@ Switch a monitor to a different input:
 
 ```powershell
 # By monitor index
-DDCSwitch set 0 HDMI1
+ddcswitch set 0 HDMI1
 
 # By monitor name (partial match)
-DDCSwitch set "LG ULTRAGEAR" HDMI2
+ddcswitch set "LG ULTRAGEAR" HDMI2
 ```
 
 Set brightness or contrast with percentage values:
 
 ```powershell
 # Set brightness to 75%
-DDCSwitch set 0 brightness 75%
+ddcswitch set 0 brightness 75%
 
 # Set contrast to 80%
-DDCSwitch set 0 contrast 80%
+ddcswitch set 0 contrast 80%
 ```
 
 Output: `✓ Successfully set brightness to 75% (120/160)`
@@ -156,10 +156,10 @@ For advanced users, access any VCP feature by code:
 
 ```powershell
 # Get raw VCP value (e.g., VCP code 0x10 for brightness)
-DDCSwitch get 0 0x10
+ddcswitch get 0 0x10
 
 # Set raw VCP value
-DDCSwitch set 0 0x10 120
+ddcswitch set 0 0x10 120
 ```
 
 ### VCP Feature Scanning
@@ -167,7 +167,7 @@ DDCSwitch set 0 0x10 120
 Discover all supported VCP features on all monitors:
 
 ```powershell
-DDCSwitch get all
+ddcswitch get all
 ```
 
 This scans all VCP codes (0x00-0xFF) for every monitor and displays supported features with their current values, maximum values, and access types (read-only, write-only, read-write).
@@ -176,10 +176,10 @@ To scan a specific monitor:
 
 ```powershell
 # Scan specific monitor by index
-DDCSwitch get 0
+ddcswitch get 0
 
 # Scan specific monitor by name
-DDCSwitch get "VG270U"
+ddcswitch get "VG270U"
 ```
 
 ### VCP Feature Categories and Discovery
@@ -188,12 +188,12 @@ Discover and browse VCP features by category:
 
 ```powershell
 # List all available categories
-DDCSwitch list --categories
+ddcswitch list --categories
 
 # List features in a specific category
-DDCSwitch list --category image
-DDCSwitch list --category color
-DDCSwitch list --category audio
+ddcswitch list --category image
+ddcswitch list --category color
+ddcswitch list --category audio
 ```
 
 Example output:
@@ -248,49 +248,49 @@ Color Control Features:
 
 **Switch multiple monitors:**
 ```powershell
-DDCSwitch set 0 HDMI1
-DDCSwitch set 1 DP1
+ddcswitch set 0 HDMI1
+ddcswitch set 1 DP1
 ```
 
 **Control comprehensive VCP features:**
 ```powershell
-DDCSwitch set 0 brightness 75%
-DDCSwitch set 0 contrast 80%
-DDCSwitch get 0 brightness
+ddcswitch set 0 brightness 75%
+ddcswitch set 0 contrast 80%
+ddcswitch get 0 brightness
 
 # Color controls
-DDCSwitch set 0 red-gain 90%
-DDCSwitch set 0 green-gain 85%
-DDCSwitch set 0 blue-gain 95%
+ddcswitch set 0 red-gain 90%
+ddcswitch set 0 green-gain 85%
+ddcswitch set 0 blue-gain 95%
 
 # Audio controls (if supported)
-DDCSwitch set 0 volume 50%
-DDCSwitch set 0 mute 1
+ddcswitch set 0 volume 50%
+ddcswitch set 0 mute 1
 ```
 
 **VCP feature discovery:**
 ```powershell
 # List all available VCP feature categories
-DDCSwitch list --categories
+ddcswitch list --categories
 
 # List features in a specific category
-DDCSwitch list --category color
+ddcswitch list --category color
 
 # Search for features by name
-DDCSwitch get 0 bright  # Matches "brightness"
+ddcswitch get 0 bright  # Matches "brightness"
 
 # Or by monitor name
-DDCSwitch get "VG270U" bright
+ddcswitch get "VG270U" bright
 ```
 
 **Desktop shortcut:**
-Create a shortcut with target: `C:\Path\To\DDCSwitch.exe set 0 brightness 50%`
+Create a shortcut with target: `C:\Path\To\ddcswitch.exe set 0 brightness 50%`
 
 **AutoHotkey:**
 ```autohotkey
-^!h::Run, DDCSwitch.exe set 0 HDMI1        ; Ctrl+Alt+H for HDMI1
-^!d::Run, DDCSwitch.exe set 0 DP1          ; Ctrl+Alt+D for DisplayPort
-^!b::Run, DDCSwitch.exe set 0 brightness 75%  ; Ctrl+Alt+B for 75% brightness
+^!h::Run, ddcswitch.exe set 0 HDMI1        ; Ctrl+Alt+H for HDMI1
+^!d::Run, ddcswitch.exe set 0 DP1          ; Ctrl+Alt+D for DisplayPort
+^!b::Run, ddcswitch.exe set 0 brightness 75%  ; Ctrl+Alt+B for 75% brightness
 ```
 
 ### JSON Output for Automation
@@ -299,20 +299,20 @@ All commands support `--json` for machine-readable output:
 
 ```powershell
 # PowerShell: Conditional switching
-$result = DDCSwitch get 0 --json | ConvertFrom-Json
+$result = ddcswitch get 0 --json | ConvertFrom-Json
 if ($result.currentInputCode -ne "0x11") {
-    DDCSwitch set 0 HDMI1
+    ddcswitch set 0 HDMI1
 }
 ```
 
 ```python
 # Python: Switch all monitors
 import subprocess, json
-data = json.loads(subprocess.run(['DDCSwitch', 'list', '--json'], 
+data = json.loads(subprocess.run(['ddcswitch', 'list', '--json'], 
                                  capture_output=True, text=True).stdout)
 for m in data['monitors']:
     if m['status'] == 'ok':
-        subprocess.run(['DDCSwitch', 'set', str(m['index']), 'HDMI1'])
+        subprocess.run(['ddcswitch', 'set', str(m['index']), 'HDMI1'])
 ```
 
 📚 **See [EXAMPLES.md](EXAMPLES.md) for comprehensive automation examples** including Stream Deck, Task Scheduler, Python, Node.js, Rust, and more.
@@ -345,7 +345,7 @@ If you need to verify DDC/CI values or troubleshoot monitor-specific issues, try
 
 ## Technical Details
 
-DDCSwitch uses the Windows DXVA2 API to communicate with monitors via DDC/CI protocol. It reads/writes VCP (Virtual Control Panel) features following the MCCS specification.
+ddcswitch uses the Windows DXVA2 API to communicate with monitors via DDC/CI protocol. It reads/writes VCP (Virtual Control Panel) features following the MCCS specification.
 
 **Common VCP Codes:**
 - `0x10` Brightness, `0x12` Contrast, `0x60` Input Source

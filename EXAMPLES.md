@@ -1,17 +1,17 @@
-﻿# DDCSwitch Examples
+# ddcswitch Examples
 
-This document contains detailed examples and use cases for DDCSwitch, including input switching, brightness/contrast control, comprehensive VCP feature access, and automation.
+This document contains detailed examples and use cases for ddcswitch, including input switching, brightness/contrast control, comprehensive VCP feature access, and automation.
 
 ## Comprehensive VCP Feature Examples
 
-DDCSwitch now supports all MCCS (Monitor Control Command Set) standardized VCP features, organized by categories for easy discovery.
+ddcswitch now supports all MCCS (Monitor Control Command Set) standardized VCP features, organized by categories for easy discovery.
 
 ### VCP Feature Categories
 
 List all available feature categories:
 
 ```powershell
-DDCSwitch list --categories
+ddcswitch list --categories
 ```
 
 Output:
@@ -29,13 +29,13 @@ Available VCP Feature Categories:
 
 ```powershell
 # Image adjustment features
-DDCSwitch list --category image
+ddcswitch list --category image
 
 # Color control features  
-DDCSwitch list --category color
+ddcswitch list --category color
 
 # Audio features
-DDCSwitch list --category audio
+ddcswitch list --category audio
 ```
 
 ### Color Control Examples
@@ -44,26 +44,26 @@ Control RGB gains for color calibration:
 
 ```powershell
 # Set individual RGB gains (percentage values)
-DDCSwitch set 0 red-gain 95%
-DDCSwitch set 0 green-gain 90%
-DDCSwitch set 0 blue-gain 85%
+ddcswitch set 0 red-gain 95%
+ddcswitch set 0 green-gain 90%
+ddcswitch set 0 blue-gain 85%
 
 # Get current RGB values
-DDCSwitch get 0 red-gain
-DDCSwitch get 0 green-gain  
-DDCSwitch get 0 blue-gain
+ddcswitch get 0 red-gain
+ddcswitch get 0 green-gain  
+ddcswitch get 0 blue-gain
 
 # Color temperature control (if supported)
-DDCSwitch set 0 color-temp-request 6500
-DDCSwitch get 0 color-temp-request
+ddcswitch set 0 color-temp-request 6500
+ddcswitch get 0 color-temp-request
 
 # Gamma control
-DDCSwitch set 0 gamma 2.2
-DDCSwitch get 0 gamma
+ddcswitch set 0 gamma 2.2
+ddcswitch get 0 gamma
 
 # Hue and saturation
-DDCSwitch set 0 hue 50%
-DDCSwitch set 0 saturation 80%
+ddcswitch set 0 hue 50%
+ddcswitch set 0 saturation 80%
 ```
 
 ### Audio Control Examples
@@ -72,19 +72,19 @@ Control monitor speakers (if supported):
 
 ```powershell
 # Volume control (percentage)
-DDCSwitch set 0 volume 75%
-DDCSwitch get 0 volume
+ddcswitch set 0 volume 75%
+ddcswitch get 0 volume
 
 # Mute/unmute
-DDCSwitch set 0 mute 1    # Mute
-DDCSwitch set 0 mute 0    # Unmute
+ddcswitch set 0 mute 1    # Mute
+ddcswitch set 0 mute 0    # Unmute
 
 # Audio balance (if supported)
-DDCSwitch set 0 audio-balance 50%  # Centered
+ddcswitch set 0 audio-balance 50%  # Centered
 
 # Treble and bass (if supported)
-DDCSwitch set 0 audio-treble 60%
-DDCSwitch set 0 audio-bass 70%
+ddcswitch set 0 audio-treble 60%
+ddcswitch set 0 audio-bass 70%
 ```
 
 ### Advanced Image Controls
@@ -93,40 +93,40 @@ Beyond basic brightness and contrast:
 
 ```powershell
 # Sharpness control
-DDCSwitch set 0 sharpness 75%
-DDCSwitch get 0 sharpness
+ddcswitch set 0 sharpness 75%
+ddcswitch get 0 sharpness
 
 # Backlight control (LED monitors)
-DDCSwitch set 0 backlight 80%
-DDCSwitch get 0 backlight
+ddcswitch set 0 backlight 80%
+ddcswitch get 0 backlight
 
 # Image orientation (if supported)
-DDCSwitch set 0 image-orientation 0  # Normal
-DDCSwitch set 0 image-orientation 1  # 90° rotation
+ddcswitch set 0 image-orientation 0  # Normal
+ddcswitch set 0 image-orientation 1  # 90� rotation
 
 # Image mode presets (if supported)
-DDCSwitch set 0 image-mode 1  # Standard
-DDCSwitch set 0 image-mode 2  # Movie
-DDCSwitch set 0 image-mode 3  # Game
+ddcswitch set 0 image-mode 1  # Standard
+ddcswitch set 0 image-mode 2  # Movie
+ddcswitch set 0 image-mode 3  # Game
 ```
 
 ### Factory Reset and Calibration
 
 ```powershell
 # Restore all factory defaults
-DDCSwitch set 0 restore-defaults 1
+ddcswitch set 0 restore-defaults 1
 
 # Restore specific defaults
-DDCSwitch set 0 restore-brightness-contrast 1
-DDCSwitch set 0 restore-color 1
-DDCSwitch set 0 restore-geometry 1
+ddcswitch set 0 restore-brightness-contrast 1
+ddcswitch set 0 restore-color 1
+ddcswitch set 0 restore-geometry 1
 
 # Degauss (CRT monitors)
-DDCSwitch set 0 degauss 1
+ddcswitch set 0 degauss 1
 
 # Auto calibration features (if supported)
-DDCSwitch set 0 auto-color-setup 1
-DDCSwitch set 0 auto-size-center 1
+ddcswitch set 0 auto-color-setup 1
+ddcswitch set 0 auto-size-center 1
 ```
 
 ### Complete Monitor Profile Examples
@@ -138,20 +138,20 @@ Create comprehensive monitor profiles using all available features:
 Write-Host "Activating Advanced Gaming Profile..." -ForegroundColor Cyan
 
 # Input and basic settings
-DDCSwitch set 0 input HDMI1
-DDCSwitch set 0 brightness 90%
-DDCSwitch set 0 contrast 85%
+ddcswitch set 0 input HDMI1
+ddcswitch set 0 brightness 90%
+ddcswitch set 0 contrast 85%
 
 # Color optimization for gaming
-DDCSwitch set 0 red-gain 100%
-DDCSwitch set 0 green-gain 95%
-DDCSwitch set 0 blue-gain 90%
-DDCSwitch set 0 saturation 110%  # Enhanced colors
-DDCSwitch set 0 sharpness 80%    # Crisp details
+ddcswitch set 0 red-gain 100%
+ddcswitch set 0 green-gain 95%
+ddcswitch set 0 blue-gain 90%
+ddcswitch set 0 saturation 110%  # Enhanced colors
+ddcswitch set 0 sharpness 80%    # Crisp details
 
 # Audio settings
-DDCSwitch set 0 volume 60%
-DDCSwitch set 0 mute 0
+ddcswitch set 0 volume 60%
+ddcswitch set 0 mute 0
 
 Write-Host "Advanced Gaming Profile Activated!" -ForegroundColor Green
 ```
@@ -161,20 +161,20 @@ Write-Host "Advanced Gaming Profile Activated!" -ForegroundColor Green
 Write-Host "Activating Advanced Work Profile..." -ForegroundColor Cyan
 
 # Input and basic settings
-DDCSwitch set 0 input DP1
-DDCSwitch set 0 brightness 60%
-DDCSwitch set 0 contrast 75%
+ddcswitch set 0 input DP1
+ddcswitch set 0 brightness 60%
+ddcswitch set 0 contrast 75%
 
 # Color optimization for text work
-DDCSwitch set 0 red-gain 85%
-DDCSwitch set 0 green-gain 90%
-DDCSwitch set 0 blue-gain 95%
-DDCSwitch set 0 saturation 70%   # Reduced saturation for comfort
-DDCSwitch set 0 sharpness 60%    # Softer for long reading
+ddcswitch set 0 red-gain 85%
+ddcswitch set 0 green-gain 90%
+ddcswitch set 0 blue-gain 95%
+ddcswitch set 0 saturation 70%   # Reduced saturation for comfort
+ddcswitch set 0 sharpness 60%    # Softer for long reading
 
 # Audio settings
-DDCSwitch set 0 volume 40%       # Lower for office environment
-DDCSwitch set 0 mute 0
+ddcswitch set 0 volume 40%       # Lower for office environment
+ddcswitch set 0 mute 0
 
 Write-Host "Advanced Work Profile Activated!" -ForegroundColor Green
 ```
@@ -184,20 +184,20 @@ Write-Host "Advanced Work Profile Activated!" -ForegroundColor Green
 Write-Host "Activating Photo Editing Profile..." -ForegroundColor Cyan
 
 # Input and basic settings
-DDCSwitch set 0 input DP1
-DDCSwitch set 0 brightness 70%
-DDCSwitch set 0 contrast 80%
+ddcswitch set 0 input DP1
+ddcswitch set 0 brightness 70%
+ddcswitch set 0 contrast 80%
 
 # Accurate color reproduction
-DDCSwitch set 0 red-gain 90%
-DDCSwitch set 0 green-gain 90%
-DDCSwitch set 0 blue-gain 90%
-DDCSwitch set 0 saturation 100%  # Natural saturation
-DDCSwitch set 0 gamma 2.2        # Standard gamma
-DDCSwitch set 0 color-temp-request 6500  # D65 standard
+ddcswitch set 0 red-gain 90%
+ddcswitch set 0 green-gain 90%
+ddcswitch set 0 blue-gain 90%
+ddcswitch set 0 saturation 100%  # Natural saturation
+ddcswitch set 0 gamma 2.2        # Standard gamma
+ddcswitch set 0 color-temp-request 6500  # D65 standard
 
 # Disable audio to avoid distractions
-DDCSwitch set 0 mute 1
+ddcswitch set 0 mute 1
 
 Write-Host "Photo Editing Profile Activated!" -ForegroundColor Green
 ```
@@ -207,7 +207,7 @@ Write-Host "Photo Editing Profile Activated!" -ForegroundColor Green
 ### Check What Monitors Support DDC/CI
 
 ```powershell
-DDCSwitch list
+ddcswitch list
 ```
 
 This will show all your monitors and indicate which ones support DDC/CI control. Monitors with "OK" status can be controlled.
@@ -217,7 +217,7 @@ This will show all your monitors and indicate which ones support DDC/CI control.
 Get detailed information including brightness and contrast:
 
 ```powershell
-DDCSwitch list --verbose
+ddcswitch list --verbose
 ```
 
 This shows current brightness and contrast levels for each monitor (displays "N/A" for unsupported features).
@@ -226,39 +226,39 @@ This shows current brightness and contrast levels for each monitor (displays "N/
 
 ```powershell
 # Get all VCP features for primary monitor (scans all supported features)
-DDCSwitch get 0
+ddcswitch get 0
 
 # Get all features by monitor name (partial matching supported)
-DDCSwitch get "VG270U P"
-DDCSwitch get "Generic PnP"
+ddcswitch get "VG270U P"
+ddcswitch get "Generic PnP"
 
 # Get specific features by index
-DDCSwitch get 0 input      # Current input source
-DDCSwitch get 0 brightness # Current brightness
-DDCSwitch get 0 contrast   # Current contrast
+ddcswitch get 0 input      # Current input source
+ddcswitch get 0 brightness # Current brightness
+ddcswitch get 0 contrast   # Current contrast
 
 # Get specific features by monitor name
-DDCSwitch get "Generic PnP" input
-DDCSwitch get "LG" brightness
+ddcswitch get "Generic PnP" input
+ddcswitch get "LG" brightness
 
 # Get raw VCP value
-DDCSwitch get 0 0x10  # Brightness (raw)
+ddcswitch get 0 0x10  # Brightness (raw)
 ```
 
 ### Set Monitor Settings
 
 ```powershell
 # Switch input
-DDCSwitch set 0 HDMI1
+ddcswitch set 0 HDMI1
 
 # Set brightness to 75%
-DDCSwitch set 0 brightness 75%
+ddcswitch set 0 brightness 75%
 
 # Set contrast to 80%
-DDCSwitch set 0 contrast 80%
+ddcswitch set 0 contrast 80%
 
 # Set raw VCP value
-DDCSwitch set 0 0x10 120  # Brightness (raw value)
+ddcswitch set 0 0x10 120  # Brightness (raw value)
 ```
 
 ## Brightness and Contrast Control
@@ -267,12 +267,12 @@ DDCSwitch set 0 0x10 120  # Brightness (raw value)
 
 ```powershell
 # Set brightness to specific percentage
-DDCSwitch set 0 brightness 50%
-DDCSwitch set 0 brightness 75%
-DDCSwitch set 0 brightness 100%
+ddcswitch set 0 brightness 50%
+ddcswitch set 0 brightness 75%
+ddcswitch set 0 brightness 100%
 
 # Get current brightness
-DDCSwitch get 0 brightness
+ddcswitch get 0 brightness
 # Output: Monitor: Generic PnP Monitor / Brightness: 75% (120/160)
 ```
 
@@ -280,12 +280,12 @@ DDCSwitch get 0 brightness
 
 ```powershell
 # Set contrast to specific percentage
-DDCSwitch set 0 contrast 60%
-DDCSwitch set 0 contrast 85%
-DDCSwitch set 0 contrast 100%
+ddcswitch set 0 contrast 60%
+ddcswitch set 0 contrast 85%
+ddcswitch set 0 contrast 100%
 
 # Get current contrast
-DDCSwitch get 0 contrast
+ddcswitch get 0 contrast
 # Output: Monitor: Generic PnP Monitor / Contrast: 85% (136/160)
 ```
 
@@ -295,19 +295,19 @@ Create quick brightness presets:
 
 ```powershell
 # brightness-low.ps1
-DDCSwitch set 0 brightness 25%
+ddcswitch set 0 brightness 25%
 Write-Host "Brightness set to 25% (Low)" -ForegroundColor Green
 
 # brightness-medium.ps1  
-DDCSwitch set 0 brightness 50%
+ddcswitch set 0 brightness 50%
 Write-Host "Brightness set to 50% (Medium)" -ForegroundColor Green
 
 # brightness-high.ps1
-DDCSwitch set 0 brightness 75%
+ddcswitch set 0 brightness 75%
 Write-Host "Brightness set to 75% (High)" -ForegroundColor Green
 
 # brightness-max.ps1
-DDCSwitch set 0 brightness 100%
+ddcswitch set 0 brightness 100%
 Write-Host "Brightness set to 100% (Maximum)" -ForegroundColor Green
 ```
 
@@ -321,19 +321,19 @@ $hour = (Get-Date).Hour
 
 if ($hour -ge 6 -and $hour -lt 9) {
     # Morning: Medium brightness
-    DDCSwitch set 0 brightness 60%
+    ddcswitch set 0 brightness 60%
     Write-Host "Morning brightness: 60%" -ForegroundColor Yellow
 } elseif ($hour -ge 9 -and $hour -lt 18) {
     # Daytime: High brightness
-    DDCSwitch set 0 brightness 85%
+    ddcswitch set 0 brightness 85%
     Write-Host "Daytime brightness: 85%" -ForegroundColor Green
 } elseif ($hour -ge 18 -and $hour -lt 22) {
     # Evening: Medium brightness
-    DDCSwitch set 0 brightness 50%
+    ddcswitch set 0 brightness 50%
     Write-Host "Evening brightness: 50%" -ForegroundColor Orange
 } else {
     # Night: Low brightness
-    DDCSwitch set 0 brightness 25%
+    ddcswitch set 0 brightness 25%
     Write-Host "Night brightness: 25%" -ForegroundColor Blue
 }
 ```
@@ -345,16 +345,16 @@ Create different brightness/contrast profiles:
 ```powershell
 # gaming-profile.ps1
 Write-Host "Activating Gaming Profile..." -ForegroundColor Cyan
-DDCSwitch set 0 input HDMI1        # Switch to console
-DDCSwitch set 0 brightness 90%     # High brightness for gaming
-DDCSwitch set 0 contrast 85%       # High contrast for visibility
+ddcswitch set 0 input HDMI1        # Switch to console
+ddcswitch set 0 brightness 90%     # High brightness for gaming
+ddcswitch set 0 contrast 85%       # High contrast for visibility
 Write-Host "Gaming profile activated!" -ForegroundColor Green
 
 # work-profile.ps1
 Write-Host "Activating Work Profile..." -ForegroundColor Cyan
-DDCSwitch set 0 input DP1           # Switch to PC
-DDCSwitch set 0 brightness 60%     # Comfortable brightness for long work
-DDCSwitch set 0 contrast 75%       # Balanced contrast for text
+ddcswitch set 0 input DP1           # Switch to PC
+ddcswitch set 0 brightness 60%     # Comfortable brightness for long work
+ddcswitch set 0 contrast 75%       # Balanced contrast for text
 Write-Host "Work profile activated!" -ForegroundColor Green
 ```
 
@@ -364,33 +364,33 @@ Write-Host "Work profile activated!" -ForegroundColor Green
 
 ```powershell
 # Scan all VCP features for all monitors
-DDCSwitch get all
+ddcswitch get all
 
 # Scan all VCP features for a specific monitor
-DDCSwitch get 0
+ddcswitch get 0
 
 # Scan by monitor name
-DDCSwitch get "VG270U P"
+ddcswitch get "VG270U P"
 ```
 
 ### Common VCP Codes
 
 ```powershell
 # Brightness (VCP 0x10)
-DDCSwitch get 0 0x10
-DDCSwitch set 0 0x10 120
+ddcswitch get 0 0x10
+ddcswitch set 0 0x10 120
 
 # Contrast (VCP 0x12)  
-DDCSwitch get 0 0x12
-DDCSwitch set 0 0x12 140
+ddcswitch get 0 0x12
+ddcswitch set 0 0x12 140
 
 # Input Source (VCP 0x60)
-DDCSwitch get 0 0x60
-DDCSwitch set 0 0x60 0x11  # HDMI1
+ddcswitch get 0 0x60
+ddcswitch set 0 0x60 0x11  # HDMI1
 
 # Color Temperature (VCP 0x14) - if supported
-DDCSwitch get 0 0x14
-DDCSwitch set 0 0x14 6500  # 6500K
+ddcswitch get 0 0x14
+ddcswitch set 0 0x14 6500  # 6500K
 ```
 
 ### Test Unknown VCP Codes
@@ -404,19 +404,19 @@ $commonCodes = @(0x10, 0x12, 0x14, 0x16, 0x18, 0x1A, 0x20, 0x30, 0x60, 0x62, 0x6
 foreach ($code in $commonCodes) {
     $hexCode = "0x{0:X2}" -f $code
     try {
-        $result = DDCSwitch get 0 $hexCode 2>$null
+        $result = ddcswitch get 0 $hexCode 2>$null
         if ($result -notmatch "error|failed") {
-            Write-Host "✓ VCP $hexCode supported: $result" -ForegroundColor Green
+            Write-Host "? VCP $hexCode supported: $result" -ForegroundColor Green
         }
     } catch {
-        Write-Host "✗ VCP $hexCode not supported" -ForegroundColor Red
+        Write-Host "? VCP $hexCode not supported" -ForegroundColor Red
     }
 }
 ```
 
 ## JSON Output and Automation
 
-All DDCSwitch commands support the `--json` flag for machine-readable output. This is perfect for scripting, automation, and integration with other tools.
+All ddcswitch commands support the `--json` flag for machine-readable output. This is perfect for scripting, automation, and integration with other tools.
 
 ### PowerShell JSON Examples
 
@@ -426,12 +426,12 @@ Check the current input and switch only if needed, then adjust brightness:
 
 ```powershell
 # Check if monitor is on HDMI1, switch to DP1 if not, then set work brightness
-$result = DDCSwitch get 0 --json | ConvertFrom-Json
+$result = ddcswitch get 0 --json | ConvertFrom-Json
 
 if ($result.success -and $result.currentInputCode -ne "0x11") {
     Write-Host "Monitor is on $($result.currentInput), switching to HDMI1..."
-    DDCSwitch set 0 HDMI1 --json | Out-Null
-    DDCSwitch set 0 brightness 75% --json | Out-Null
+    ddcswitch set 0 HDMI1 --json | Out-Null
+    ddcswitch set 0 brightness 75% --json | Out-Null
     Write-Host "Switched to HDMI1 and set brightness to 75%" -ForegroundColor Green
 } else {
     Write-Host "Monitor already on HDMI1"
@@ -442,7 +442,7 @@ if ($result.success -and $result.currentInputCode -ne "0x11") {
 
 ```powershell
 # Switch all available monitors with full configuration
-$listResult = DDCSwitch list --json | ConvertFrom-Json
+$listResult = ddcswitch list --json | ConvertFrom-Json
 
 if ($listResult.success) {
     foreach ($monitor in $listResult.monitors) {
@@ -450,25 +450,25 @@ if ($listResult.success) {
             Write-Host "Configuring $($monitor.name)..." -ForegroundColor Cyan
             
             # Set input
-            $setResult = DDCSwitch set $monitor.index HDMI1 --json | ConvertFrom-Json
+            $setResult = ddcswitch set $monitor.index HDMI1 --json | ConvertFrom-Json
             if ($setResult.success) {
-                Write-Host "  ✓ Input: HDMI1" -ForegroundColor Green
+                Write-Host "  ? Input: HDMI1" -ForegroundColor Green
             }
             
             # Set brightness
-            $brightnessResult = DDCSwitch set $monitor.index brightness 75% --json | ConvertFrom-Json
+            $brightnessResult = ddcswitch set $monitor.index brightness 75% --json | ConvertFrom-Json
             if ($brightnessResult.success) {
-                Write-Host "  ✓ Brightness: 75%" -ForegroundColor Green
+                Write-Host "  ? Brightness: 75%" -ForegroundColor Green
             } else {
-                Write-Host "  ✗ Brightness not supported" -ForegroundColor Yellow
+                Write-Host "  ? Brightness not supported" -ForegroundColor Yellow
             }
             
             # Set contrast
-            $contrastResult = DDCSwitch set $monitor.index contrast 80% --json | ConvertFrom-Json
+            $contrastResult = ddcswitch set $monitor.index contrast 80% --json | ConvertFrom-Json
             if ($contrastResult.success) {
-                Write-Host "  ✓ Contrast: 80%" -ForegroundColor Green
+                Write-Host "  ? Contrast: 80%" -ForegroundColor Green
             } else {
-                Write-Host "  ✗ Contrast not supported" -ForegroundColor Yellow
+                Write-Host "  ? Contrast not supported" -ForegroundColor Yellow
             }
         }
     }
@@ -483,7 +483,7 @@ Create a comprehensive dashboard showing all monitor states:
 
 ```powershell
 # monitor-dashboard.ps1
-$result = DDCSwitch list --verbose --json | ConvertFrom-Json
+$result = ddcswitch list --verbose --json | ConvertFrom-Json
 
 if ($result.success) {
     Write-Host "`n=== Monitor Status Dashboard ===" -ForegroundColor Cyan
@@ -518,7 +518,7 @@ if ($result.success) {
 # smart-brightness-toggle.ps1
 param([int]$MonitorIndex = 0)
 
-$result = DDCSwitch get $MonitorIndex brightness --json | ConvertFrom-Json
+$result = ddcswitch get $MonitorIndex brightness --json | ConvertFrom-Json
 
 if ($result.success) {
     $currentPercent = $result.percentageValue
@@ -531,10 +531,10 @@ if ($result.success) {
         default { 25 }
     }
     
-    $switchResult = DDCSwitch set $MonitorIndex brightness "$newBrightness%" --json | ConvertFrom-Json
+    $switchResult = ddcswitch set $MonitorIndex brightness "$newBrightness%" --json | ConvertFrom-Json
     
     if ($switchResult.success) {
-        Write-Host "Brightness: $currentPercent% → $newBrightness%" -ForegroundColor Green
+        Write-Host "Brightness: $currentPercent% ? $newBrightness%" -ForegroundColor Green
     }
 } else {
     Write-Host "Brightness control not supported on this monitor" -ForegroundColor Yellow
@@ -552,7 +552,7 @@ import json
 import sys
 
 def run_ddc(args):
-    """Run DDCSwitch and return JSON result"""
+    """Run ddcswitch and return JSON result"""
     result = subprocess.run(
         ['DDCSwitch'] + args + ['--json'],
         capture_output=True,
@@ -577,25 +577,25 @@ def set_brightness(monitor_index, percentage):
     """Set monitor brightness"""
     data = run_ddc(['set', str(monitor_index), 'brightness', f'{percentage}%'])
     if data['success']:
-        print(f"✓ Set brightness to {percentage}% on {data['monitor']['name']}")
+        print(f"? Set brightness to {percentage}% on {data['monitor']['name']}")
     else:
-        print(f"✗ Error: {data['error']}", file=sys.stderr)
+        print(f"? Error: {data['error']}", file=sys.stderr)
 
 def set_contrast(monitor_index, percentage):
     """Set monitor contrast"""
     data = run_ddc(['set', str(monitor_index), 'contrast', f'{percentage}%'])
     if data['success']:
-        print(f"✓ Set contrast to {percentage}% on {data['monitor']['name']}")
+        print(f"? Set contrast to {percentage}% on {data['monitor']['name']}")
     else:
-        print(f"✗ Error: {data['error']}", file=sys.stderr)
+        print(f"? Error: {data['error']}", file=sys.stderr)
 
 def switch_input(monitor_index, input_name):
     """Switch monitor input"""
     data = run_ddc(['set', str(monitor_index), input_name])
     if data['success']:
-        print(f"✓ Switched {data['monitor']['name']} to {data['newInput']}")
+        print(f"? Switched {data['monitor']['name']} to {data['newInput']}")
     else:
-        print(f"✗ Error: {data['error']}", file=sys.stderr)
+        print(f"? Error: {data['error']}", file=sys.stderr)
         sys.exit(1)
 
 # Example usage
@@ -626,7 +626,7 @@ def run_ddc(args):
 
 def set_brightness_all(percentage):
     """Set brightness on all supported monitors"""
-    print(f"🔆 Setting brightness to {percentage}%...")
+    print(f"?? Setting brightness to {percentage}%...")
     data = run_ddc(['list'])
     
     if data['success']:
@@ -634,9 +634,9 @@ def set_brightness_all(percentage):
             if monitor['status'] == 'ok':
                 result = run_ddc(['set', str(monitor['index']), 'brightness', f'{percentage}%'])
                 if result['success']:
-                    print(f"  ✓ {monitor['name']} → {percentage}%")
+                    print(f"  ? {monitor['name']} ? {percentage}%")
                 else:
-                    print(f"  ✗ {monitor['name']} → Brightness not supported")
+                    print(f"  ? {monitor['name']} ? Brightness not supported")
 
 def get_brightness_for_time():
     """Get appropriate brightness based on current time"""
@@ -653,7 +653,7 @@ def get_brightness_for_time():
 
 def gaming_mode():
     """Switch to gaming setup with high brightness"""
-    print("🎮 Activating gaming mode...")
+    print("?? Activating gaming mode...")
     data = run_ddc(['list'])
     
     if data['success']:
@@ -662,16 +662,16 @@ def gaming_mode():
                 # Switch to HDMI (console)
                 input_result = run_ddc(['set', str(monitor['index']), 'HDMI1'])
                 if input_result['success']:
-                    print(f"  ✓ {monitor['name']} → HDMI1")
+                    print(f"  ? {monitor['name']} ? HDMI1")
                 
                 # Set high brightness for gaming
                 brightness_result = run_ddc(['set', str(monitor['index']), 'brightness', '90%'])
                 if brightness_result['success']:
-                    print(f"  ✓ {monitor['name']} → 90% brightness")
+                    print(f"  ? {monitor['name']} ? 90% brightness")
 
 def work_mode():
     """Switch to work setup with comfortable brightness"""
-    print("💼 Activating work mode...")
+    print("?? Activating work mode...")
     data = run_ddc(['list'])
     
     if data['success']:
@@ -680,12 +680,12 @@ def work_mode():
                 # Switch to DisplayPort (PC)
                 input_result = run_ddc(['set', str(monitor['index']), 'DP1'])
                 if input_result['success']:
-                    print(f"  ✓ {monitor['name']} → DP1")
+                    print(f"  ? {monitor['name']} ? DP1")
                 
                 # Set comfortable brightness for work
                 brightness_result = run_ddc(['set', str(monitor['index']), 'brightness', '60%'])
                 if brightness_result['success']:
-                    print(f"  ✓ {monitor['name']} → 60% brightness")
+                    print(f"  ? {monitor['name']} ? 60% brightness")
 
 # Auto-brightness based on time
 if __name__ == '__main__':
@@ -701,9 +701,9 @@ if __name__ == '__main__':
 // monitor-api.js
 const { execSync } = require('child_process');
 
-class DDCSwitch {
+class ddcswitch {
     static exec(args) {
-        const output = execSync(`DDCSwitch ${args.join(' ')} --json`, {
+        const output = execSync(`ddcswitch ${args.join(' ')} --json`, {
             encoding: 'utf-8'
         });
         return JSON.parse(output);
@@ -757,12 +757,12 @@ monitors.monitors.forEach(monitor => {
 // Set brightness and contrast
 const brightnessResult = DDCSwitch.setBrightness(0, 75);
 if (brightnessResult.success) {
-    console.log(`✓ Set brightness to 75%`);
+    console.log(`? Set brightness to 75%`);
 }
 
 const contrastResult = DDCSwitch.setContrast(0, 80);
 if (contrastResult.success) {
-    console.log(`✓ Set contrast to 80%`);
+    console.log(`? Set contrast to 80%`);
 }
 ```
 
@@ -778,7 +778,7 @@ app.use(express.json());
 
 function runDDC(args) {
     try {
-        const output = execSync(`DDCSwitch ${args.join(' ')} --json`, {
+        const output = execSync(`ddcswitch ${args.join(' ')} --json`, {
             encoding: 'utf-8'
         });
         return JSON.parse(output);
@@ -860,7 +860,7 @@ app.post('/monitors/:id/profile', (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('DDCSwitch API running on http://localhost:3000');
+    console.log('ddcswitch API running on http://localhost:3000');
     console.log('Endpoints:');
     console.log('  GET  /monitors?verbose=true');
     console.log('  GET  /monitors/:id/brightness');
@@ -878,30 +878,30 @@ REM complete-setup.bat - Set input, brightness, and contrast
 echo Setting up monitor configuration...
 
 REM Switch to HDMI1
-for /f "delims=" %%i in ('DDCSwitch set 0 HDMI1 --json') do set INPUT_RESULT=%%i
+for /f "delims=" %%i in ('ddcswitch set 0 HDMI1 --json') do set INPUT_RESULT=%%i
 echo %INPUT_RESULT% | find "\"success\":true" >nul
 if not errorlevel 1 (
-    echo ✓ Switched to HDMI1
+    echo ? Switched to HDMI1
 ) else (
-    echo ✗ Failed to switch input
+    echo ? Failed to switch input
 )
 
 REM Set brightness to 75%
-for /f "delims=" %%i in ('DDCSwitch set 0 brightness 75%% --json') do set BRIGHTNESS_RESULT=%%i
+for /f "delims=" %%i in ('ddcswitch set 0 brightness 75%% --json') do set BRIGHTNESS_RESULT=%%i
 echo %BRIGHTNESS_RESULT% | find "\"success\":true" >nul
 if not errorlevel 1 (
-    echo ✓ Set brightness to 75%%
+    echo ? Set brightness to 75%%
 ) else (
-    echo ✗ Brightness not supported or failed
+    echo ? Brightness not supported or failed
 )
 
 REM Set contrast to 80%
-for /f "delims=" %%i in ('DDCSwitch set 0 contrast 80%% --json') do set CONTRAST_RESULT=%%i
+for /f "delims=" %%i in ('ddcswitch set 0 contrast 80%% --json') do set CONTRAST_RESULT=%%i
 echo %CONTRAST_RESULT% | find "\"success\":true" >nul
 if not errorlevel 1 (
-    echo ✓ Set contrast to 80%%
+    echo ? Set contrast to 80%%
 ) else (
-    echo ✗ Contrast not supported or failed
+    echo ? Contrast not supported or failed
 )
 
 echo Monitor setup complete!
@@ -1008,25 +1008,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 
                 match set_brightness(monitor_index, 75) {
                     Ok(response) if response.success => {
-                        println!("✓ Set brightness to 75%");
+                        println!("? Set brightness to 75%");
                     }
                     Ok(response) => {
-                        println!("✗ Failed to set brightness: {:?}", response.error);
+                        println!("? Failed to set brightness: {:?}", response.error);
                     }
                     Err(e) => {
-                        println!("✗ Error setting brightness: {}", e);
+                        println!("? Error setting brightness: {}", e);
                     }
                 }
                 
                 match set_contrast(monitor_index, 80) {
                     Ok(response) if response.success => {
-                        println!("✓ Set contrast to 80%");
+                        println!("? Set contrast to 80%");
                     }
                     Ok(response) => {
-                        println!("✗ Failed to set contrast: {:?}", response.error);
+                        println!("? Failed to set contrast: {:?}", response.error);
                     }
                     Err(e) => {
-                        println!("✗ Error setting contrast: {}", e);
+                        println!("? Error setting contrast: {}", e);
                     }
                 }
             }
@@ -1049,12 +1049,12 @@ Switch all monitors to PC inputs with comfortable brightness:
 ```powershell
 # work-setup.ps1
 Write-Host "Switching to work setup..." -ForegroundColor Cyan
-DDCSwitch set 0 DP1
-DDCSwitch set 0 brightness 60%
-DDCSwitch set 0 contrast 75%
-DDCSwitch set 1 DP2
-DDCSwitch set 1 brightness 60%
-DDCSwitch set 1 contrast 75%
+ddcswitch set 0 DP1
+ddcswitch set 0 brightness 60%
+ddcswitch set 0 contrast 75%
+ddcswitch set 1 DP2
+ddcswitch set 1 brightness 60%
+ddcswitch set 1 contrast 75%
 Write-Host "Work setup ready!" -ForegroundColor Green
 ```
 
@@ -1064,12 +1064,12 @@ Switch monitors to console inputs with high brightness:
 ```powershell
 # gaming-setup.ps1
 Write-Host "Switching to gaming setup..." -ForegroundColor Cyan
-DDCSwitch set 0 HDMI1  # Main monitor to PS5
-DDCSwitch set 0 brightness 90%
-DDCSwitch set 0 contrast 85%
-DDCSwitch set 1 HDMI2  # Secondary to Switch
-DDCSwitch set 1 brightness 85%
-DDCSwitch set 1 contrast 80%
+ddcswitch set 0 HDMI1  # Main monitor to PS5
+ddcswitch set 0 brightness 90%
+ddcswitch set 0 contrast 85%
+ddcswitch set 1 HDMI2  # Secondary to Switch
+ddcswitch set 1 brightness 85%
+ddcswitch set 1 contrast 80%
 Write-Host "Gaming setup ready!" -ForegroundColor Green
 ```
 
@@ -1079,9 +1079,9 @@ Optimize for media consumption:
 ```powershell
 # media-setup.ps1
 Write-Host "Switching to media setup..." -ForegroundColor Cyan
-DDCSwitch set 0 HDMI1  # Media device
-DDCSwitch set 0 brightness 40%  # Lower brightness for comfortable viewing
-DDCSwitch set 0 contrast 90%    # High contrast for better blacks
+ddcswitch set 0 HDMI1  # Media device
+ddcswitch set 0 brightness 40%  # Lower brightness for comfortable viewing
+ddcswitch set 0 contrast 90%    # High contrast for better blacks
 Write-Host "Media setup ready!" -ForegroundColor Green
 ```
 
@@ -1090,11 +1090,11 @@ Write-Host "Media setup ready!" -ForegroundColor Green
 Create a comprehensive input switching and brightness control system:
 
 ```autohotkey
-; DDCSwitch AutoHotkey Script with VCP Support
-; Place DDCSwitch.exe in C:\Tools\ or update path below
+; ddcswitch AutoHotkey Script with VCP Support
+; Place ddcswitch.exe in C:\Tools\ or update path below
 
 ; Global variables
-DDCSwitchPath := "C:\Tools\DDCSwitch.exe"
+DDCSwitchPath := "C:\Tools\ddcswitch.exe"
 
 ; Function to run DDCSwitch
 RunDDCSwitch(args) {
@@ -1106,19 +1106,19 @@ RunDDCSwitch(args) {
 ; Ctrl+Alt+1: Switch monitor 0 to HDMI1
 ^!1::
     RunDDCSwitch("set 0 HDMI1")
-    TrayTip, DDCSwitch, Switched to HDMI1, 1
+    TrayTip, ddcswitch, Switched to HDMI1, 1
     return
 
 ; Ctrl+Alt+2: Switch monitor 0 to HDMI2
 ^!2::
     RunDDCSwitch("set 0 HDMI2")
-    TrayTip, DDCSwitch, Switched to HDMI2, 1
+    TrayTip, ddcswitch, Switched to HDMI2, 1
     return
 
 ; Ctrl+Alt+D: Switch monitor 0 to DisplayPort
 ^!d::
     RunDDCSwitch("set 0 DP1")
-    TrayTip, DDCSwitch, Switched to DisplayPort, 1
+    TrayTip, ddcswitch, Switched to DisplayPort, 1
     return
 
 ; Brightness control hotkeys
@@ -1126,39 +1126,39 @@ RunDDCSwitch(args) {
 ^!NumpadAdd::
 ^!=::
     RunDDCSwitch("set 0 brightness +10%")
-    TrayTip, DDCSwitch, Brightness increased, 1
+    TrayTip, ddcswitch, Brightness increased, 1
     return
 
 ; Ctrl+Alt+Minus: Decrease brightness by 10%
 ^!NumpadSub::
 ^!-::
     RunDDCSwitch("set 0 brightness -10%")
-    TrayTip, DDCSwitch, Brightness decreased, 1
+    TrayTip, ddcswitch, Brightness decreased, 1
     return
 
 ; Brightness presets
 ; Ctrl+Alt+F1: 25% brightness (night mode)
 ^!F1::
     RunDDCSwitch("set 0 brightness 25%")
-    TrayTip, DDCSwitch, Night Mode (25%), 1
+    TrayTip, ddcswitch, Night Mode (25%), 1
     return
 
 ; Ctrl+Alt+F2: 50% brightness (comfortable)
 ^!F2::
     RunDDCSwitch("set 0 brightness 50%")
-    TrayTip, DDCSwitch, Comfortable (50%), 1
+    TrayTip, ddcswitch, Comfortable (50%), 1
     return
 
 ; Ctrl+Alt+F3: 75% brightness (bright)
 ^!F3::
     RunDDCSwitch("set 0 brightness 75%")
-    TrayTip, DDCSwitch, Bright (75%), 1
+    TrayTip, ddcswitch, Bright (75%), 1
     return
 
 ; Ctrl+Alt+F4: 100% brightness (maximum)
 ^!F4::
     RunDDCSwitch("set 0 brightness 100%")
-    TrayTip, DDCSwitch, Maximum (100%), 1
+    TrayTip, ddcswitch, Maximum (100%), 1
     return
 
 ; Profile hotkeys
@@ -1171,7 +1171,7 @@ RunDDCSwitch(args) {
     RunDDCSwitch("set 0 contrast 75%")
     Sleep 500
     RunDDCSwitch("set 1 DP2")
-    TrayTip, DDCSwitch, Work Setup Activated, 1
+    TrayTip, ddcswitch, Work Setup Activated, 1
     return
 
 ; Ctrl+Alt+G: Gaming setup (all monitors to console with high brightness)
@@ -1183,7 +1183,7 @@ RunDDCSwitch(args) {
     RunDDCSwitch("set 0 contrast 85%")
     Sleep 500
     RunDDCSwitch("set 1 HDMI2")
-    TrayTip, DDCSwitch, Gaming Setup Activated, 1
+    TrayTip, ddcswitch, Gaming Setup Activated, 1
     return
 
 ; Ctrl+Alt+M: Media setup (HDMI with low brightness, high contrast)
@@ -1193,17 +1193,17 @@ RunDDCSwitch(args) {
     RunDDCSwitch("set 0 brightness 40%")
     Sleep 500
     RunDDCSwitch("set 0 contrast 90%")
-    TrayTip, DDCSwitch, Media Setup Activated, 1
+    TrayTip, ddcswitch, Media Setup Activated, 1
     return
 
 ; Ctrl+Alt+L: List all monitors with verbose info
 ^!l::
-    Run, cmd /k DDCSwitch.exe list --verbose
+    Run, cmd /k ddcswitch.exe list --verbose
     return
 
 ; Ctrl+Alt+I: Show current monitor info
 ^!i::
-    Run, cmd /k "DDCSwitch.exe get 0 && DDCSwitch.exe get 0 brightness && DDCSwitch.exe get 0 contrast && pause"
+    Run, cmd /k "ddcswitch.exe get 0 && ddcswitch.exe get 0 brightness && ddcswitch.exe get 0 contrast && pause"
     return
 ```
 
@@ -1214,40 +1214,40 @@ If you use Elgato Stream Deck, create actions for complete monitor control:
 **Button 1: PC Mode**
 ```
 Title: PC Mode
-Command: C:\Tools\DDCSwitch.exe set 0 DP1
-Arguments: && C:\Tools\DDCSwitch.exe set 0 brightness 60%
+Command: C:\Tools\ddcswitch.exe set 0 DP1
+Arguments: && C:\Tools\ddcswitch.exe set 0 brightness 60%
 ```
 
 **Button 2: Console Mode**
 ```
 Title: Console Mode
-Command: C:\Tools\DDCSwitch.exe set 0 HDMI1
-Arguments: && C:\Tools\DDCSwitch.exe set 0 brightness 90%
+Command: C:\Tools\ddcswitch.exe set 0 HDMI1
+Arguments: && C:\Tools\ddcswitch.exe set 0 brightness 90%
 ```
 
 **Button 3: Brightness Low**
 ```
-Title: 🔅 Low
-Command: C:\Tools\DDCSwitch.exe set 0 brightness 25%
+Title: ?? Low
+Command: C:\Tools\ddcswitch.exe set 0 brightness 25%
 ```
 
 **Button 4: Brightness High**
 ```
-Title: 🔆 High
-Command: C:\Tools\DDCSwitch.exe set 0 brightness 85%
+Title: ?? High
+Command: C:\Tools\ddcswitch.exe set 0 brightness 85%
 ```
 
 **Button 5: Monitor Info**
 ```
 Title: Monitor Info
-Command: cmd /k C:\Tools\DDCSwitch.exe list --verbose
+Command: cmd /k C:\Tools\ddcswitch.exe list --verbose
 ```
 
 **Button 6: Gaming Profile**
 ```
-Title: 🎮 Gaming
-Command: C:\Tools\DDCSwitch.exe set 0 HDMI1
-Arguments: && timeout /t 1 && C:\Tools\DDCSwitch.exe set 0 brightness 90% && C:\Tools\DDCSwitch.exe set 0 contrast 85%
+Title: ?? Gaming
+Command: C:\Tools\ddcswitch.exe set 0 HDMI1
+Arguments: && timeout /t 1 && C:\Tools\ddcswitch.exe set 0 brightness 90% && C:\Tools\ddcswitch.exe set 0 contrast 85%
 ```
 
 ### Task Scheduler Integration
@@ -1257,10 +1257,10 @@ Automatically switch inputs at specific times:
 #### Morning: Switch to Work Setup (8 AM)
 
 1. Open Task Scheduler
-2. Create Basic Task → "Morning Work Setup"
+2. Create Basic Task ? "Morning Work Setup"
 3. Trigger: Daily at 8:00 AM
 4. Action: Start a program
-   - Program: `C:\Tools\DDCSwitch.exe`
+   - Program: `C:\Tools\ddcswitch.exe`
    - Arguments: `set 0 DP1`
 
 #### Evening: Switch to Gaming Setup (6 PM)
@@ -1272,45 +1272,45 @@ Same steps, but with trigger at 6:00 PM and arguments: `set 0 HDMI1`
 Add to your PowerShell profile (`$PROFILE`):
 
 ```powershell
-# DDCSwitch aliases for complete monitor control
-function ddc-list { DDCSwitch list --verbose }
+# ddcswitch aliases for complete monitor control
+function ddc-list { ddcswitch list --verbose }
 function ddc-work { 
-    DDCSwitch set 0 DP1
-    DDCSwitch set 0 brightness 60%
-    DDCSwitch set 0 contrast 75%
-    DDCSwitch set 1 DP2
-    Write-Host "✓ Work setup activated" -ForegroundColor Green
+    ddcswitch set 0 DP1
+    ddcswitch set 0 brightness 60%
+    ddcswitch set 0 contrast 75%
+    ddcswitch set 1 DP2
+    Write-Host "? Work setup activated" -ForegroundColor Green
 }
 function ddc-game { 
-    DDCSwitch set 0 HDMI1
-    DDCSwitch set 0 brightness 90%
-    DDCSwitch set 0 contrast 85%
-    DDCSwitch set 1 HDMI2
-    Write-Host "✓ Gaming setup activated" -ForegroundColor Green
+    ddcswitch set 0 HDMI1
+    ddcswitch set 0 brightness 90%
+    ddcswitch set 0 contrast 85%
+    ddcswitch set 1 HDMI2
+    Write-Host "? Gaming setup activated" -ForegroundColor Green
 }
 function ddc-media {
-    DDCSwitch set 0 HDMI1
-    DDCSwitch set 0 brightness 40%
-    DDCSwitch set 0 contrast 90%
-    Write-Host "✓ Media setup activated" -ForegroundColor Green
+    ddcswitch set 0 HDMI1
+    ddcswitch set 0 brightness 40%
+    ddcswitch set 0 contrast 90%
+    Write-Host "? Media setup activated" -ForegroundColor Green
 }
-function ddc-hdmi { DDCSwitch set 0 HDMI1 }
-function ddc-dp { DDCSwitch set 0 DP1 }
-function ddc-bright([int]$level) { DDCSwitch set 0 brightness "$level%" }
-function ddc-contrast([int]$level) { DDCSwitch set 0 contrast "$level%" }
+function ddc-hdmi { ddcswitch set 0 HDMI1 }
+function ddc-dp { ddcswitch set 0 DP1 }
+function ddc-bright([int]$level) { ddcswitch set 0 brightness "$level%" }
+function ddc-contrast([int]$level) { ddcswitch set 0 contrast "$level%" }
 
 # Brightness shortcuts
-function ddc-dim { DDCSwitch set 0 brightness 25% }
-function ddc-normal { DDCSwitch set 0 brightness 60% }
-function ddc-bright { DDCSwitch set 0 brightness 85% }
-function ddc-max { DDCSwitch set 0 brightness 100% }
+function ddc-dim { ddcswitch set 0 brightness 25% }
+function ddc-normal { ddcswitch set 0 brightness 60% }
+function ddc-bright { ddcswitch set 0 brightness 85% }
+function ddc-max { ddcswitch set 0 brightness 100% }
 
 # Then use: ddc-work, ddc-game, ddc-media, ddc-bright 75, ddc-list
 ```
 
 ### Complete Monitor Control
 
-Use DDCSwitch as a comprehensive monitor management solution:
+Use ddcswitch as a comprehensive monitor management solution:
 
 ```powershell
 # complete-monitor-control.ps1
@@ -1327,28 +1327,28 @@ function Apply-Profile {
     
     switch ($ProfileName.ToLower()) {
         "work" {
-            DDCSwitch set $MonitorIndex DP1
-            DDCSwitch set $MonitorIndex brightness 60%
-            DDCSwitch set $MonitorIndex contrast 75%
-            Write-Host "✓ Applied work profile" -ForegroundColor Green
+            ddcswitch set $MonitorIndex DP1
+            ddcswitch set $MonitorIndex brightness 60%
+            ddcswitch set $MonitorIndex contrast 75%
+            Write-Host "? Applied work profile" -ForegroundColor Green
         }
         "gaming" {
-            DDCSwitch set $MonitorIndex HDMI1
-            DDCSwitch set $MonitorIndex brightness 90%
-            DDCSwitch set $MonitorIndex contrast 85%
-            Write-Host "✓ Applied gaming profile" -ForegroundColor Green
+            ddcswitch set $MonitorIndex HDMI1
+            ddcswitch set $MonitorIndex brightness 90%
+            ddcswitch set $MonitorIndex contrast 85%
+            Write-Host "? Applied gaming profile" -ForegroundColor Green
         }
         "media" {
-            DDCSwitch set $MonitorIndex HDMI1
-            DDCSwitch set $MonitorIndex brightness 40%
-            DDCSwitch set $MonitorIndex contrast 90%
-            Write-Host "✓ Applied media profile" -ForegroundColor Green
+            ddcswitch set $MonitorIndex HDMI1
+            ddcswitch set $MonitorIndex brightness 40%
+            ddcswitch set $MonitorIndex contrast 90%
+            Write-Host "? Applied media profile" -ForegroundColor Green
         }
         "custom" {
-            if ($Input) { DDCSwitch set $MonitorIndex $Input }
-            if ($Brightness) { DDCSwitch set $MonitorIndex brightness "$Brightness%" }
-            if ($Contrast) { DDCSwitch set $MonitorIndex contrast "$Contrast%" }
-            Write-Host "✓ Applied custom settings" -ForegroundColor Green
+            if ($Input) { ddcswitch set $MonitorIndex $Input }
+            if ($Brightness) { ddcswitch set $MonitorIndex brightness "$Brightness%" }
+            if ($Contrast) { ddcswitch set $MonitorIndex contrast "$Contrast%" }
+            Write-Host "? Applied custom settings" -ForegroundColor Green
         }
     }
 }
@@ -1375,39 +1375,39 @@ Write-Host "=" * 50
 # Test brightness support
 Write-Host "`nTesting Brightness (VCP 0x10)..." -ForegroundColor Yellow
 try {
-    $brightness = DDCSwitch get $monitor brightness 2>$null
+    $brightness = ddcswitch get $monitor brightness 2>$null
     if ($brightness -match "Brightness:") {
-        Write-Host "✓ Brightness supported: $brightness" -ForegroundColor Green
+        Write-Host "? Brightness supported: $brightness" -ForegroundColor Green
         
         # Test setting brightness
-        DDCSwitch set $monitor brightness 50% | Out-Null
+        ddcswitch set $monitor brightness 50% | Out-Null
         Start-Sleep -Seconds 1
-        $newBrightness = DDCSwitch get $monitor brightness
-        Write-Host "✓ Brightness control works: $newBrightness" -ForegroundColor Green
+        $newBrightness = ddcswitch get $monitor brightness
+        Write-Host "? Brightness control works: $newBrightness" -ForegroundColor Green
     } else {
-        Write-Host "✗ Brightness not supported" -ForegroundColor Red
+        Write-Host "? Brightness not supported" -ForegroundColor Red
     }
 } catch {
-    Write-Host "✗ Brightness not supported" -ForegroundColor Red
+    Write-Host "? Brightness not supported" -ForegroundColor Red
 }
 
 # Test contrast support
 Write-Host "`nTesting Contrast (VCP 0x12)..." -ForegroundColor Yellow
 try {
-    $contrast = DDCSwitch get $monitor contrast 2>$null
+    $contrast = ddcswitch get $monitor contrast 2>$null
     if ($contrast -match "Contrast:") {
-        Write-Host "✓ Contrast supported: $contrast" -ForegroundColor Green
+        Write-Host "? Contrast supported: $contrast" -ForegroundColor Green
         
         # Test setting contrast
-        DDCSwitch set $monitor contrast 75% | Out-Null
+        ddcswitch set $monitor contrast 75% | Out-Null
         Start-Sleep -Seconds 1
-        $newContrast = DDCSwitch get $monitor contrast
-        Write-Host "✓ Contrast control works: $newContrast" -ForegroundColor Green
+        $newContrast = ddcswitch get $monitor contrast
+        Write-Host "? Contrast control works: $newContrast" -ForegroundColor Green
     } else {
-        Write-Host "✗ Contrast not supported" -ForegroundColor Red
+        Write-Host "? Contrast not supported" -ForegroundColor Red
     }
 } catch {
-    Write-Host "✗ Contrast not supported" -ForegroundColor Red
+    Write-Host "? Contrast not supported" -ForegroundColor Red
 }
 
 # Test raw VCP codes
@@ -1428,14 +1428,14 @@ $vcpCodes = @{
 
 foreach ($code in $vcpCodes.Keys) {
     try {
-        $result = DDCSwitch get $monitor $code 2>$null
+        $result = ddcswitch get $monitor $code 2>$null
         if ($result -and $result -notmatch "error|failed|not supported") {
-            Write-Host "✓ VCP $code ($($vcpCodes[$code])): $result" -ForegroundColor Green
+            Write-Host "? VCP $code ($($vcpCodes[$code])): $result" -ForegroundColor Green
         } else {
-            Write-Host "✗ VCP $code ($($vcpCodes[$code])): Not supported" -ForegroundColor Gray
+            Write-Host "? VCP $code ($($vcpCodes[$code])): Not supported" -ForegroundColor Gray
         }
     } catch {
-        Write-Host "✗ VCP $code ($($vcpCodes[$code])): Not supported" -ForegroundColor Gray
+        Write-Host "? VCP $code ($($vcpCodes[$code])): Not supported" -ForegroundColor Gray
     }
 }
 
@@ -1461,9 +1461,9 @@ foreach ($brightness in $brightnessLevels) {
     foreach ($contrast in $contrastLevels) {
         Write-Host "Setting: Brightness $brightness%, Contrast $contrast%" -ForegroundColor Yellow
         
-        DDCSwitch set $monitor brightness "$brightness%" | Out-Null
+        ddcswitch set $monitor brightness "$brightness%" | Out-Null
         Start-Sleep -Milliseconds 500
-        DDCSwitch set $monitor contrast "$contrast%" | Out-Null
+        ddcswitch set $monitor contrast "$contrast%" | Out-Null
         
         Write-Host "How does this look? (Press Enter to continue, 'q' to quit, 's' to save this setting)" -ForegroundColor Green
         $input = Read-Host
@@ -1473,7 +1473,7 @@ foreach ($brightness in $brightnessLevels) {
             break
         } elseif ($input -eq 's') {
             Write-Host "Saved setting: Brightness $brightness%, Contrast $contrast%" -ForegroundColor Cyan
-            Write-Host "Command to reproduce: DDCSwitch set $monitor brightness $brightness%; DDCSwitch set $monitor contrast $contrast%" -ForegroundColor White
+            Write-Host "Command to reproduce: ddcswitch set $monitor brightness $brightness%; ddcswitch set $monitor contrast $contrast%" -ForegroundColor White
             Read-Host "Press Enter to continue or Ctrl+C to stop"
         }
     }
@@ -1483,7 +1483,7 @@ foreach ($brightness in $brightnessLevels) {
 
 ### Finding Non-Standard VCP Codes
 
-Some monitors use non-standard DDC/CI codes. If DDCSwitch shows the wrong current input or switching doesn't work, you can find the correct codes:
+Some monitors use non-standard DDC/CI codes. If ddcswitch shows the wrong current input or switching doesn't work, you can find the correct codes:
 
 #### Method 1: Use ControlMyMonitor by NirSoft
 
@@ -1499,15 +1499,15 @@ Some monitors use non-standard DDC/CI codes. If DDCSwitch shows the wrong curren
 **Example:**
 ```
 VCP Code 60 (Input Source):
-- HDMI1 physical input → Shows value 17 (0x11) ✓ Standard
-- HDMI2 physical input → Shows value 18 (0x12) ✓ Standard  
-- DisplayPort physical input → Shows value 15 (0x0F) ✓ Standard
-- DisplayPort physical input → Shows value 27 (0x1B) ✗ Non-standard!
+- HDMI1 physical input ? Shows value 17 (0x11) ? Standard
+- HDMI2 physical input ? Shows value 18 (0x12) ? Standard  
+- DisplayPort physical input ? Shows value 15 (0x0F) ? Standard
+- DisplayPort physical input ? Shows value 27 (0x1B) ? Non-standard!
 ```
 
 Once you know the correct codes, use them with DDCSwitch:
 ```powershell
-DDCSwitch set 0 0x1B  # Use the actual code your monitor responds to
+ddcswitch set 0 0x1B  # Use the actual code your monitor responds to
 ```
 
 #### Method 2: Trial and Error
@@ -1525,7 +1525,7 @@ $codes = @(0x01, 0x02, 0x03, 0x04, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x1
 foreach ($code in $codes) {
     $hexCode = "0x{0:X2}" -f $code
     Write-Host "Testing $hexCode..." -ForegroundColor Green
-    DDCSwitch set 0 $hexCode
+    ddcswitch set 0 $hexCode
     Start-Sleep -Seconds 3
 }
 
@@ -1539,17 +1539,17 @@ Write-Host "Testing complete! Document which codes worked for your monitor." -Fo
 
 ```powershell
 # Get current input (if this works, DDC/CI is functional)
-DDCSwitch get 0
+ddcswitch get 0
 
 # Get by monitor name
-DDCSwitch get "VG270U"
+ddcswitch get "VG270U"
 
 # List all monitors with all VCP values
-DDCSwitch get all
+ddcswitch get all
 
 # Try setting to current input (should succeed instantly)
-DDCSwitch list  # Note the current input
-DDCSwitch set 0 <current-input>
+ddcswitch list  # Note the current input
+ddcswitch set 0 <current-input>
 ```
 
 ### Dealing with Slow Monitors
@@ -1558,9 +1558,9 @@ Some monitors are slow to respond to DDC/CI commands. Add delays:
 
 ```powershell
 # slow-switch.ps1
-DDCSwitch set 0 HDMI1
+ddcswitch set 0 HDMI1
 Start-Sleep -Seconds 2  # Wait for monitor to switch
-DDCSwitch set 1 HDMI2
+ddcswitch set 1 HDMI2
 Start-Sleep -Seconds 2
 Write-Host "Done" -ForegroundColor Green
 ```
@@ -1571,25 +1571,25 @@ Useful if monitor order changes:
 
 ```powershell
 # Find monitor with "LG" in the name and switch it
-DDCSwitch list  # Note the exact name
-DDCSwitch set "LG ULTRAGEAR" HDMI1
+ddcswitch list  # Note the exact name
+ddcswitch set "LG ULTRAGEAR" HDMI1
 
 # Partial name matching works
-DDCSwitch set "ULTRAGEAR" HDMI1
+ddcswitch set "ULTRAGEAR" HDMI1
 
 # Get settings by monitor name
-DDCSwitch get "VG270U" brightness
-DDCSwitch get "Generic PnP"  # Gets all VCP values for this monitor
+ddcswitch get "VG270U" brightness
+ddcswitch get "Generic PnP"  # Gets all VCP values for this monitor
 ```
 
 ## Integration with Other Tools
 
 ### PowerToys Run
 
-Add DDCSwitch to your PATH, then use PowerToys Run (Alt+Space):
+Add ddcswitch to your PATH, then use PowerToys Run (Alt+Space):
 
 ```
-> DDCSwitch set 0 HDMI1
+> ddcswitch set 0 HDMI1
 ```
 
 ### Windows Run Dialog
@@ -1597,7 +1597,7 @@ Add DDCSwitch to your PATH, then use PowerToys Run (Alt+Space):
 Press Win+R and type:
 
 ```
-DDCSwitch set 0 DP1
+ddcswitch set 0 DP1
 ```
 
 ### Batch File Shortcuts
@@ -1607,21 +1607,21 @@ Create `.bat` files on your desktop:
 **switch-to-hdmi.bat:**
 ```batch
 @echo off
-"C:\Tools\DDCSwitch.exe" set 0 HDMI1
+"C:\Tools\ddcswitch.exe" set 0 HDMI1
 ```
 
 **switch-to-dp.bat:**
 ```batch
 @echo off
-"C:\Tools\DDCSwitch.exe" set 0 DP1
+"C:\Tools\ddcswitch.exe" set 0 DP1
 ```
 
 Make them double-clickable for quick access!
 
 ## Tips and Tricks
 
-1. **Add to PATH**: Add DDCSwitch.exe location to your Windows PATH for easier access
-2. **Create shortcuts**: Right-click DDCSwitch.exe → Send to → Desktop (create shortcut), then edit properties to add arguments
+1. **Add to PATH**: Add ddcswitch.exe location to your Windows PATH for easier access
+2. **Create shortcuts**: Right-click ddcswitch.exe ? Send to ? Desktop (create shortcut), then edit properties to add arguments
 3. **Use monitoring**: Combine with other tools to detect when certain apps launch and switch inputs automatically
 4. **Test first**: Always test with `list` and `get` before creating automation scripts
 5. **Admin rights**: Some monitors require running as Administrator - right-click and "Run as administrator"
@@ -1632,12 +1632,12 @@ Make them double-clickable for quick access!
 
 ```powershell
 # toggle-brightness.ps1 - Toggle between low/medium/high brightness
-$current = DDCSwitch get 0 brightness --json | ConvertFrom-Json
+$current = ddcswitch get 0 brightness --json | ConvertFrom-Json
 
 if ($current.success) {
     $currentPercent = $current.percentageValue
     
-    # Cycle through 25% → 50% → 75% → 100% → 25%
+    # Cycle through 25% ? 50% ? 75% ? 100% ? 25%
     $newBrightness = switch ($currentPercent) {
         {$_ -le 25} { 50 }
         {$_ -le 50} { 75 }
@@ -1645,8 +1645,8 @@ if ($current.success) {
         default { 25 }
     }
     
-    DDCSwitch set 0 brightness "$newBrightness%"
-    Write-Host "Brightness: $currentPercent% → $newBrightness%" -ForegroundColor Green
+    ddcswitch set 0 brightness "$newBrightness%"
+    Write-Host "Brightness: $currentPercent% ? $newBrightness%" -ForegroundColor Green
 } else {
     Write-Host "Brightness control not supported" -ForegroundColor Red
 }
@@ -1659,8 +1659,8 @@ if ($current.success) {
 param([string]$Profile = "work")
 
 # Get current settings
-$inputResult = DDCSwitch get 0 --json | ConvertFrom-Json
-$brightnessResult = DDCSwitch get 0 brightness --json | ConvertFrom-Json
+$inputResult = ddcswitch get 0 --json | ConvertFrom-Json
+$brightnessResult = ddcswitch get 0 brightness --json | ConvertFrom-Json
 
 if (-not $inputResult.success) {
     Write-Error "Monitor not accessible"
@@ -1683,17 +1683,17 @@ $targetProfile = $profiles[$Profile]
 
 # Apply settings only if different
 if ($inputResult.currentInputCode -ne $targetProfile.input) {
-    DDCSwitch set 0 $targetProfile.input
-    Write-Host "✓ Input: $($targetProfile.input)" -ForegroundColor Green
+    ddcswitch set 0 $targetProfile.input
+    Write-Host "? Input: $($targetProfile.input)" -ForegroundColor Green
 }
 
 if ($brightnessResult.success -and $brightnessResult.percentageValue -ne $targetProfile.brightness) {
-    DDCSwitch set 0 brightness "$($targetProfile.brightness)%"
-    Write-Host "✓ Brightness: $($targetProfile.brightness)%" -ForegroundColor Green
+    ddcswitch set 0 brightness "$($targetProfile.brightness)%"
+    Write-Host "? Brightness: $($targetProfile.brightness)%" -ForegroundColor Green
 }
 
-DDCSwitch set 0 contrast "$($targetProfile.contrast)%"
-Write-Host "✓ Profile '$Profile' applied" -ForegroundColor Cyan
+ddcswitch set 0 contrast "$($targetProfile.contrast)%"
+Write-Host "? Profile '$Profile' applied" -ForegroundColor Cyan
 ```
 
 ### Pattern 3: Sync All Monitors
@@ -1706,7 +1706,7 @@ param(
     [int]$Contrast = 80
 )
 
-$result = DDCSwitch list --json | ConvertFrom-Json
+$result = ddcswitch list --json | ConvertFrom-Json
 
 if (-not $result.success) {
     Write-Error $result.error
@@ -1719,27 +1719,27 @@ foreach ($monitor in $okMonitors) {
     Write-Host "Configuring monitor $($monitor.index) ($($monitor.name))..." -ForegroundColor Cyan
     
     # Set input
-    $inputResult = DDCSwitch set $monitor.index $Input --json | ConvertFrom-Json
+    $inputResult = ddcswitch set $monitor.index $Input --json | ConvertFrom-Json
     if ($inputResult.success) {
-        Write-Host "  ✓ Input: $Input" -ForegroundColor Green
+        Write-Host "  ? Input: $Input" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ Input failed: $($inputResult.error)" -ForegroundColor Red
+        Write-Host "  ? Input failed: $($inputResult.error)" -ForegroundColor Red
     }
     
     # Set brightness
-    $brightnessResult = DDCSwitch set $monitor.index brightness "$Brightness%" --json | ConvertFrom-Json
+    $brightnessResult = ddcswitch set $monitor.index brightness "$Brightness%" --json | ConvertFrom-Json
     if ($brightnessResult.success) {
-        Write-Host "  ✓ Brightness: $Brightness%" -ForegroundColor Green
+        Write-Host "  ? Brightness: $Brightness%" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ Brightness not supported" -ForegroundColor Yellow
+        Write-Host "  ? Brightness not supported" -ForegroundColor Yellow
     }
     
     # Set contrast
-    $contrastResult = DDCSwitch set $monitor.index contrast "$Contrast%" --json | ConvertFrom-Json
+    $contrastResult = ddcswitch set $monitor.index contrast "$Contrast%" --json | ConvertFrom-Json
     if ($contrastResult.success) {
-        Write-Host "  ✓ Contrast: $Contrast%" -ForegroundColor Green
+        Write-Host "  ? Contrast: $Contrast%" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ Contrast not supported" -ForegroundColor Yellow
+        Write-Host "  ? Contrast not supported" -ForegroundColor Yellow
     }
     
     Start-Sleep -Milliseconds 500  # Prevent DDC/CI overload

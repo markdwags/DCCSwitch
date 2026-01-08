@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 echo ========================================
-echo Building DDCSwitch with NativeAOT
+echo Building ddcswitch with NativeAOT
 echo ========================================
 echo.
 
@@ -30,7 +30,7 @@ if not exist "dist" mkdir "dist"
 
 REM Copy the NativeAOT executable
 echo Copying executable to dist folder...
-copy /Y "DDCSwitch\bin\Release\net10.0\win-x64\publish\DDCSwitch.exe" "dist\DDCSwitch.exe"
+copy /Y "DDCSwitch\bin\Release\net10.0\win-x64\publish\ddcswitch.exe" "dist\ddcswitch.exe"
 if errorlevel 1 (
     echo ERROR: Failed to copy executable
     exit /b 1
@@ -39,11 +39,11 @@ if errorlevel 1 (
 echo.
 echo ========================================
 echo Build completed successfully!
-echo Output: dist\DDCSwitch.exe
+echo Output: dist\ddcswitch.exe
 echo ========================================
 
 REM Display file size
-for %%A in ("dist\DDCSwitch.exe") do (
+for %%A in ("dist\ddcswitch.exe") do (
     set size=%%~zA
     set /a sizeMB=!size! / 1048576
     echo File size: !sizeMB! MB

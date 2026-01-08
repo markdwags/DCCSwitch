@@ -72,7 +72,7 @@ internal static class VcpScanCommand
             else
             {
                 ConsoleOutputFormatter.WriteError($"Monitor '{monitorIdentifier}' not found.");
-                AnsiConsole.MarkupLine("Use [yellow]DDCSwitch list[/] to see available monitors.");
+                AnsiConsole.MarkupLine("Use [yellow]ddcswitch list[/] to see available monitors.");
             }
 
             // Cleanup

@@ -1,6 +1,6 @@
 ﻿# Changelog
 
-All notable changes to DDCSwitch will be documented in this file.
+All notable changes to ddcswitch will be documented in this file.
 
 ## [1.0.2] - 2026-01-07
 
@@ -9,6 +9,7 @@ All notable changes to DDCSwitch will be documented in this file.
 - Improved error handling for unsupported monitors
 - Enhanced documentation with additional examples
 - Optimized performance for input switching operations
+- Better clarity in CLI output messages
 
 ## [1.0.1] - 2026-01-07
 
