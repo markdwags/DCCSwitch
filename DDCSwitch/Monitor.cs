@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+
 namespace DDCSwitch;
 
 /// <summary>
@@ -40,6 +45,164 @@ public class Monitor(int index, string name, string deviceName, bool isPrimary, 
         }
 
         return NativeMethods.SetVCPFeature(Handle, InputSource.VcpInputSource, value);
+    }
+
+    /// <summary>
+    /// Attempts to read a VCP feature value from the monitor with enhanced error detection
+    /// </summary>
+    /// <param name="vcpCode">VCP code to read (0x00-0xFF)</param>
+    /// <param name="currentValue">Current value of the VCP feature</param>
+    /// <param name="maxValue">Maximum value supported by the VCP feature</param>
+    /// <param name="errorCode">Win32 error code if operation fails</param>
+    /// <returns>True if the operation was successful</returns>
+    public bool TryGetVcpFeature(byte vcpCode, out uint currentValue, out uint maxValue, out int errorCode)
+    {
+        currentValue = 0;
+        maxValue = 0;
+        errorCode = 0;
+
+        if (_disposed || Handle == IntPtr.Zero)
+        {
+            errorCode = 0x00000006; // ERROR_INVALID_HANDLE
+            return false;
+        }
+
+        bool success = NativeMethods.GetVCPFeatureAndVCPFeatureReply(
+            Handle,
+            vcpCode,
+            out _,
+            out currentValue,
+            out maxValue);
+
+        if (!success)
+        {
+            errorCode = Marshal.GetLastWin32Error();
+        }
+
+        return success;
+    }
+
+    /// <summary>
+    /// Attempts to read a VCP feature value from the monitor (legacy method for backward compatibility)
+    /// </summary>
+    /// <param name="vcpCode">VCP code to read (0x00-0xFF)</param>
+    /// <param name="currentValue">Current value of the VCP feature</param>
+    /// <param name="maxValue">Maximum value supported by the VCP feature</param>
+    /// <returns>True if the operation was successful</returns>
+    public bool TryGetVcpFeature(byte vcpCode, out uint currentValue, out uint maxValue)
+    {
+        return TryGetVcpFeature(vcpCode, out currentValue, out maxValue, out _);
+    }
+
+    /// <summary>
+    /// Attempts to write a VCP feature value to the monitor with enhanced error detection
+    /// </summary>
+    /// <param name="vcpCode">VCP code to write (0x00-0xFF)</param>
+    /// <param name="value">Value to set for the VCP feature</param>
+    /// <param name="errorCode">Win32 error code if operation fails</param>
+    /// <returns>True if the operation was successful</returns>
+    public bool TrySetVcpFeature(byte vcpCode, uint value, out int errorCode)
+    {
+        errorCode = 0;
+
+        if (_disposed || Handle == IntPtr.Zero)
+        {
+            errorCode = 0x00000006; // ERROR_INVALID_HANDLE
+            return false;
+        }
+
+        bool success = NativeMethods.SetVCPFeature(Handle, vcpCode, value);
+
+        if (!success)
+        {
+            errorCode = Marshal.GetLastWin32Error();
+        }
+
+        return success;
+    }
+
+    /// <summary>
+    /// Attempts to write a VCP feature value to the monitor (legacy method for backward compatibility)
+    /// </summary>
+    /// <param name="vcpCode">VCP code to write (0x00-0xFF)</param>
+    /// <param name="value">Value to set for the VCP feature</param>
+    /// <returns>True if the operation was successful</returns>
+    public bool TrySetVcpFeature(byte vcpCode, uint value)
+    {
+        return TrySetVcpFeature(vcpCode, value, out _);
+    }
+
+    /// <summary>
+    /// Scans all VCP codes (0x00-0xFF) to discover supported features
+    /// </summary>
+    /// <returns>Dictionary mapping VCP codes to their feature information</returns>
+    public Dictionary<byte, VcpFeatureInfo> ScanVcpFeatures()
+    {
+        var features = new Dictionary<byte, VcpFeatureInfo>();
+
+        if (_disposed || Handle == IntPtr.Zero)
+        {
+            return features;
+        }
+
+        // Get predefined features for name lookup
+        var predefinedFeatures = FeatureResolver.GetPredefinedFeatures()
+            .ToDictionary(f => f.Code, f => f);
+
+        // Scan all possible VCP codes (0x00 to 0xFF)
+        for (int code = 0; code <= 255; code++)
+        {
+            byte vcpCode = (byte)code;
+            
+            if (TryGetVcpFeature(vcpCode, out uint currentValue, out uint maxValue))
+            {
+                // Feature is supported - determine name and type
+                string name;
+                VcpFeatureType type;
+
+                if (predefinedFeatures.TryGetValue(vcpCode, out VcpFeature? predefined))
+                {
+                    name = predefined.Name;
+                    type = predefined.Type;
+                }
+                else
+                {
+                    name = $"VCP_{vcpCode:X2}";
+                    type = VcpFeatureType.ReadWrite; // Assume read-write for unknown codes
+                }
+
+                features[vcpCode] = new VcpFeatureInfo(
+                    vcpCode,
+                    name,
+                    predefined?.Description ?? $"VCP feature {name}",
+                    type,
+                    predefined?.Category ?? VcpFeatureCategory.Miscellaneous,
+                    currentValue,
+                    maxValue,
+                    true
+                );
+            }
+            else
+            {
+                // Feature is not supported - still add entry for completeness
+                string name = predefinedFeatures.TryGetValue(vcpCode, out VcpFeature? predefined) 
+                    ? predefined.Name 
+                    : $"VCP_{vcpCode:X2}";
+
+                features[vcpCode] = new VcpFeatureInfo(
+                    vcpCode,
+                    name,
+                    predefined?.Description ?? $"VCP feature {name}",
+                    VcpFeatureType.ReadWrite,
+                    predefined?.Category ?? VcpFeatureCategory.Miscellaneous,
+                    0,
+                    0,
+                    false
+                );
+            }
+        }
+
+        return features;
     }
 
     public void Dispose()

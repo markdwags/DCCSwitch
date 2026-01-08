@@ -11,6 +11,7 @@
         <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
         <StripSymbols>true</StripSymbols>
+        <AssemblyName>ddcswitch</AssemblyName>
     </PropertyGroup>
 
     <!-- Extract version from CHANGELOG.md -->
@@ -19,7 +20,7 @@
             <ChangelogPath>$(MSBuildProjectDirectory)\..\CHANGELOG.md</ChangelogPath>
         </PropertyGroup>
         <ReadLinesFromFile File="$(ChangelogPath)" Condition="Exists('$(ChangelogPath)')">
-            <Output TaskParameter="Lines" ItemName="ChangelogLines"/>
+            <Output TaskParameter="Lines" ItemName="ChangelogLines" />
         </ReadLinesFromFile>
         <PropertyGroup>
             <ChangelogContent>@(ChangelogLines, '%0A')</ChangelogContent>
@@ -33,11 +34,23 @@
             <FileVersion>$(Version)</FileVersion>
             <InformationalVersion>$(Version)</InformationalVersion>
         </PropertyGroup>
-        <Message Text="Building DDCSwitch version: $(Version)" Importance="high"/>
+        <Message Text="Building ddcswitch version: $(Version)" Importance="high" />
     </Target>
 
     <ItemGroup>
         <PackageReference Include="Spectre.Console" Version="0.54.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Embed VCP feature data JSON for potential runtime use -->
+        <EmbeddedResource Include="VcpFeatureData.json" />
+        
+        <!-- Mark generated file as auto-generated -->
+        <Compile Update="VcpFeature.Generated.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>VcpFeatureData.json</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>
