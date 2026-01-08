@@ -15,7 +15,8 @@ A Windows command-line utility to control monitor settings via DDC/CI (Display D
 - 🖥️ **List all DDC/CI capable monitors** with their current input sources
 - 🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
 - 🔆 **Control brightness and contrast** with percentage values (0-100%)
-- 🎛️ **Raw VCP access** for advanced users to control any monitor feature
+- 🎛️ **Comprehensive VCP feature support** - Access all MCCS standardized monitor controls
+- 🏷️ **Feature categories and discovery** - Browse VCP features by category (Image, Color, Geometry, Audio, etc.)
 - 🔍 **VCP scanning** to discover all supported monitor features
 - 🎯 **Simple CLI interface** perfect for scripts, shortcuts, and hotkeys
 - 📊 **JSON output support** - Machine-readable output for automation and integration
@@ -159,6 +160,34 @@ DDCSwitch list --verbose
 
 This scans all VCP codes (0x00-0xFF) and displays supported features with their current values, maximum values, and access types (read-only, write-only, read-write).
 
+### VCP Feature Categories and Discovery
+
+Discover and browse VCP features by category:
+
+```powershell
+# List all available categories
+DDCSwitch list --categories
+
+# List features in a specific category
+DDCSwitch list --category image
+DDCSwitch list --category color
+DDCSwitch list --category audio
+```
+
+Example output:
+```
+Image Adjustment Features:
+- brightness (0x10): Brightness control
+- contrast (0x12): Contrast control  
+- sharpness (0x87): Sharpness control
+- backlight (0x13): Backlight control
+
+Color Control Features:
+- red-gain (0x16): Video gain: Red
+- green-gain (0x18): Video gain: Green
+- blue-gain (0x1A): Video gain: Blue
+```
+
 ### Supported Features
 
 #### Input Sources
@@ -173,6 +202,18 @@ This scans all VCP codes (0x00-0xFF) and displays supported features with their 
 - **Brightness**: `brightness` (VCP 0x10) - accepts percentage values (0-100%)
 - **Contrast**: `contrast` (VCP 0x12) - accepts percentage values (0-100%)
 - **Input Source**: `input` (VCP 0x60) - existing functionality maintained
+- **Color Controls**: `red-gain`, `green-gain`, `blue-gain` (VCP 0x16, 0x18, 0x1A)
+- **Audio**: `volume`, `mute` (VCP 0x62, 0x8D) - volume accepts percentage values
+- **Geometry**: `h-position`, `v-position`, `clock`, `phase` (mainly for CRT monitors)
+- **Presets**: `restore-defaults`, `degauss` (VCP 0x04, 0x01)
+
+#### VCP Feature Categories
+- **Image Adjustment**: brightness, contrast, sharpness, backlight, etc.
+- **Color Control**: RGB gains, color temperature, gamma, hue, saturation
+- **Geometry**: position, size, pincushion controls (mainly CRT)
+- **Audio**: volume, mute, balance, treble, bass
+- **Preset**: factory defaults, degauss, calibration
+- **Miscellaneous**: power mode, OSD settings, firmware info
 
 #### Raw VCP Codes
 - Any VCP code from `0x00` to `0xFF`
@@ -189,17 +230,32 @@ DDCSwitch set 0 HDMI1
 DDCSwitch set 1 DP1
 ```
 
-**Control brightness and contrast:**
+**Control comprehensive VCP features:**
 ```powershell
 DDCSwitch set 0 brightness 75%
 DDCSwitch set 0 contrast 80%
 DDCSwitch get 0 brightness
+
+# Color controls
+DDCSwitch set 0 red-gain 90%
+DDCSwitch set 0 green-gain 85%
+DDCSwitch set 0 blue-gain 95%
+
+# Audio controls (if supported)
+DDCSwitch set 0 volume 50%
+DDCSwitch set 0 mute 1
 ```
 
-**Raw VCP access:**
+**VCP feature discovery:**
 ```powershell
-DDCSwitch get 0 0x10      # Get brightness (raw)
-DDCSwitch set 0 0x10 120  # Set brightness (raw value)
+# List all available VCP feature categories
+DDCSwitch list --categories
+
+# List features in a specific category
+DDCSwitch list --category color
+
+# Search for features by name
+DDCSwitch get 0 bright  # Matches "brightness"
 ```
 
 **Desktop shortcut:**
@@ -291,6 +347,6 @@ MIT License - see LICENSE file for details
 
 ## Acknowledgments
 
-- Inspired by `ddcutil` for Linux
+- Inspired by [ddcutil](https://www.ddcutil.com) for Linux
 - Uses Spectre.Console for beautiful terminal output
 

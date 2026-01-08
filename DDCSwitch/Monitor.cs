@@ -174,7 +174,9 @@ public class Monitor(int index, string name, string deviceName, bool isPrimary, 
                 features[vcpCode] = new VcpFeatureInfo(
                     vcpCode,
                     name,
+                    predefined?.Description ?? $"VCP feature {name}",
                     type,
+                    predefined?.Category ?? VcpFeatureCategory.Miscellaneous,
                     currentValue,
                     maxValue,
                     true
@@ -190,7 +192,9 @@ public class Monitor(int index, string name, string deviceName, bool isPrimary, 
                 features[vcpCode] = new VcpFeatureInfo(
                     vcpCode,
                     name,
+                    predefined?.Description ?? $"VCP feature {name}",
                     VcpFeatureType.ReadWrite,
+                    predefined?.Category ?? VcpFeatureCategory.Miscellaneous,
                     0,
                     0,
                     false

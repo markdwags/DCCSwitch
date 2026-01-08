@@ -135,17 +135,22 @@ static class DDCSwitchProgram
 
     private static int ListMonitors(bool jsonOutput, bool verboseOutput = false, bool scanOutput = false)
     {
+        List<DDCSwitch.Monitor> monitors;
+
         if (!jsonOutput)
         {
+            monitors = null!;
             AnsiConsole.Status()
                 .Start(scanOutput ? "Scanning VCP features..." : "Enumerating monitors...", ctx =>
                 {
                     ctx.Spinner(Spinner.Known.Dots);
-                    Thread.Sleep(scanOutput ? 500 : 100); // Longer pause for VCP scanning
+                    monitors = MonitorController.EnumerateMonitors();
                 });
         }
-
-        var monitors = MonitorController.EnumerateMonitors();
+        else
+        {
+            monitors = MonitorController.EnumerateMonitors();
+        }
 
         if (monitors.Count == 0)
         {
@@ -448,7 +453,24 @@ static class DDCSwitchProgram
         }
 
         // Use generic VCP method for all features with enhanced error handling
-        bool success = monitor.TryGetVcpFeature(feature!.Code, out uint current, out uint max, out int errorCode);
+        bool success = false;
+        uint current = 0;
+        uint max = 0;
+        int errorCode = 0;
+        
+        if (!jsonOutput)
+        {
+            AnsiConsole.Status()
+                .Start($"Reading {feature!.Name} from {monitor.Name}...", ctx =>
+                {
+                    ctx.Spinner(Spinner.Known.Dots);
+                    success = monitor.TryGetVcpFeature(feature.Code, out current, out max, out errorCode);
+                });
+        }
+        else
+        {
+            success = monitor.TryGetVcpFeature(feature!.Code, out current, out max, out errorCode);
+        }
 
         if (!success)
         {
@@ -496,20 +518,9 @@ static class DDCSwitchProgram
         {
             var monitorRef = new MonitorReference(monitor.Index, monitor.Name, monitor.DeviceName, monitor.IsPrimary);
             
-            if (feature.Code == InputSource.VcpInputSource)
-            {
-                // Use generic VCP response for input as well
-                uint? percentageValue = feature.SupportsPercentage ? FeatureResolver.ConvertRawToPercentage(current, max) : null;
-                var result = new GetVcpResponse(true, monitorRef, feature.Name, current, max, percentageValue);
-                Console.WriteLine(JsonSerializer.Serialize(result, JsonContext.Default.GetVcpResponse));
-            }
-            else
-            {
-                // Use generic VCP response for other features
-                uint? percentageValue = feature.SupportsPercentage ? FeatureResolver.ConvertRawToPercentage(current, max) : null;
-                var result = new GetVcpResponse(true, monitorRef, feature.Name, current, max, percentageValue);
-                Console.WriteLine(JsonSerializer.Serialize(result, JsonContext.Default.GetVcpResponse));
-            }
+            uint? percentageValue = feature.SupportsPercentage ? FeatureResolver.ConvertRawToPercentage(current, max) : null;
+            var result = new GetVcpResponse(true, monitorRef, feature.Name, current, max, percentageValue);
+            Console.WriteLine(JsonSerializer.Serialize(result, JsonContext.Default.GetVcpResponse));
         }
         else
         {
@@ -949,7 +960,14 @@ static class DDCSwitchProgram
                 {
                     AnsiConsole.MarkupLine($"\n[bold blue]Monitor {monitor.Index}: {monitor.Name}[/] ({monitor.DeviceName})");
                     
-                    var features = monitor.ScanVcpFeatures();
+                    Dictionary<byte, VcpFeatureInfo> features = null!;
+                    AnsiConsole.Status()
+                        .Start($"Scanning VCP features for {monitor.Name}...", ctx =>
+                        {
+                            ctx.Spinner(Spinner.Known.Dots);
+                            features = monitor.ScanVcpFeatures();
+                        });
+                    
                     var supportedFeatures = features.Values
                         .Where(f => f.IsSupported)
                         .OrderBy(f => f.Code)
@@ -1015,17 +1033,22 @@ static class DDCSwitchProgram
 
     private static int HandleVcpScanForMonitor(string monitorIdentifier, bool jsonOutput)
     {
+        List<DDCSwitch.Monitor> monitors;
+
         if (!jsonOutput)
         {
+            monitors = null!;
             AnsiConsole.Status()
-                .Start("Scanning VCP features...", ctx =>
+                .Start("Enumerating monitors...", ctx =>
                 {
                     ctx.Spinner(Spinner.Known.Dots);
-                    Thread.Sleep(500); // Pause for VCP scanning
+                    monitors = MonitorController.EnumerateMonitors();
                 });
         }
-
-        var monitors = MonitorController.EnumerateMonitors();
+        else
+        {
+            monitors = MonitorController.EnumerateMonitors();
+        }
 
         if (monitors.Count == 0)
         {
@@ -1069,7 +1092,22 @@ static class DDCSwitchProgram
         try
         {
             var monitorRef = new MonitorReference(monitor.Index, monitor.Name, monitor.DeviceName, monitor.IsPrimary);
-            var features = monitor.ScanVcpFeatures();
+            Dictionary<byte, VcpFeatureInfo> features;
+            
+            if (!jsonOutput)
+            {
+                features = null!;
+                AnsiConsole.Status()
+                    .Start($"Scanning VCP features for {monitor.Name}...", ctx =>
+                    {
+                        ctx.Spinner(Spinner.Known.Dots);
+                        features = monitor.ScanVcpFeatures();
+                    });
+            }
+            else
+            {
+                features = monitor.ScanVcpFeatures();
+            }
             
             // Filter only supported features for cleaner output
             var supportedFeatures = features.Values

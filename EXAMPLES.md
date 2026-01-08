@@ -1,6 +1,206 @@
 ﻿# DDCSwitch Examples
 
-This document contains detailed examples and use cases for DDCSwitch, including input switching, brightness/contrast control, and raw VCP access.
+This document contains detailed examples and use cases for DDCSwitch, including input switching, brightness/contrast control, comprehensive VCP feature access, and automation.
+
+## Comprehensive VCP Feature Examples
+
+DDCSwitch now supports all MCCS (Monitor Control Command Set) standardized VCP features, organized by categories for easy discovery.
+
+### VCP Feature Categories
+
+List all available feature categories:
+
+```powershell
+DDCSwitch list --categories
+```
+
+Output:
+```
+Available VCP Feature Categories:
+- ImageAdjustment: Brightness, contrast, sharpness, backlight controls
+- ColorControl: RGB gains, color temperature, gamma, hue, saturation
+- Geometry: Position, size, pincushion controls (mainly CRT monitors)
+- Audio: Volume, mute, balance, treble, bass controls
+- Preset: Factory defaults, degauss, calibration features
+- Miscellaneous: Power mode, OSD settings, firmware information
+```
+
+### Browse Features by Category
+
+```powershell
+# Image adjustment features
+DDCSwitch list --category image
+
+# Color control features  
+DDCSwitch list --category color
+
+# Audio features
+DDCSwitch list --category audio
+```
+
+### Color Control Examples
+
+Control RGB gains for color calibration:
+
+```powershell
+# Set individual RGB gains (percentage values)
+DDCSwitch set 0 red-gain 95%
+DDCSwitch set 0 green-gain 90%
+DDCSwitch set 0 blue-gain 85%
+
+# Get current RGB values
+DDCSwitch get 0 red-gain
+DDCSwitch get 0 green-gain  
+DDCSwitch get 0 blue-gain
+
+# Color temperature control (if supported)
+DDCSwitch set 0 color-temp-request 6500
+DDCSwitch get 0 color-temp-request
+
+# Gamma control
+DDCSwitch set 0 gamma 2.2
+DDCSwitch get 0 gamma
+
+# Hue and saturation
+DDCSwitch set 0 hue 50%
+DDCSwitch set 0 saturation 80%
+```
+
+### Audio Control Examples
+
+Control monitor speakers (if supported):
+
+```powershell
+# Volume control (percentage)
+DDCSwitch set 0 volume 75%
+DDCSwitch get 0 volume
+
+# Mute/unmute
+DDCSwitch set 0 mute 1    # Mute
+DDCSwitch set 0 mute 0    # Unmute
+
+# Audio balance (if supported)
+DDCSwitch set 0 audio-balance 50%  # Centered
+
+# Treble and bass (if supported)
+DDCSwitch set 0 audio-treble 60%
+DDCSwitch set 0 audio-bass 70%
+```
+
+### Advanced Image Controls
+
+Beyond basic brightness and contrast:
+
+```powershell
+# Sharpness control
+DDCSwitch set 0 sharpness 75%
+DDCSwitch get 0 sharpness
+
+# Backlight control (LED monitors)
+DDCSwitch set 0 backlight 80%
+DDCSwitch get 0 backlight
+
+# Image orientation (if supported)
+DDCSwitch set 0 image-orientation 0  # Normal
+DDCSwitch set 0 image-orientation 1  # 90° rotation
+
+# Image mode presets (if supported)
+DDCSwitch set 0 image-mode 1  # Standard
+DDCSwitch set 0 image-mode 2  # Movie
+DDCSwitch set 0 image-mode 3  # Game
+```
+
+### Factory Reset and Calibration
+
+```powershell
+# Restore all factory defaults
+DDCSwitch set 0 restore-defaults 1
+
+# Restore specific defaults
+DDCSwitch set 0 restore-brightness-contrast 1
+DDCSwitch set 0 restore-color 1
+DDCSwitch set 0 restore-geometry 1
+
+# Degauss (CRT monitors)
+DDCSwitch set 0 degauss 1
+
+# Auto calibration features (if supported)
+DDCSwitch set 0 auto-color-setup 1
+DDCSwitch set 0 auto-size-center 1
+```
+
+### Complete Monitor Profile Examples
+
+Create comprehensive monitor profiles using all available features:
+
+```powershell
+# gaming-profile-advanced.ps1
+Write-Host "Activating Advanced Gaming Profile..." -ForegroundColor Cyan
+
+# Input and basic settings
+DDCSwitch set 0 input HDMI1
+DDCSwitch set 0 brightness 90%
+DDCSwitch set 0 contrast 85%
+
+# Color optimization for gaming
+DDCSwitch set 0 red-gain 100%
+DDCSwitch set 0 green-gain 95%
+DDCSwitch set 0 blue-gain 90%
+DDCSwitch set 0 saturation 110%  # Enhanced colors
+DDCSwitch set 0 sharpness 80%    # Crisp details
+
+# Audio settings
+DDCSwitch set 0 volume 60%
+DDCSwitch set 0 mute 0
+
+Write-Host "Advanced Gaming Profile Activated!" -ForegroundColor Green
+```
+
+```powershell
+# work-profile-advanced.ps1  
+Write-Host "Activating Advanced Work Profile..." -ForegroundColor Cyan
+
+# Input and basic settings
+DDCSwitch set 0 input DP1
+DDCSwitch set 0 brightness 60%
+DDCSwitch set 0 contrast 75%
+
+# Color optimization for text work
+DDCSwitch set 0 red-gain 85%
+DDCSwitch set 0 green-gain 90%
+DDCSwitch set 0 blue-gain 95%
+DDCSwitch set 0 saturation 70%   # Reduced saturation for comfort
+DDCSwitch set 0 sharpness 60%    # Softer for long reading
+
+# Audio settings
+DDCSwitch set 0 volume 40%       # Lower for office environment
+DDCSwitch set 0 mute 0
+
+Write-Host "Advanced Work Profile Activated!" -ForegroundColor Green
+```
+
+```powershell
+# photo-editing-profile.ps1
+Write-Host "Activating Photo Editing Profile..." -ForegroundColor Cyan
+
+# Input and basic settings
+DDCSwitch set 0 input DP1
+DDCSwitch set 0 brightness 70%
+DDCSwitch set 0 contrast 80%
+
+# Accurate color reproduction
+DDCSwitch set 0 red-gain 90%
+DDCSwitch set 0 green-gain 90%
+DDCSwitch set 0 blue-gain 90%
+DDCSwitch set 0 saturation 100%  # Natural saturation
+DDCSwitch set 0 gamma 2.2        # Standard gamma
+DDCSwitch set 0 color-temp-request 6500  # D65 standard
+
+# Disable audio to avoid distractions
+DDCSwitch set 0 mute 1
+
+Write-Host "Photo Editing Profile Activated!" -ForegroundColor Green
+```
 
 ## Basic Usage Examples
 

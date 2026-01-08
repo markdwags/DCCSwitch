@@ -7,12 +7,45 @@ namespace DDCSwitch;
 /// </summary>
 public static class FeatureResolver
 {
-    private static readonly Dictionary<string, VcpFeature> FeatureMap = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, VcpFeature> FeatureMap = BuildFeatureMap();
+    private static readonly Dictionary<byte, VcpFeature> CodeMap = BuildCodeMap();
+
+    /// <summary>
+    /// Builds the feature name to VcpFeature mapping including aliases
+    /// </summary>
+    private static Dictionary<string, VcpFeature> BuildFeatureMap()
     {
-        { "brightness", VcpFeature.Brightness },
-        { "contrast", VcpFeature.Contrast },
-        { "input", VcpFeature.InputSource }
-    };
+        var map = new Dictionary<string, VcpFeature>(StringComparer.OrdinalIgnoreCase);
+        
+        foreach (var feature in VcpFeature.AllFeatures)
+        {
+            // Add primary name
+            map[feature.Name] = feature;
+            
+            // Add aliases
+            foreach (var alias in feature.Aliases)
+            {
+                map[alias] = feature;
+            }
+        }
+        
+        return map;
+    }
+
+    /// <summary>
+    /// Builds the VCP code to VcpFeature mapping
+    /// </summary>
+    private static Dictionary<byte, VcpFeature> BuildCodeMap()
+    {
+        var map = new Dictionary<byte, VcpFeature>();
+        
+        foreach (var feature in VcpFeature.AllFeatures)
+        {
+            map[feature.Code] = feature;
+        }
+        
+        return map;
+    }
 
     /// <summary>
     /// Attempts to resolve a feature name or VCP code to a VcpFeature
@@ -29,7 +62,7 @@ public static class FeatureResolver
             return false;
         }
 
-        // First try to resolve as a known feature name
+        // First try to resolve as a known feature name or alias
         if (FeatureMap.TryGetValue(input.Trim(), out feature))
         {
             return true;
@@ -38,12 +71,73 @@ public static class FeatureResolver
         // Try to parse as a VCP code
         if (TryParseVcpCode(input, out byte vcpCode))
         {
+            // Check if we have a predefined feature for this code
+            if (CodeMap.TryGetValue(vcpCode, out feature))
+            {
+                return true;
+            }
+            
             // Create a generic VCP feature for unknown codes
-            feature = new VcpFeature(vcpCode, $"VCP_{vcpCode:X2}", VcpFeatureType.ReadWrite, false);
+            feature = new VcpFeature(vcpCode, $"VCP_{vcpCode:X2}", $"Unknown VCP feature 0x{vcpCode:X2}", VcpFeatureType.ReadWrite, VcpFeatureCategory.Miscellaneous, false);
             return true;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Gets VCP features by category
+    /// </summary>
+    /// <param name="category">The category to filter by</param>
+    /// <returns>Array of VCP features in the specified category</returns>
+    public static VcpFeature[] GetFeaturesByCategory(VcpFeatureCategory category)
+    {
+        return VcpFeature.AllFeatures.Where(f => f.Category == category).ToArray();
+    }
+
+    /// <summary>
+    /// Searches for VCP features by partial name matching
+    /// </summary>
+    /// <param name="partialName">Partial name to search for</param>
+    /// <returns>Array of VCP features matching the partial name</returns>
+    public static VcpFeature[] SearchFeatures(string partialName)
+    {
+        if (string.IsNullOrWhiteSpace(partialName))
+        {
+            return Array.Empty<VcpFeature>();
+        }
+
+        var searchTerm = partialName.Trim();
+        return VcpFeature.AllFeatures
+            .Where(f => f.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                       f.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                       f.Aliases.Any(alias => alias.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .ToArray();
+    }
+
+    /// <summary>
+    /// Gets a VCP feature by its code
+    /// </summary>
+    /// <param name="code">VCP code</param>
+    /// <returns>VCP feature if found, otherwise a generic feature for the code</returns>
+    public static VcpFeature GetFeatureByCode(byte code)
+    {
+        if (CodeMap.TryGetValue(code, out var feature))
+        {
+            return feature;
+        }
+        
+        // Return a generic feature for unknown codes
+        return new VcpFeature(code, $"VCP_{code:X2}", $"Unknown VCP feature 0x{code:X2}", VcpFeatureType.ReadWrite, VcpFeatureCategory.Miscellaneous, false);
+    }
+
+    /// <summary>
+    /// Gets all available VCP feature categories
+    /// </summary>
+    /// <returns>Array of category names</returns>
+    public static string[] GetAllCategories()
+    {
+        return Enum.GetNames<VcpFeatureCategory>();
     }
 
     /// <summary>
@@ -269,7 +363,7 @@ public static class FeatureResolver
     }
 
     /// <summary>
-    /// Gets all known feature names
+    /// Gets all known feature names including aliases
     /// </summary>
     /// <returns>Collection of known feature names</returns>
     public static IEnumerable<string> GetKnownFeatureNames()
@@ -283,6 +377,6 @@ public static class FeatureResolver
     /// <returns>Collection of predefined VCP features</returns>
     public static IEnumerable<VcpFeature> GetPredefinedFeatures()
     {
-        return FeatureMap.Values;
+        return VcpFeature.AllFeatures;
     }
 }

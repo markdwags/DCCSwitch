@@ -1,0 +1,29 @@
+﻿{
+  "profiles": {
+    "DDCSwitch (get 0)": {
+      "commandName": "Project",
+      "commandLineArgs": "get 0"
+    },
+    "DDCSwitch (list)": {
+      "commandName": "Project",
+      "commandLineArgs": "list"
+    },
+    "DDCSwitch (list --verbose)": {
+      "commandName": "Project",
+      "commandLineArgs": "list --verbose"
+    },
+    "DDCSwitch (set)": {
+      "commandName": "Project",
+      "commandLineArgs": "set 0 input HDMI1"
+    },
+    "DDCSwitch (version)": {
+      "commandName": "Project",
+      "commandLineArgs": "version"
+    },
+    "DDCSwitch (help)": {
+      "commandName": "Project",
+      "commandLineArgs": "help"
+    }
+  }
+}
+
