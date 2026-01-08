@@ -1,10 +1,10 @@
 ﻿# ddcswitch
 
-[![GitHub Release](https://img.shields.io/github/v/release/markdwags/DDCSwitch)](https://github.com/markdwags/DDCSwitch/releases)
-[![License](https://img.shields.io/github/license/markdwags/DDCSwitch)](https://github.com/markdwags/DDCSwitch/blob/main/LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows-blue)](https://github.com/markdwags/DDCSwitch)
+[![GitHub Release](https://img.shields.io/github/v/release/markdwags/ddcswitch)](https://github.com/markdwags/ddcswitch/releases)
+[![License](https://img.shields.io/github/license/markdwags/ddcswitch)](https://github.com/markdwags/ddcswitch/blob/main/LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows-blue)](https://github.com/markdwags/ddcswitch)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/)
-[![JSON Output](https://img.shields.io/badge/JSON-Output%20Support-green)](https://github.com/markdwags/DDCSwitch#json-output-for-automation)
+[![JSON Output](https://img.shields.io/badge/JSON-Output%20Support-green)](https://github.com/markdwags/ddcswitch#json-output-for-automation)
 
 A Windows command-line utility to control monitor settings via DDC/CI (Display Data Channel Command Interface). Control input sources, brightness, contrast, and other VCP features without touching physical buttons.
 
@@ -40,14 +40,14 @@ Download the latest release from the [Releases](../../releases) page and extract
 **Build:**
 
 ```powershell
-git clone https://github.com/markdwags/DDCSwitch.git
-cd DDCSwitch
+git clone https://github.com/markdwags/ddcswitch.git
+cd ddcswitch
 dotnet publish -c Release
 ```
 
 The project is pre-configured with NativeAOT (`<PublishAot>true</PublishAot>`), which produces a ~3-5 MB native executable with instant startup and no .NET runtime dependency.
 
-Executable location: `DDCSwitch/bin/Release/net10.0/win-x64/publish/ddcswitch.exe`
+Executable location: `ddcswitch/bin/Release/net10.0/win-x64/publish/ddcswitch.exe`
 
 ## Usage
 

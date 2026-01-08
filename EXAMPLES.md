@@ -102,7 +102,7 @@ ddcswitch get 0 backlight
 
 # Image orientation (if supported)
 ddcswitch set 0 image-orientation 0  # Normal
-ddcswitch set 0 image-orientation 1  # 90° rotation
+ddcswitch set 0 image-orientation 1  # 90ï¿½ rotation
 
 # Image mode presets (if supported)
 ddcswitch set 0 image-mode 1  # Standard
@@ -554,7 +554,7 @@ import sys
 def run_ddc(args):
     """Run ddcswitch and return JSON result"""
     result = subprocess.run(
-        ['DDCSwitch'] + args + ['--json'],
+        ['ddcswitch'] + args + ['--json'],
         capture_output=True,
         text=True
     )
@@ -620,7 +620,7 @@ import time
 from datetime import datetime
 
 def run_ddc(args):
-    result = subprocess.run(['DDCSwitch'] + args + ['--json'],
+    result = subprocess.run(['ddcswitch'] + args + ['--json'],
                           capture_output=True, text=True)
     return json.loads(result.stdout)
 
@@ -744,7 +744,7 @@ class ddcswitch {
 }
 
 // Usage example
-const monitors = DDCSwitch.listMonitors(true);
+const monitors = ddcswitch.listMonitors(true);
 console.log(`Found ${monitors.monitors.length} monitors`);
 
 monitors.monitors.forEach(monitor => {
@@ -755,12 +755,12 @@ monitors.monitors.forEach(monitor => {
 });
 
 // Set brightness and contrast
-const brightnessResult = DDCSwitch.setBrightness(0, 75);
+const brightnessResult = ddcswitch.setBrightness(0, 75);
 if (brightnessResult.success) {
     console.log(`? Set brightness to 75%`);
 }
 
-const contrastResult = DDCSwitch.setContrast(0, 80);
+const contrastResult = ddcswitch.setContrast(0, 80);
 if (contrastResult.success) {
     console.log(`? Set contrast to 80%`);
 }
@@ -953,7 +953,7 @@ fn run_ddc_command(args: &[&str]) -> Result<String, Box<dyn std::error::Error>> 
     let mut cmd_args = args.to_vec();
     cmd_args.push("--json");
     
-    let output = Command::new("DDCSwitch")
+    let output = Command::new("ddcswitch")
         .args(&cmd_args)
         .output()?;
 
@@ -1094,30 +1094,30 @@ Create a comprehensive input switching and brightness control system:
 ; Place ddcswitch.exe in C:\Tools\ or update path below
 
 ; Global variables
-DDCSwitchPath := "C:\Tools\ddcswitch.exe"
+ddcswitchPath := "C:\Tools\ddcswitch.exe"
 
-; Function to run DDCSwitch
-RunDDCSwitch(args) {
-    global DDCSwitchPath
-    Run, %DDCSwitchPath% %args%, , Hide
+; Function to run ddcswitch
+Runddcswitch(args) {
+    global ddcswitchPath
+    Run, %ddcswitchPath% %args%, , Hide
 }
 
 ; Input switching hotkeys
 ; Ctrl+Alt+1: Switch monitor 0 to HDMI1
 ^!1::
-    RunDDCSwitch("set 0 HDMI1")
+    Runddcswitch("set 0 HDMI1")
     TrayTip, ddcswitch, Switched to HDMI1, 1
     return
 
 ; Ctrl+Alt+2: Switch monitor 0 to HDMI2
 ^!2::
-    RunDDCSwitch("set 0 HDMI2")
+    Runddcswitch("set 0 HDMI2")
     TrayTip, ddcswitch, Switched to HDMI2, 1
     return
 
 ; Ctrl+Alt+D: Switch monitor 0 to DisplayPort
 ^!d::
-    RunDDCSwitch("set 0 DP1")
+    Runddcswitch("set 0 DP1")
     TrayTip, ddcswitch, Switched to DisplayPort, 1
     return
 
@@ -1125,74 +1125,74 @@ RunDDCSwitch(args) {
 ; Ctrl+Alt+Plus: Increase brightness by 10%
 ^!NumpadAdd::
 ^!=::
-    RunDDCSwitch("set 0 brightness +10%")
+    Runddcswitch("set 0 brightness +10%")
     TrayTip, ddcswitch, Brightness increased, 1
     return
 
 ; Ctrl+Alt+Minus: Decrease brightness by 10%
 ^!NumpadSub::
 ^!-::
-    RunDDCSwitch("set 0 brightness -10%")
+    Runddcswitch("set 0 brightness -10%")
     TrayTip, ddcswitch, Brightness decreased, 1
     return
 
 ; Brightness presets
 ; Ctrl+Alt+F1: 25% brightness (night mode)
 ^!F1::
-    RunDDCSwitch("set 0 brightness 25%")
+    Runddcswitch("set 0 brightness 25%")
     TrayTip, ddcswitch, Night Mode (25%), 1
     return
 
 ; Ctrl+Alt+F2: 50% brightness (comfortable)
 ^!F2::
-    RunDDCSwitch("set 0 brightness 50%")
+    Runddcswitch("set 0 brightness 50%")
     TrayTip, ddcswitch, Comfortable (50%), 1
     return
 
 ; Ctrl+Alt+F3: 75% brightness (bright)
 ^!F3::
-    RunDDCSwitch("set 0 brightness 75%")
+    Runddcswitch("set 0 brightness 75%")
     TrayTip, ddcswitch, Bright (75%), 1
     return
 
 ; Ctrl+Alt+F4: 100% brightness (maximum)
 ^!F4::
-    RunDDCSwitch("set 0 brightness 100%")
+    Runddcswitch("set 0 brightness 100%")
     TrayTip, ddcswitch, Maximum (100%), 1
     return
 
 ; Profile hotkeys
 ; Ctrl+Alt+W: Work setup (all monitors to PC with comfortable settings)
 ^!w::
-    RunDDCSwitch("set 0 DP1")
+    Runddcswitch("set 0 DP1")
     Sleep 500
-    RunDDCSwitch("set 0 brightness 60%")
+    Runddcswitch("set 0 brightness 60%")
     Sleep 500
-    RunDDCSwitch("set 0 contrast 75%")
+    Runddcswitch("set 0 contrast 75%")
     Sleep 500
-    RunDDCSwitch("set 1 DP2")
+    Runddcswitch("set 1 DP2")
     TrayTip, ddcswitch, Work Setup Activated, 1
     return
 
 ; Ctrl+Alt+G: Gaming setup (all monitors to console with high brightness)
 ^!g::
-    RunDDCSwitch("set 0 HDMI1")
+    Runddcswitch("set 0 HDMI1")
     Sleep 500
-    RunDDCSwitch("set 0 brightness 90%")
+    Runddcswitch("set 0 brightness 90%")
     Sleep 500
-    RunDDCSwitch("set 0 contrast 85%")
+    Runddcswitch("set 0 contrast 85%")
     Sleep 500
-    RunDDCSwitch("set 1 HDMI2")
+    Runddcswitch("set 1 HDMI2")
     TrayTip, ddcswitch, Gaming Setup Activated, 1
     return
 
 ; Ctrl+Alt+M: Media setup (HDMI with low brightness, high contrast)
 ^!m::
-    RunDDCSwitch("set 0 HDMI1")
+    Runddcswitch("set 0 HDMI1")
     Sleep 500
-    RunDDCSwitch("set 0 brightness 40%")
+    Runddcswitch("set 0 brightness 40%")
     Sleep 500
-    RunDDCSwitch("set 0 contrast 90%")
+    Runddcswitch("set 0 contrast 90%")
     TrayTip, ddcswitch, Media Setup Activated, 1
     return
 
@@ -1505,7 +1505,7 @@ VCP Code 60 (Input Source):
 - DisplayPort physical input ? Shows value 27 (0x1B) ? Non-standard!
 ```
 
-Once you know the correct codes, use them with DDCSwitch:
+Once you know the correct codes, use them with ddcswitch:
 ```powershell
 ddcswitch set 0 0x1B  # Use the actual code your monitor responds to
 ```
