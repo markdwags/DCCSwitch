@@ -138,6 +138,25 @@ ddcswitch set 0 HDMI1
 ddcswitch set "LG ULTRAGEAR" HDMI2
 ```
 
+### Toggle Between Input Sources
+
+Automatically switch between two input sources without specifying which one:
+
+```powershell
+# Toggle between HDMI1 and DisplayPort1
+ddcswitch toggle 0 HDMI1 DP1
+
+# Toggle by monitor name
+ddcswitch toggle "LG ULTRAGEAR" HDMI1 HDMI2
+```
+
+The toggle command detects the current input and switches to the alternate one:
+- If current input is HDMI1 → switches to DP1
+- If current input is DP1 → switches to HDMI1  
+- If current input is neither → switches to HDMI1 (with warning)
+
+Perfect for hotkeys and automation where you want to switch between two specific inputs without knowing which one is currently active.
+
 Set brightness or contrast with percentage values:
 
 ```powershell
@@ -250,6 +269,15 @@ Color Control Features:
 ```powershell
 ddcswitch set 0 HDMI1
 ddcswitch set 1 DP1
+```
+
+**Toggle between input sources:**
+```powershell
+# Toggle main monitor between HDMI1 and DisplayPort
+ddcswitch toggle 0 HDMI1 DP1
+
+# Toggle secondary monitor between HDMI inputs
+ddcswitch toggle 1 HDMI1 HDMI2
 ```
 
 **Control comprehensive VCP features:**

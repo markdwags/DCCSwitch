@@ -261,6 +261,64 @@ ddcswitch set 0 contrast 80%
 ddcswitch set 0 0x10 120  # Brightness (raw value)
 ```
 
+### Toggle Between Input Sources
+
+The toggle command automatically switches between two specified input sources by detecting the current input and switching to the alternate one:
+
+```powershell
+# Toggle between HDMI1 and DisplayPort1
+ddcswitch toggle 0 HDMI1 DP1
+
+# Toggle between HDMI1 and HDMI2 by monitor name
+ddcswitch toggle "LG ULTRAGEAR" HDMI1 HDMI2
+
+# Toggle with JSON output for automation
+ddcswitch toggle 0 HDMI1 DP1 --json
+```
+
+#### Toggle Command Behavior
+
+- **Current input is HDMI1** → Switches to DP1
+- **Current input is DP1** → Switches to HDMI1  
+- **Current input is neither** → Switches to HDMI1 (first input) with warning
+
+#### Toggle Examples
+
+```powershell
+# Create toggle shortcuts for different monitor setups
+# toggle-main-monitor.ps1
+ddcswitch toggle 0 HDMI1 DP1
+Write-Host "Toggled main monitor input" -ForegroundColor Green
+
+# toggle-secondary-monitor.ps1  
+ddcswitch toggle 1 HDMI2 DP2
+Write-Host "Toggled secondary monitor input" -ForegroundColor Green
+
+# Smart toggle with status feedback
+$result = ddcswitch toggle 0 HDMI1 DP1 --json | ConvertFrom-Json
+if ($result.success) {
+    Write-Host "Switched from $($result.fromInput) to $($result.toInput)" -ForegroundColor Green
+} else {
+    Write-Host "Toggle failed: $($result.errorMessage)" -ForegroundColor Red
+}
+```
+
+#### AutoHotkey Toggle Integration
+
+```autohotkey
+; Ctrl+Alt+T: Toggle between HDMI1 and DisplayPort
+^!t::
+    Run, ddcswitch.exe toggle 0 HDMI1 DP1, , Hide
+    TrayTip, ddcswitch, Input toggled, 1
+    return
+
+; Ctrl+Alt+Shift+T: Toggle secondary monitor
+^!+t::
+    Run, ddcswitch.exe toggle 1 HDMI2 DP2, , Hide
+    TrayTip, ddcswitch, Secondary monitor toggled, 1
+    return
+```
+
 ## Brightness and Contrast Control
 
 ### Basic Brightness Control

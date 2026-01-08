@@ -37,6 +37,7 @@ internal static class CommandRouter
                 "list" or "ls" => ListCommand.Execute(jsonOutput, verboseOutput),
                 "get" => GetCommand.Execute(filteredArgs, jsonOutput),
                 "set" => SetCommand.Execute(filteredArgs, jsonOutput),
+                "toggle" => ToggleCommand.Execute(filteredArgs, jsonOutput),
                 "version" or "-v" or "--version" => HelpCommand.ShowVersion(jsonOutput),
                 "help" or "-h" or "--help" or "/?" => HelpCommand.ShowUsage(),
                 _ => InvalidCommand(filteredArgs[0], jsonOutput)

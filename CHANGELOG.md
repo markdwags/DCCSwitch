@@ -2,6 +2,11 @@
 
 All notable changes to ddcswitch will be documented in this file.
 
+## [1.0.3] - 2026-01-08
+
+### Added
+- Added the toggle command to flip a monitor between two input sources
+
 ## [1.0.2] - 2026-01-07
 
 ### Added
