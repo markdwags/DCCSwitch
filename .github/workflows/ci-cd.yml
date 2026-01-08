@@ -38,7 +38,7 @@ jobs:
       - name: Verify executable exists
         shell: pwsh
         run: |
-          $exePath = "DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.exe"
+          $exePath = "DDCSwitch/bin/Release/net10.0/win-x64/publish/ddcswitch.exe"
           if (Test-Path $exePath) {
             $size = (Get-Item $exePath).Length / 1MB
             Write-Host "✓ Build successful! Executable size: $([math]::Round($size, 2)) MB"
@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: DDCSwitch-build-${{ github.sha }}
-          path: DDCSwitch/bin/Release/net10.0/win-x64/publish/DDCSwitch.exe
+          path: DDCSwitch/bin/Release/net10.0/win-x64/publish/ddcswitch.exe
           retention-days: 7
 
   release:
@@ -92,7 +92,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release
-          Copy-Item artifact/DDCSwitch.exe release/
+          Copy-Item artifact/ddcswitch.exe release/
           Copy-Item README.md release/
           Copy-Item LICENSE release/
           Copy-Item EXAMPLES.md release/
@@ -102,7 +102,7 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ steps.get_version.outputs.version }}"
-          Compress-Archive -Path release/* -DestinationPath "DDCSwitch-$version-win-x64.zip"
+          Compress-Archive -Path release/* -DestinationPath "ddcswitch-$version-win-x64.zip"
 
       - name: Generate release notes
         id: release_notes
@@ -150,20 +150,20 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_version.outputs.tag }}
-          name: DDCSwitch ${{ steps.get_version.outputs.version }}
+          name: ddcswitch ${{ steps.get_version.outputs.version }}
           body: ${{ steps.release_notes.outputs.notes }}
           draft: false
           prerelease: false
           files: |
-            DDCSwitch-${{ steps.get_version.outputs.version }}-win-x64.zip
-            release/DDCSwitch.exe
+            ddcswitch-${{ steps.get_version.outputs.version }}-win-x64.zip
+            release/ddcswitch.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: DDCSwitch-${{ steps.get_version.outputs.version }}-win-x64
+          name: ddcswitch-${{ steps.get_version.outputs.version }}-win-x64
           path: release/
           retention-days: 30
 
