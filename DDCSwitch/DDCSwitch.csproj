@@ -40,5 +40,17 @@
         <PackageReference Include="Spectre.Console" Version="0.54.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <!-- Embed VCP feature data JSON for potential runtime use -->
+        <EmbeddedResource Include="VcpFeatureData.json" />
+        
+        <!-- Mark generated file as auto-generated -->
+        <Compile Update="VcpFeature.Generated.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>VcpFeatureData.json</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
 </Project>
 

@@ -1,0 +1,1561 @@
+{
+  "$schema": "vcp-feature-schema",
+  "description": "VCP (VESA Display Data Channel Command Interface) feature definitions from MCCS specification",
+  "features": [
+    {
+      "code": "0x01",
+      "property": "Degauss",
+      "name": "degauss",
+      "description": "Degauss",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x02",
+      "property": "NewControlValue",
+      "name": "new-control-value",
+      "description": "New control value",
+      "type": "ReadWrite",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x03",
+      "property": "SoftControls",
+      "name": "soft-controls",
+      "description": "Soft controls",
+      "type": "ReadWrite",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x04",
+      "property": "RestoreDefaults",
+      "name": "restore-defaults",
+      "description": "Restore factory defaults",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": [
+        "factory-reset"
+      ]
+    },
+    {
+      "code": "0x05",
+      "property": "RestoreBrightnessContrastDefaults",
+      "name": "restore-brightness-contrast",
+      "description": "Restore factory brightness/contrast defaults",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x06",
+      "property": "RestoreGeometryDefaults",
+      "name": "restore-geometry",
+      "description": "Restore factory geometry defaults",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x08",
+      "property": "RestoreColorDefaults",
+      "name": "restore-color",
+      "description": "Restore factory color defaults",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x0A",
+      "property": "RestoreTVDefaults",
+      "name": "restore-tv-defaults",
+      "description": "Restore factory TV defaults",
+      "type": "WriteOnly",
+      "category": "Preset",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x0B",
+      "property": "ColorTemperatureIncrement",
+      "name": "color-temp-increment",
+      "description": "Color temperature increment",
+      "type": "ReadOnly",
+      "category": "ColorControl",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x0C",
+      "property": "ColorTemperatureRequest",
+      "name": "color-temp-request",
+      "description": "Color temperature request",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": false,
+      "aliases": [
+        "color-temp"
+      ]
+    },
+    {
+      "code": "0x0E",
+      "property": "Clock",
+      "name": "clock",
+      "description": "Clock",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x10",
+      "property": "Brightness",
+      "name": "brightness",
+      "description": "Brightness control",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": [
+        "bright"
+      ]
+    },
+    {
+      "code": "0x11",
+      "property": "FleshToneEnhancement",
+      "name": "flesh-tone-enhancement",
+      "description": "Flesh tone enhancement",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x12",
+      "property": "Contrast",
+      "name": "contrast",
+      "description": "Contrast control",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x13",
+      "property": "Backlight",
+      "name": "backlight",
+      "description": "Backlight control",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x14",
+      "property": "SelectColorPreset",
+      "name": "select-color-preset",
+      "description": "Select color preset",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": [
+        "color-preset"
+      ]
+    },
+    {
+      "code": "0x16",
+      "property": "RedGain",
+      "name": "red-gain",
+      "description": "Video gain: Red",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": [
+        "red"
+      ]
+    },
+    {
+      "code": "0x17",
+      "property": "UserColorVisionCompensation",
+      "name": "user-color-vision-compensation",
+      "description": "User color vision compensation",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x18",
+      "property": "GreenGain",
+      "name": "green-gain",
+      "description": "Video gain: Green",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": [
+        "green"
+      ]
+    },
+    {
+      "code": "0x1A",
+      "property": "BlueGain",
+      "name": "blue-gain",
+      "description": "Video gain: Blue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": [
+        "blue"
+      ]
+    },
+    {
+      "code": "0x1C",
+      "property": "Focus",
+      "name": "focus",
+      "description": "Focus",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x1E",
+      "property": "AutoSetup",
+      "name": "auto-setup",
+      "description": "Auto setup",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x1F",
+      "property": "AutoColorSetup",
+      "name": "auto-color-setup",
+      "description": "Auto color setup",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x20",
+      "property": "HorizontalPosition",
+      "name": "h-position",
+      "description": "Horizontal Position (Phase)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": [
+        "h-pos"
+      ]
+    },
+    {
+      "code": "0x22",
+      "property": "HorizontalSize",
+      "name": "h-size",
+      "description": "Horizontal Size",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x24",
+      "property": "HorizontalPincushion",
+      "name": "h-pincushion",
+      "description": "Horizontal Pincushion",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x26",
+      "property": "HorizontalPincushionBalance",
+      "name": "h-pincushion-balance",
+      "description": "Horizontal Pincushion Balance",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x28",
+      "property": "HorizontalConvergenceRB",
+      "name": "h-convergence-rb",
+      "description": "Horizontal Convergence R/B",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x29",
+      "property": "HorizontalConvergenceMG",
+      "name": "h-convergence-mg",
+      "description": "Horizontal Convergence M/G",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x2A",
+      "property": "HorizontalLinearity",
+      "name": "h-linearity",
+      "description": "Horizontal Linearity",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x2C",
+      "property": "HorizontalLinearityBalance",
+      "name": "h-linearity-balance",
+      "description": "Horizontal Linearity Balance",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x2E",
+      "property": "GrayScaleExpansion",
+      "name": "gray-scale-expansion",
+      "description": "Gray scale expansion",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x30",
+      "property": "VerticalPosition",
+      "name": "v-position",
+      "description": "Vertical Position (Phase)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": [
+        "v-pos"
+      ]
+    },
+    {
+      "code": "0x32",
+      "property": "VerticalSize",
+      "name": "v-size",
+      "description": "Vertical Size",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x34",
+      "property": "VerticalPincushion",
+      "name": "v-pincushion",
+      "description": "Vertical Pincushion",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x36",
+      "property": "VerticalPincushionBalance",
+      "name": "v-pincushion-balance",
+      "description": "Vertical Pincushion Balance",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x38",
+      "property": "VerticalConvergenceRB",
+      "name": "v-convergence-rb",
+      "description": "Vertical Convergence R/B",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x39",
+      "property": "VerticalConvergenceMG",
+      "name": "v-convergence-mg",
+      "description": "Vertical Convergence M/G",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x3A",
+      "property": "VerticalLinearity",
+      "name": "v-linearity",
+      "description": "Vertical Linearity",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x3C",
+      "property": "VerticalLinearityBalance",
+      "name": "v-linearity-balance",
+      "description": "Vertical Linearity Balance",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x3E",
+      "property": "ClockPhase",
+      "name": "clock-phase",
+      "description": "Clock Phase",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": [
+        "phase"
+      ]
+    },
+    {
+      "code": "0x40",
+      "property": "HorizontalParallelogram",
+      "name": "horizontal-parallelogram",
+      "description": "Horizontal Parallelogram",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x41",
+      "property": "VerticalParallelogram",
+      "name": "vertical-parallelogram",
+      "description": "Vertical Parallelogram",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x42",
+      "property": "HorizontalKeystone",
+      "name": "horizontal-keystone",
+      "description": "Horizontal Keystone",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x43",
+      "property": "VerticalKeystone",
+      "name": "vertical-keystone",
+      "description": "Vertical Keystone",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x44",
+      "property": "Rotation",
+      "name": "rotation",
+      "description": "Rotation",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x46",
+      "property": "TopCornerFlare",
+      "name": "top-corner-flare",
+      "description": "Top Corner Flare",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x48",
+      "property": "TopCornerHook",
+      "name": "top-corner-hook",
+      "description": "Top Corner Hook",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x4A",
+      "property": "BottomCornerFlare",
+      "name": "bottom-corner-flare",
+      "description": "Bottom Corner Flare",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x4C",
+      "property": "BottomCornerHook",
+      "name": "bottom-corner-hook",
+      "description": "Bottom Corner Hook",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x52",
+      "property": "ActiveControl",
+      "name": "active-control",
+      "description": "Active control",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x54",
+      "property": "PerformancePreservation",
+      "name": "performance-preservation",
+      "description": "Performance Preservation",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x56",
+      "property": "HorizontalMoire",
+      "name": "horizontal-moire",
+      "description": "Horizontal Moire",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x58",
+      "property": "VerticalMoire",
+      "name": "vertical-moire",
+      "description": "Vertical Moire",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x59",
+      "property": "SixAxisSaturationRed",
+      "name": "6-axis-saturation-red",
+      "description": "6 axis saturation: Red",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x5A",
+      "property": "SixAxisSaturationYellow",
+      "name": "6-axis-saturation-yellow",
+      "description": "6 axis saturation: Yellow",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x5B",
+      "property": "SixAxisSaturationGreen",
+      "name": "6-axis-saturation-green",
+      "description": "6 axis saturation: Green",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x5C",
+      "property": "SixAxisSaturationCyan",
+      "name": "6-axis-saturation-cyan",
+      "description": "6 axis saturation: Cyan",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x5D",
+      "property": "SixAxisSaturationBlue",
+      "name": "6-axis-saturation-blue",
+      "description": "6 axis saturation: Blue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x5E",
+      "property": "SixAxisSaturationMagenta",
+      "name": "6-axis-saturation-magenta",
+      "description": "6 axis saturation: Magenta",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x60",
+      "property": "InputSource",
+      "name": "input",
+      "description": "Input source selection",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": [
+        "source"
+      ]
+    },
+    {
+      "code": "0x62",
+      "property": "AudioVolume",
+      "name": "volume",
+      "description": "Audio speaker volume",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": true,
+      "aliases": [
+        "vol"
+      ]
+    },
+    {
+      "code": "0x63",
+      "property": "SpeakerSelect",
+      "name": "speaker-select",
+      "description": "Speaker Select",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x64",
+      "property": "MicrophoneVolume",
+      "name": "microphone-volume",
+      "description": "Audio: Microphone Volume",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": true,
+      "aliases": [
+        "mic-volume"
+      ]
+    },
+    {
+      "code": "0x66",
+      "property": "AmbientLightSensor",
+      "name": "ambient-light-sensor",
+      "description": "Ambient light sensor",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x6B",
+      "property": "BacklightLevelWhite",
+      "name": "backlight-level-white",
+      "description": "Backlight Level: White",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x6C",
+      "property": "RedBlackLevel",
+      "name": "red-black-level",
+      "description": "Video black level: Red",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x6D",
+      "property": "BacklightLevelRed",
+      "name": "backlight-level-red",
+      "description": "Backlight Level: Red",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x6E",
+      "property": "GreenBlackLevel",
+      "name": "green-black-level",
+      "description": "Video black level: Green",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x6F",
+      "property": "BacklightLevelGreen",
+      "name": "backlight-level-green",
+      "description": "Backlight Level: Green",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x70",
+      "property": "BlueBlackLevel",
+      "name": "blue-black-level",
+      "description": "Video black level: Blue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x71",
+      "property": "BacklightLevelBlue",
+      "name": "backlight-level-blue",
+      "description": "Backlight Level: Blue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x72",
+      "property": "Gamma",
+      "name": "gamma",
+      "description": "Gamma",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x73",
+      "property": "LUTSize",
+      "name": "lut-size",
+      "description": "LUT Size",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x74",
+      "property": "SinglePointLUTOperation",
+      "name": "single-point-lut-operation",
+      "description": "Single point LUT operation",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x75",
+      "property": "BlockLUTOperation",
+      "name": "block-lut-operation",
+      "description": "Block LUT operation",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x76",
+      "property": "RemoteProcedureCall",
+      "name": "remote-procedure-call",
+      "description": "Remote Procedure Call",
+      "type": "WriteOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x78",
+      "property": "DisplayIdentificationOperation",
+      "name": "display-identification-operation",
+      "description": "Display Identification Operation",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x7A",
+      "property": "AdjustFocalPlane",
+      "name": "adjust-focal-plane",
+      "description": "Adjust Focal Plane",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x7C",
+      "property": "AdjustZoom",
+      "name": "adjust-zoom",
+      "description": "Adjust Zoom",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x7E",
+      "property": "Trapezoid",
+      "name": "trapezoid",
+      "description": "Trapezoid",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x80",
+      "property": "Keystone",
+      "name": "keystone",
+      "description": "Keystone",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x82",
+      "property": "HorizontalMirror",
+      "name": "horizontal-mirror",
+      "description": "Horizontal Mirror (Flip)",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x84",
+      "property": "VerticalMirror",
+      "name": "vertical-mirror",
+      "description": "Vertical Mirror (Flip)",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x86",
+      "property": "DisplayScaling",
+      "name": "display-scaling",
+      "description": "Display Scaling",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x87",
+      "property": "Sharpness",
+      "name": "sharpness",
+      "description": "Sharpness control",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": [
+        "sharp"
+      ]
+    },
+    {
+      "code": "0x88",
+      "property": "VelocityScanModulation",
+      "name": "velocity-scan-modulation",
+      "description": "Velocity Scan Modulation",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x8A",
+      "property": "ColorSaturation",
+      "name": "color-saturation",
+      "description": "Color Saturation",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": [
+        "saturation",
+        "sat"
+      ]
+    },
+    {
+      "code": "0x8B",
+      "property": "TVChannelUpDown",
+      "name": "tv-channel-up-down",
+      "description": "TV Channel Up/Down",
+      "type": "WriteOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x8C",
+      "property": "TVSharpness",
+      "name": "tv-sharpness",
+      "description": "TV Sharpness",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x8D",
+      "property": "AudioMute",
+      "name": "mute",
+      "description": "Audio mute/Screen blank",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x8E",
+      "property": "TVContrast",
+      "name": "tv-contrast",
+      "description": "TV Contrast",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x8F",
+      "property": "AudioTreble",
+      "name": "audio-treble",
+      "description": "Audio treble",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": true,
+      "aliases": [
+        "treble"
+      ]
+    },
+    {
+      "code": "0x90",
+      "property": "Hue",
+      "name": "hue",
+      "description": "Hue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x91",
+      "property": "AudioBass",
+      "name": "audio-bass",
+      "description": "Audio bass",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": true,
+      "aliases": [
+        "bass"
+      ]
+    },
+    {
+      "code": "0x92",
+      "property": "TVBlackLevel",
+      "name": "tv-black-level",
+      "description": "TV Black level/Luminesence",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x93",
+      "property": "AudioBalance",
+      "name": "audio-balance",
+      "description": "Audio balance L/R",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": true,
+      "aliases": [
+        "balance"
+      ]
+    },
+    {
+      "code": "0x94",
+      "property": "AudioProcessorMode",
+      "name": "audio-processor-mode",
+      "description": "Audio processor mode",
+      "type": "ReadWrite",
+      "category": "Audio",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x95",
+      "property": "WindowPositionTLX",
+      "name": "window-position-tl-x",
+      "description": "Window Position(TL_X)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x96",
+      "property": "WindowPositionTLY",
+      "name": "window-position-tl-y",
+      "description": "Window Position(TL_Y)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x97",
+      "property": "WindowPositionBRX",
+      "name": "window-position-br-x",
+      "description": "Window Position(BR_X)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x98",
+      "property": "WindowPositionBRY",
+      "name": "window-position-br-y",
+      "description": "Window Position(BR_Y)",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x99",
+      "property": "WindowControlOnOff",
+      "name": "window-control-on-off",
+      "description": "Window control on/off",
+      "type": "ReadWrite",
+      "category": "Geometry",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0x9A",
+      "property": "WindowBackground",
+      "name": "window-background",
+      "description": "Window background",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x9B",
+      "property": "SixAxisHueRed",
+      "name": "6-axis-hue-red",
+      "description": "6 axis hue control: Red",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x9C",
+      "property": "SixAxisHueYellow",
+      "name": "6-axis-hue-yellow",
+      "description": "6 axis hue control: Yellow",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x9D",
+      "property": "SixAxisHueGreen",
+      "name": "6-axis-hue-green",
+      "description": "6 axis hue control: Green",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x9E",
+      "property": "SixAxisHueCyan",
+      "name": "6-axis-hue-cyan",
+      "description": "6 axis hue control: Cyan",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0x9F",
+      "property": "SixAxisHueBlue",
+      "name": "6-axis-hue-blue",
+      "description": "6 axis hue control: Blue",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0xA0",
+      "property": "SixAxisHueMagenta",
+      "name": "6-axis-hue-magenta",
+      "description": "6 axis hue control: Magenta",
+      "type": "ReadWrite",
+      "category": "ColorControl",
+      "supportsPercentage": true,
+      "aliases": []
+    },
+    {
+      "code": "0xA2",
+      "property": "AutoSetupOnOff",
+      "name": "auto-setup-on-off",
+      "description": "Auto setup on/off",
+      "type": "WriteOnly",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xA4",
+      "property": "WindowMaskControl",
+      "name": "window-mask-control",
+      "description": "Window mask control",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xA5",
+      "property": "ChangeSelectedWindow",
+      "name": "change-selected-window",
+      "description": "Change the selected window",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xAA",
+      "property": "ScreenOrientation",
+      "name": "screen-orientation",
+      "description": "Screen Orientation",
+      "type": "ReadOnly",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": [
+        "orientation"
+      ]
+    },
+    {
+      "code": "0xAC",
+      "property": "HorizontalFrequency",
+      "name": "horizontal-frequency",
+      "description": "Horizontal frequency",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "h-freq"
+      ]
+    },
+    {
+      "code": "0xAE",
+      "property": "VerticalFrequency",
+      "name": "vertical-frequency",
+      "description": "Vertical frequency",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "v-freq"
+      ]
+    },
+    {
+      "code": "0xB0",
+      "property": "Settings",
+      "name": "settings",
+      "description": "Settings",
+      "type": "WriteOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB2",
+      "property": "FlatPanelSubPixelLayout",
+      "name": "flat-panel-sub-pixel-layout",
+      "description": "Flat panel sub-pixel layout",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB4",
+      "property": "SourceTimingMode",
+      "name": "source-timing-mode",
+      "description": "Source Timing Mode",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB6",
+      "property": "DisplayTechnologyType",
+      "name": "display-technology-type",
+      "description": "Display technology type",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB7",
+      "property": "MonitorStatus",
+      "name": "monitor-status",
+      "description": "Monitor status",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB8",
+      "property": "PacketCount",
+      "name": "packet-count",
+      "description": "Packet count",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xB9",
+      "property": "MonitorXOrigin",
+      "name": "monitor-x-origin",
+      "description": "Monitor X origin",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xBA",
+      "property": "MonitorYOrigin",
+      "name": "monitor-y-origin",
+      "description": "Monitor Y origin",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xBB",
+      "property": "HeaderErrorCount",
+      "name": "header-error-count",
+      "description": "Header error count",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xBC",
+      "property": "BodyCRCErrorCount",
+      "name": "body-crc-error-count",
+      "description": "Body CRC error count",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xBD",
+      "property": "ClientID",
+      "name": "client-id",
+      "description": "Client ID",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xBE",
+      "property": "LinkControl",
+      "name": "link-control",
+      "description": "Link control",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC0",
+      "property": "DisplayUsageTime",
+      "name": "display-usage-time",
+      "description": "Display usage time",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC2",
+      "property": "DisplayDescriptorLength",
+      "name": "display-descriptor-length",
+      "description": "Display descriptor length",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC3",
+      "property": "TransmitDisplayDescriptor",
+      "name": "transmit-display-descriptor",
+      "description": "Transmit display descriptor",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC4",
+      "property": "EnableDisplayOfDisplayDescriptor",
+      "name": "enable-display-of-display-descriptor",
+      "description": "Enable display of 'display descriptor'",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC6",
+      "property": "ApplicationEnableKey",
+      "name": "application-enable-key",
+      "description": "Application enable key",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC8",
+      "property": "DisplayControllerType",
+      "name": "display-controller-type",
+      "description": "Display controller type",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xC9",
+      "property": "DisplayFirmwareLevel",
+      "name": "display-firmware-level",
+      "description": "Display firmware level",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "firmware"
+      ]
+    },
+    {
+      "code": "0xCA",
+      "property": "OSDButtonControl",
+      "name": "osd-button-control",
+      "description": "OSD/Button Control",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "osd"
+      ]
+    },
+    {
+      "code": "0xCC",
+      "property": "OSDLanguage",
+      "name": "osd-language",
+      "description": "OSD Language",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "language"
+      ]
+    },
+    {
+      "code": "0xCD",
+      "property": "StatusIndicators",
+      "name": "status-indicators",
+      "description": "Status Indicators",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xCE",
+      "property": "AuxiliaryDisplaySize",
+      "name": "auxiliary-display-size",
+      "description": "Auxiliary display size",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xCF",
+      "property": "AuxiliaryDisplayData",
+      "name": "auxiliary-display-data",
+      "description": "Auxiliary display data",
+      "type": "WriteOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xD0",
+      "property": "OutputSelect",
+      "name": "output-select",
+      "description": "Output select",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xD2",
+      "property": "AssetTag",
+      "name": "asset-tag",
+      "description": "Asset Tag",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xD4",
+      "property": "StereoVideoMode",
+      "name": "stereo-video-mode",
+      "description": "Stereo video mode",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xD6",
+      "property": "PowerMode",
+      "name": "power-mode",
+      "description": "Power mode",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "power"
+      ]
+    },
+    {
+      "code": "0xD7",
+      "property": "AuxiliaryPowerOutput",
+      "name": "auxiliary-power-output",
+      "description": "Auxiliary power output",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xDA",
+      "property": "ScanMode",
+      "name": "scan-mode",
+      "description": "Scan mode",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xDB",
+      "property": "ImageMode",
+      "name": "image-mode",
+      "description": "Image Mode",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": [
+        "mode"
+      ]
+    },
+    {
+      "code": "0xDC",
+      "property": "DisplayMode",
+      "name": "display-mode",
+      "description": "Display Mode",
+      "type": "ReadWrite",
+      "category": "ImageAdjustment",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xDE",
+      "property": "ScratchPad",
+      "name": "scratch-pad",
+      "description": "Scratch Pad",
+      "type": "ReadWrite",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": []
+    },
+    {
+      "code": "0xDF",
+      "property": "VcpVersion",
+      "name": "vcp-version",
+      "description": "VCP Version",
+      "type": "ReadOnly",
+      "category": "Miscellaneous",
+      "supportsPercentage": false,
+      "aliases": [
+        "version"
+      ]
+    }
+  ]
+}
