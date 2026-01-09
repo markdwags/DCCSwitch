@@ -13,8 +13,8 @@ A Windows command-line utility to control monitor settings via DDC/CI (Display D
 ## Features
 
 - 🖥️ **List all DDC/CI capable monitors** with their current input sources
-- � **Detailed EDID information** - View monitor specifications, capabilities, and color characteristics
-- �🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
+- **Detailed EDID information** - View monitor specifications, capabilities, and color characteristics
+- 🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
 - 🔆 **Control brightness and contrast** with percentage values (0-100%)
 - 🎛️ **Comprehensive VCP feature support** - Access all MCCS standardized monitor controls
 - 🏷️ **Feature categories and discovery** - Browse VCP features by category (Image, Color, Geometry, Audio, etc.)
