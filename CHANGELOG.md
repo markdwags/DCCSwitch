@@ -6,6 +6,8 @@ All notable changes to ddcswitch will be documented in this file.
 
 ### Added
 - Added the toggle command to flip a monitor between two input sources
+- `info` command to display detailed EDID (Extended Display Identification Data) information
+  - Full JSON output support for programmatic access
 
 ## [1.0.2] - 2026-01-07
 
