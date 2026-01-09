@@ -70,7 +70,7 @@ internal static class ConsoleOutputFormatter
         if (monitor.ManufactureYear.HasValue)
         {
             var date = monitor.ManufactureWeek.HasValue 
-                ? $"{monitor.ManufactureYear.Value} Week {monitor.ManufactureWeek.Value}"
+                ? FormatManufactureDate(monitor.ManufactureYear.Value, monitor.ManufactureWeek.Value)
                 : $"{monitor.ManufactureYear.Value}";
             WriteMonitorInfo("Manufacture Date", date);
         }
@@ -104,6 +104,35 @@ internal static class ConsoleOutputFormatter
         }
         
         AnsiConsole.WriteLine();
+    }
+
+    private static string FormatManufactureDate(int year, int week)
+    {
+        // Calculate approximate month from week number
+        // Week 1-4: January, Week 5-8: February, etc.
+        string? monthName = week switch
+        {
+            >= 1 and <= 4 => "January",
+            >= 5 and <= 8 => "February",
+            >= 9 and <= 13 => "March",
+            >= 14 and <= 17 => "April",
+            >= 18 and <= 22 => "May",
+            >= 23 and <= 26 => "June",
+            >= 27 and <= 30 => "July",
+            >= 31 and <= 35 => "August",
+            >= 36 and <= 39 => "September",
+            >= 40 and <= 43 => "October",
+            >= 44 and <= 48 => "November",
+            >= 49 and <= 53 => "December",
+            _ => null
+        };
+
+        if (monthName != null)
+        {
+            return $"{monthName} {year} (Week {week})";
+        }
+
+        return $"{year} Week {week}";
     }
 }
 
