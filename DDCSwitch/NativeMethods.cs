@@ -147,8 +147,8 @@ internal static class NativeMethods
                 return edidList[listIndex];
             }
 
-            // Fallback: return first EDID if index doesn't match
-            return edidList.Count > 0 ? edidList[0] : null;
+            // No reliable EDID mapping found for this display index
+            return null;
         }
         catch (System.Security.SecurityException)
         {

@@ -490,28 +490,24 @@ public static class EdidParser
         {
             // Chromaticity data is stored in bytes 25-34
             // Each coordinate is a 10-bit value split between two bytes
-            byte lsb = edid[25]; // Low-order bits for red/green X
-            byte lsb2 = edid[26]; // Low-order bits for red/green Y
+            byte lsb = edid[25]; // Low-order bits for red/green/blue/white X
+            byte lsb2 = edid[26]; // Low-order bits for red/green/blue/white Y
             
-            // Red X: bits 7-6 of byte 27 (MSB) + all 8 bits of byte 25 bits 1-0 (LSB)
-            // Red Y: bits 5-4 of byte 27 (MSB) + all 8 bits of byte 26 bits 1-0 (LSB)
-            int redXRaw = ((edid[27] & 0xC0) << 2) | ((lsb >> 6) & 0x03);
-            int redYRaw = ((edid[27] & 0x30) << 4) | ((lsb2 >> 6) & 0x03);
+            // Red X/Y: 8 MSB bits in byte 27, 2 LSB bits in bytes 25/26
+            int redXRaw = (edid[27] << 2) | ((lsb >> 6) & 0x03);
+            int redYRaw = (edid[27] << 2) | ((lsb2 >> 6) & 0x03);
             
-            // Green X: bits 7-6 of byte 28 + byte 25 bits 5-4
-            // Green Y: bits 5-4 of byte 28 + byte 26 bits 5-4
-            int greenXRaw = ((edid[28] & 0xC0) << 2) | ((lsb >> 4) & 0x03);
-            int greenYRaw = ((edid[28] & 0x30) << 4) | ((lsb2 >> 4) & 0x03);
+            // Green X/Y: 8 MSB bits in byte 28, 2 LSB bits in bytes 25/26
+            int greenXRaw = (edid[28] << 2) | ((lsb >> 4) & 0x03);
+            int greenYRaw = (edid[28] << 2) | ((lsb2 >> 4) & 0x03);
             
-            // Blue X: bits 7-6 of byte 29 + byte 25 bits 3-2
-            // Blue Y: bits 5-4 of byte 29 + byte 26 bits 3-2
-            int blueXRaw = ((edid[29] & 0xC0) << 2) | ((lsb >> 2) & 0x03);
-            int blueYRaw = ((edid[29] & 0x30) << 4) | ((lsb2 >> 2) & 0x03);
+            // Blue X/Y: 8 MSB bits in byte 29, 2 LSB bits in bytes 25/26
+            int blueXRaw = (edid[29] << 2) | ((lsb >> 2) & 0x03);
+            int blueYRaw = (edid[29] << 2) | ((lsb2 >> 2) & 0x03);
             
-            // White X: bits 7-6 of byte 30 + byte 25 bits 1-0
-            // White Y: bits 5-4 of byte 30 + byte 26 bits 1-0
-            int whiteXRaw = ((edid[30] & 0xC0) << 2) | (lsb & 0x03);
-            int whiteYRaw = ((edid[30] & 0x30) << 4) | (lsb2 & 0x03);
+            // White X/Y: 8 MSB bits in byte 30, 2 LSB bits in bytes 25/26
+            int whiteXRaw = (edid[30] << 2) | (lsb & 0x03);
+            int whiteYRaw = (edid[30] << 2) | (lsb2 & 0x03);
 
             // Convert 10-bit values to 0.0-1.0 range
             var red = new ColorPoint(redXRaw / 1024.0, redYRaw / 1024.0);

@@ -88,8 +88,6 @@ internal static class ToggleCommand
         return 1;
     }
 
-
-
     private static int HandleInvalidInput(string invalidInput, string position, bool jsonOutput)
     {
         string errorMessage = $"Invalid {position} input source: '{invalidInput}'";
