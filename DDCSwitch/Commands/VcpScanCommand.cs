@@ -199,7 +199,8 @@ internal static class VcpScanCommand
                     Style = new Style(Color.Cyan)
                 };
                 AnsiConsole.Write(rule);
-                
+                AnsiConsole.WriteLine();
+
                 Dictionary<byte, VcpFeatureInfo> features = null!;
                 AnsiConsole.Status()
                     .Start($"Scanning VCP features for {monitor.Name}...", ctx =>
@@ -221,7 +222,15 @@ internal static class VcpScanCommand
                     continue;
                 }
 
-                AnsiConsole.MarkupLine($"[bold green]>> Found {supportedFeatures.Count} supported features[/]\n");
+                // Show feature count summary
+                int readWriteCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.ReadWrite);
+                int readOnlyCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.ReadOnly);
+                int writeOnlyCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.WriteOnly);
+                
+                AnsiConsole.MarkupLine(
+                    $"[bold green]✓ Found {supportedFeatures.Count} supported features[/] " +
+                    $"[dim]([green]{readWriteCount}[/] R/W, [yellow]{readOnlyCount}[/] R, [red]{writeOnlyCount}[/] W)[/]\n");
+                
                 OutputFeatureTable(supportedFeatures);
                 AnsiConsole.WriteLine();
             }
@@ -241,16 +250,23 @@ internal static class VcpScanCommand
 
     private static void OutputTableScanSingle(Monitor monitor, List<VcpFeatureInfo> supportedFeatures)
     {
-        var panel = new Panel(
-            $"[bold cyan]Monitor:[/] {monitor.Name}\n" +
-            $"[dim]Device:[/] [dim]{monitor.DeviceName}[/]\n" +
-            $"[bold yellow]Supported Features:[/] [green]{supportedFeatures.Count}[/]")
+        // Summary panel with feature count breakdown
+        int readWriteCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.ReadWrite);
+        int readOnlyCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.ReadOnly);
+        int writeOnlyCount = supportedFeatures.Count(f => f.Type == VcpFeatureType.WriteOnly);
+        
+        var summaryPanel = new Panel(
+            $"[bold white]{monitor.Name}[/]\n" +
+            $"[dim]Device:[/] [dim]{monitor.DeviceName}[/]\n\n" +
+            $"[bold yellow]Total Features:[/] [green]{supportedFeatures.Count}[/]  " +
+            $"[dim]([green]{readWriteCount}[/] R/W, [yellow]{readOnlyCount}[/] R, [red]{writeOnlyCount}[/] W)[/]")
         {
-            Header = new PanelHeader($"[bold cyan]>> VCP Feature Scan Results[/]", Justify.Left),
+            Header = new PanelHeader($"[bold cyan]🔍 VCP Feature Scan Results[/]", Justify.Left),
             Border = BoxBorder.Rounded,
-            BorderStyle = new Style(Color.White)
+            BorderStyle = new Style(Color.Cyan)
         };
-        AnsiConsole.Write(panel);
+        AnsiConsole.Write(summaryPanel);
+        AnsiConsole.WriteLine();
         
         if (supportedFeatures.Count == 0)
         {
@@ -266,7 +282,7 @@ internal static class VcpScanCommand
     {
         var table = new Table()
             .Border(TableBorder.Rounded)
-            .BorderColor(Color.White)
+            .BorderColor(Color.Grey)
             .AddColumn(new TableColumn("[bold yellow]VCP Code[/]").Centered())
             .AddColumn(new TableColumn("[bold yellow]Feature Name[/]").LeftAligned())
             .AddColumn(new TableColumn("[bold yellow]Access[/]").Centered())
@@ -278,10 +294,10 @@ internal static class VcpScanCommand
             string vcpCode = $"[cyan]0x{feature.Code:X2}[/]";
             string accessType = feature.Type switch
             {
-                VcpFeatureType.ReadOnly => "[yellow]Read Only[/]",
-                VcpFeatureType.WriteOnly => "[red]Write Only[/]",
-                VcpFeatureType.ReadWrite => "[green]Read+Write[/]",
-                _ => "[dim]? ?[/]"
+                VcpFeatureType.ReadOnly => "[yellow]✓[/] [dim]Read[/]",
+                VcpFeatureType.WriteOnly => "[red]✎[/] [dim]Write[/]",
+                VcpFeatureType.ReadWrite => "[green]✓✎[/] [dim]R/W[/]",
+                _ => "[dim]?[/]"
             };
 
             string currentValue = $"[green]{feature.CurrentValue}[/]";
@@ -293,6 +309,19 @@ internal static class VcpScanCommand
             if (feature.Name.StartsWith("VCP_"))
             {
                 name = $"[dim]{feature.Name}[/]";
+            }
+            else
+            {
+                // Add icon for common features
+                name = feature.Code switch
+                {
+                    0x10 => $"☀️  {feature.Name}",
+                    0x12 => $"🎨 {feature.Name}",
+                    0x60 => $"📺 {feature.Name}",
+                    0x62 => $"🔊 {feature.Name}",
+                    0x8D => $"🔇 {feature.Name}",
+                    _ => feature.Name
+                };
             }
 
             table.AddRow(vcpCode, name, accessType, currentValue, maxValue);

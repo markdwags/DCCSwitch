@@ -2,6 +2,24 @@
 
 All notable changes to ddcswitch will be documented in this file.
 
+## [1.0.4] - 2026-01-09
+
+### Added
+- Enhanced visual styling across all commands with improved panels, tables, and progress bars
+- Better color hierarchy and readability optimized for Windows Terminal and Command Prompt dark backgrounds
+- Improved status indicators with clear symbols (✓/✗/⚠) for monitor and feature status
+- Visual progress bars for percentage-based features (brightness, contrast) in `get` command
+- Summary statistics in `list` command showing monitor count and DDC/CI status overview
+- Better visual separation and formatting in `set`, `toggle`, and scan commands
+- Documentation for `NO_COLOR` environment variable support (automatic via Spectre.Console)
+- Consistent panel styling with icons for better visual hierarchy (📋⚡🎨📡)
+
+### Improved
+- Error messages now include better formatting and actionable hints
+- Success panels show more detailed information with clear visual structure
+- Table styling enhanced for better readability on dark backgrounds
+- Warning messages have improved formatting and context
+
 ## [1.0.3] - 2026-01-08
 
 ### Added

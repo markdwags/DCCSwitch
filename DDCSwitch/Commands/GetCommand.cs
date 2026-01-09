@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+﻿﻿using Spectre.Console;
 using System.Text.Json;
 
 namespace DDCSwitch.Commands;
@@ -267,39 +267,58 @@ internal static class GetCommand
         }
         else
         {
-            var panel = new Panel(
-                $"[bold cyan]Monitor:[/] {monitor.Name}\n" +
+            // Header panel with monitor info
+            var headerPanel = new Panel(
+                $"[bold white]{monitor.Name}[/]\n" +
                 $"[dim]Device:[/] [dim]{monitor.DeviceName}[/]")
             {
-                Header = new PanelHeader($"[bold green]>> Feature Value[/]", Justify.Left),
+                Header = new PanelHeader($"[bold cyan]📊 {feature.Name}[/]", Justify.Left),
                 Border = BoxBorder.Rounded,
                 BorderStyle = new Style(Color.Cyan)
             };
-            AnsiConsole.Write(panel);
+            AnsiConsole.Write(headerPanel);
+            AnsiConsole.WriteLine();
             
             if (feature.Code == InputSource.VcpInputSource)
             {
                 // Display input with name resolution
                 var inputName = InputSource.GetName(current);
-                AnsiConsole.MarkupLine($"  [bold yellow]{feature.Name}:[/] [cyan]{inputName}[/] [dim](0x{current:X2})[/]");
+                var valuePanel = new Panel(
+                    $"[bold cyan]{inputName}[/] [dim](0x{current:X2})[/]")
+                {
+                    Header = new PanelHeader("[bold yellow]Current Input Source[/]", Justify.Left),
+                    Border = BoxBorder.Rounded,
+                    BorderStyle = new Style(Color.Yellow)
+                };
+                AnsiConsole.Write(valuePanel);
             }
             else if (feature.SupportsPercentage)
             {
-                // Display percentage for brightness/contrast
+                // Display percentage for brightness/contrast with progress bar
                 uint percentage = FeatureResolver.ConvertRawToPercentage(current, max);
+                
                 var progressBar = new BarChart()
-                    .Width(40)
-                    .Label($"[bold yellow]{feature.Name}[/]")
+                    .Width(50)
+                    .Label($"[bold yellow]{percentage}%[/]")
                     .CenterLabel()
-                    .AddItem("", percentage, Color.Green);
+                    .AddItem("", percentage, percentage >= 75 ? Color.Green : 
+                                              percentage >= 50 ? Color.Yellow : 
+                                              percentage >= 25 ? Color.Orange1 : Color.Red);
                 
                 AnsiConsole.Write(progressBar);
-                AnsiConsole.MarkupLine($"  [bold green]{percentage}%[/] [dim](raw: {current}/{max})[/]");
+                AnsiConsole.MarkupLine($"  [dim]Raw value: {current}/{max}[/]");
             }
             else
             {
                 // Display raw values for unknown VCP codes
-                AnsiConsole.MarkupLine($"  [bold yellow]{feature.Name}:[/] [green]{current}[/] [dim](max: {max})[/]");
+                var valuePanel = new Panel(
+                    $"[bold green]{current}[/] [dim](maximum: {max})[/]")
+                {
+                    Header = new PanelHeader("[bold yellow]Current Value[/]", Justify.Left),
+                    Border = BoxBorder.Rounded,
+                    BorderStyle = new Style(Color.Yellow)
+                };
+                AnsiConsole.Write(valuePanel);
             }
         }
     }

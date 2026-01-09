@@ -379,11 +379,11 @@ internal static class ToggleCommand
         else
         {
             var successPanel = new Panel(
-                $"[bold cyan]Monitor:[/] {monitor.Name}\n" +
-                $"[bold yellow]From:[/] {fromInputName}\n" +
-                $"[bold green]To:[/] {toInputName}")
+                $"[bold white]{monitor.Name}[/]\n" +
+                $"[dim]Device:[/] [dim]{monitor.DeviceName}[/]\n\n" +
+                $"[cyan]{fromInputName}[/] [dim](0x{currentInput:X2})[/]  [bold yellow]→[/]  [bold cyan]{toInputName}[/] [dim](0x{targetInput:X2})[/]")
             {
-                Header = new PanelHeader("[bold green]>> Input Toggled Successfully[/]", Justify.Left),
+                Header = new PanelHeader("[bold green]✓ 🔄 Input Toggled Successfully[/]", Justify.Left),
                 Border = BoxBorder.Rounded,
                 BorderStyle = new Style(Color.Green)
             };
@@ -392,7 +392,14 @@ internal static class ToggleCommand
 
             if (hasWarning && warningMessage != null)
             {
-                AnsiConsole.MarkupLine($"[yellow]Warning:[/] {warningMessage}");
+                AnsiConsole.WriteLine();
+                var warningPanel = new Panel(warningMessage)
+                {
+                    Header = new PanelHeader("[bold yellow]⚠ Warning[/]", Justify.Left),
+                    Border = BoxBorder.Rounded,
+                    BorderStyle = new Style(Color.Yellow)
+                };
+                AnsiConsole.Write(warningPanel);
             }
         }
     }

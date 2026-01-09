@@ -204,7 +204,7 @@ internal static class InfoCommand
         else
         {
             ConsoleOutputFormatter.WriteError($"Monitor '{identifier}' not found.");
-            AnsiConsole.MarkupLine($"Available monitors: [cyan]{string.Join(", ", monitors.Select(m => m.Index.ToString()))}[/]");
+            AnsiConsole.MarkupLine("[dim]Use [/][yellow]ddcswitch list[/][dim] to see available monitors.[/]");
         }
 
         foreach (var m in monitors)

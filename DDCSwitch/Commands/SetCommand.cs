@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+﻿﻿using Spectre.Console;
 using System.Text.Json;
 
 namespace DDCSwitch.Commands;
@@ -369,28 +369,33 @@ internal static class SetCommand
         else
         {
             string displayValue;
+            string featureIcon;
+            
             if (feature.Code == InputSource.VcpInputSource)
             {
                 // Display input with name resolution
-                displayValue = $"[cyan]{InputSource.GetName(setValue)}[/]";
+                displayValue = $"[bold cyan]{InputSource.GetName(setValue)}[/] [dim](0x{setValue:X2})[/]";
+                featureIcon = "📺";
             }
             else if (percentageValue.HasValue)
             {
                 // Display percentage for brightness/contrast
-                displayValue = $"[green]{percentageValue}%[/]";
+                displayValue = $"[bold green]{percentageValue}%[/] [dim](raw: {setValue})[/]";
+                featureIcon = feature.Code == VcpFeature.Brightness.Code ? "☀️" : "🎨";
             }
             else
             {
                 // Display raw value for unknown VCP codes
-                displayValue = $"[green]{setValue}[/]";
+                displayValue = $"[bold green]{setValue}[/]";
+                featureIcon = "⚙️";
             }
 
             var successPanel = new Panel(
-                $"[bold cyan]Monitor:[/] {monitor.Name}\n" +
-                $"[bold yellow]Feature:[/] {feature.Name}\n" +
-                $"[bold green]New Value:[/] {displayValue}")
+                $"[bold white]{monitor.Name}[/]\n" +
+                $"[dim]Device:[/] [dim]{monitor.DeviceName}[/]\n\n" +
+                $"[bold yellow]{feature.Name}:[/] {displayValue}")
             {
-                Header = new PanelHeader("[bold green]>> Successfully Applied[/]", Justify.Left),
+                Header = new PanelHeader($"[bold green]✓ {featureIcon} Successfully Applied[/]", Justify.Left),
                 Border = BoxBorder.Rounded,
                 BorderStyle = new Style(Color.Green)
             };

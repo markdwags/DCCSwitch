@@ -1,4 +1,4 @@
-﻿using Spectre.Console;
+﻿﻿using Spectre.Console;
 using System.Text.Json;
 
 namespace DDCSwitch.Commands;
@@ -141,6 +141,35 @@ internal static class ListCommand
 
     private static void OutputTableList(List<Monitor> monitors, bool verboseOutput)
     {
+        // Summary statistics header
+        int ddcciCount = 0;
+        int primaryCount = 0;
+        
+        foreach (var monitor in monitors)
+        {
+            if (monitor.IsPrimary) primaryCount++;
+            try
+            {
+                if (monitor.TryGetInputSource(out _, out _))
+                {
+                    ddcciCount++;
+                }
+            }
+            catch { }
+        }
+        
+        var summaryPanel = new Panel(
+            $"[bold white]Total Monitors:[/] [cyan]{monitors.Count}[/]  " +
+            $"[bold white]DDC/CI Capable:[/] [green]{ddcciCount}[/]  " +
+            $"[bold white]Primary:[/] [yellow]{primaryCount}[/]")
+        {
+            Header = new PanelHeader("[bold cyan]🖥️  Monitor Overview[/]", Justify.Left),
+            Border = BoxBorder.Rounded,
+            BorderStyle = new Style(Color.Cyan)
+        };
+        AnsiConsole.Write(summaryPanel);
+        AnsiConsole.WriteLine();
+        
         var table = new Table()
             .Border(TableBorder.Rounded)
             .BorderColor(Color.White)
@@ -165,7 +194,7 @@ internal static class ListCommand
         foreach (var monitor in monitors)
         {
             string inputInfo = "[dim]N/A[/]";
-            string status = "[green]+[/] [bold green]OK[/]";
+            string status = "[green]✓[/] [bold green]OK[/]";
             string brightnessInfo = "[dim]N/A[/]";
             string contrastInfo = "[dim]N/A[/]";
 
@@ -178,11 +207,11 @@ internal static class ListCommand
                 }
                 else
                 {
-                    status = "[yellow]~[/] [bold yellow]No DDC/CI[/]";
+                    status = "[yellow]⚠[/] [bold yellow]No DDC/CI[/]";
                 }
 
                 // Get brightness and contrast if verbose mode is enabled and monitor supports DDC/CI
-                if (verboseOutput && status == "[green]+[/] [bold green]OK[/]")
+                if (verboseOutput && status == "[green]✓[/] [bold green]OK[/]")
                 {
                     // Try to get brightness (VCP 0x10)
                     if (monitor.TryGetVcpFeature(VcpFeature.Brightness.Code, out uint brightnessCurrent, out uint brightnessMax))
@@ -214,7 +243,7 @@ internal static class ListCommand
             }
             catch
             {
-                status = "[red]X[/] [bold red]Error[/]";
+                status = "[red]✗[/] [bold red]Error[/]";
                 if (verboseOutput)
                 {
                     brightnessInfo = "[dim]N/A[/]";
@@ -224,7 +253,7 @@ internal static class ListCommand
 
             var row = new List<string>
             {
-                monitor.IsPrimary ? $"[bold cyan] {monitor.Index}[/][yellow]*[/]" : $"[cyan]{monitor.Index}[/]",
+                monitor.IsPrimary ? $"[bold cyan]{monitor.Index}[/] [yellow]●[/]" : $"[cyan]{monitor.Index}[/]",
                 monitor.Name,
                 $"[dim]{monitor.DeviceName}[/]",
                 inputInfo
