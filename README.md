@@ -13,7 +13,8 @@ A Windows command-line utility to control monitor settings via DDC/CI (Display D
 ## Features
 
 - 🖥️ **List all DDC/CI capable monitors** with their current input sources
-- 🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
+- � **Detailed EDID information** - View monitor specifications, capabilities, and color characteristics
+- �🔄 **Switch monitor inputs** programmatically (HDMI, DisplayPort, DVI, VGA, etc.)
 - 🔆 **Control brightness and contrast** with percentage values (0-100%)
 - 🎛️ **Comprehensive VCP feature support** - Access all MCCS standardized monitor controls
 - 🏷️ **Feature categories and discovery** - Browse VCP features by category (Image, Color, Geometry, Audio, etc.)
@@ -102,6 +103,28 @@ Example output:
 ```
 
 Add `--json` for machine-readable output (see [EXAMPLES.md](EXAMPLES.md) for automation examples).
+
+### Monitor Information (EDID)
+
+View detailed EDID (Extended Display Identification Data) information for a specific monitor:
+
+```powershell
+ddcswitch info 0
+```
+
+The info command provides comprehensive monitor details including:
+- **EDID version** and manufacturer information
+- **Model name**, serial number, and manufacture date
+- **Video input type** (Digital/Analog)
+- **Supported features** (DPMS power modes, display type, color space)
+- **Chromaticity coordinates** for color calibration (red, green, blue, white points in CIE 1931 color space)
+- **Current input source** status
+
+JSON output is supported with `--json` flag for programmatic access to all EDID data:
+
+```powershell
+ddcswitch info 0 --json
+```
 
 ### Get Current Settings
 

@@ -1,6 +1,216 @@
 # ddcswitch Examples
 
-This document contains detailed examples and use cases for ddcswitch, including input switching, brightness/contrast control, comprehensive VCP feature access, and automation.
+This document contains detailed examples and use cases for ddcswitch, including input switching, brightness/contrast control, comprehensive VCP feature access, EDID information retrieval, and automation.
+
+## Monitor Information (EDID)
+
+Retrieve detailed Extended Display Identification Data (EDID) from your monitors to view specifications, capabilities, and color characteristics.
+
+### Basic EDID Information
+
+View all EDID data for a specific monitor:
+
+```powershell
+ddcswitch info 0
+```
+
+Example output:
+```
+── Monitor 0: Generic PnP Monitor ───────────────────────────────
+  Device Name: \\.\DISPLAY2
+  Is Primary: No
+
+  EDID Information
+  EDID Version: 1.4
+  Manufacturer ID: ACR
+  Manufacturer: Acer Technologies
+  Model Name: VG270U P
+  Product Code: 0x06CF
+  Manufacture Date: 2021 Week 2
+  Video Input Type: Digital
+
+  Supported Features
+  Display Type: RGB Color
+  DPMS Standby: Supported
+  DPMS Suspend: Not supported
+  DPMS Active-Off: Supported
+  Default Color Space: Standard
+  Preferred Timing Mode: Included
+  Continuous Frequency: Supported
+
+  Chromaticity Coordinates (CIE 1931)
+  Red: x=0.6396, y=0.3300
+  Green: x=0.2998, y=0.5996
+  Blue: x=0.1503, y=0.0595
+  White Point: x=0.3125, y=0.3291
+
+  Current Status
+  Current Input: HDMI1 (0x11)
+```
+
+### JSON Output for EDID Data
+
+Retrieve EDID data in JSON format for programmatic access:
+
+```powershell
+ddcswitch info 0 --json
+```
+
+Example JSON output:
+```json
+{
+  "success": true,
+  "monitor": {
+    "index": 0,
+    "name": "Generic PnP Monitor",
+    "deviceName": "\\\\.\\DISPLAY2",
+    "isPrimary": false
+  },
+  "status": "ok",
+  "currentInput": "HDMI1",
+  "currentInputCode": "0x11",
+  "edid": {
+    "versionMajor": 1,
+    "versionMinor": 4,
+    "manufacturerId": "ACR",
+    "manufacturerName": "Acer Technologies",
+    "modelName": "VG270U P",
+    "productCode": "0x06CF",
+    "manufactureYear": 2021,
+    "manufactureWeek": 2,
+    "isDigitalInput": true,
+    "videoInputType": "Digital",
+    "features": {
+      "displayType": "RGB Color",
+      "dpmsStandby": false,
+      "dpmsSuspend": false,
+      "dpmsActiveOff": true,
+      "defaultColorSpace": false,
+      "preferredTimingMode": true,
+      "continuousFrequency": true
+    },
+    "chromaticity": {
+      "red": { "x": 0.6396484375, "y": 0.330078125 },
+      "green": { "x": 0.2998046875, "y": 0.599609375 },
+      "blue": { "x": 0.150390625, "y": 0.0595703125 },
+      "white": { "x": 0.3125, "y": 0.32910156 }
+    }
+  }
+}
+```
+
+### Automation Examples with EDID Data
+
+#### PowerShell: Check Monitor Model Before Applying Settings
+
+```powershell
+# Get EDID info and apply settings only to specific model
+$info = ddcswitch info 0 --json | ConvertFrom-Json
+
+if ($info.edid.modelName -like "*VG270U*") {
+    Write-Host "Configuring Acer VG270U..." -ForegroundColor Green
+    ddcswitch set 0 brightness 80%
+    ddcswitch set 0 contrast 75%
+    ddcswitch set 0 input HDMI1
+}
+else {
+    Write-Host "Monitor model: $($info.edid.modelName)" -ForegroundColor Yellow
+}
+```
+
+#### PowerShell: Log Monitor Information
+
+```powershell
+# Create monitor inventory with EDID details
+$monitors = @()
+$listOutput = ddcswitch list --json | ConvertFrom-Json
+
+foreach ($monitor in $listOutput.monitors) {
+    $edidInfo = ddcswitch info $monitor.index --json | ConvertFrom-Json
+    
+    $monitors += [PSCustomObject]@{
+        Index = $monitor.index
+        Name = $monitor.name
+        Manufacturer = $edidInfo.edid.manufacturerName
+        Model = $edidInfo.edid.modelName
+        Serial = $edidInfo.edid.serialNumber
+        EdidVersion = "$($edidInfo.edid.versionMajor).$($edidInfo.edid.versionMinor)"
+        VideoInput = $edidInfo.edid.videoInputType
+        ManufactureDate = "$($edidInfo.edid.manufactureYear) Week $($edidInfo.edid.manufactureWeek)"
+        CurrentInput = $edidInfo.currentInput
+    }
+}
+
+$monitors | Format-Table -AutoSize
+```
+
+#### Python: Color Calibration Using Chromaticity Data
+
+```python
+import subprocess
+import json
+
+def get_monitor_chromaticity(monitor_index):
+    """Get chromaticity coordinates for color calibration."""
+    result = subprocess.run(
+        ['ddcswitch', 'info', str(monitor_index), '--json'],
+        capture_output=True,
+        text=True
+    )
+    
+    data = json.loads(result.stdout)
+    if data['success'] and 'chromaticity' in data['edid']:
+        chroma = data['edid']['chromaticity']
+        return {
+            'red': (chroma['red']['x'], chroma['red']['y']),
+            'green': (chroma['green']['x'], chroma['green']['y']),
+            'blue': (chroma['blue']['x'], chroma['blue']['y']),
+            'white': (chroma['white']['x'], chroma['white']['y'])
+        }
+    return None
+
+# Use chromaticity data for color management
+chroma = get_monitor_chromaticity(0)
+if chroma:
+    print(f"Monitor Color Gamut:")
+    print(f"  Red:   x={chroma['red'][0]:.4f}, y={chroma['red'][1]:.4f}")
+    print(f"  Green: x={chroma['green'][0]:.4f}, y={chroma['green'][1]:.4f}")
+    print(f"  Blue:  x={chroma['blue'][0]:.4f}, y={chroma['blue'][1]:.4f}")
+    print(f"  White: x={chroma['white'][0]:.4f}, y={chroma['white'][1]:.4f}")
+```
+
+#### Node.js: Monitor Fleet Management
+
+```javascript
+const { execSync } = require('child_process');
+
+function getMonitorInfo(index) {
+    const output = execSync(`ddcswitch info ${index} --json`, { encoding: 'utf8' });
+    return JSON.parse(output);
+}
+
+// Create monitor inventory
+function inventoryMonitors() {
+    const list = JSON.parse(execSync('ddcswitch list --json', { encoding: 'utf8' }));
+    
+    const inventory = list.monitors.map(monitor => {
+        const info = getMonitorInfo(monitor.index);
+        return {
+            index: monitor.index,
+            manufacturer: info.edid?.manufacturerName || 'Unknown',
+            model: info.edid?.modelName || 'Unknown',
+            edidVersion: `${info.edid?.versionMajor}.${info.edid?.versionMinor}`,
+            isDigital: info.edid?.isDigitalInput,
+            manufactureYear: info.edid?.manufactureYear,
+            currentInput: info.currentInput
+        };
+    });
+    
+    console.table(inventory);
+}
+
+inventoryMonitors();
+```
 
 ## Comprehensive VCP Feature Examples
 

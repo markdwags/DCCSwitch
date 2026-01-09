@@ -12,6 +12,11 @@ namespace DDCSwitch;
 [JsonSerializable(typeof(VcpFeatureInfo))]
 [JsonSerializable(typeof(VcpFeatureType))]
 [JsonSerializable(typeof(MonitorReference))]
+[JsonSerializable(typeof(MonitorInfoResponse))]
+[JsonSerializable(typeof(EdidInfo))]
+[JsonSerializable(typeof(FeaturesInfo))]
+[JsonSerializable(typeof(ChromaticityInfo))]
+[JsonSerializable(typeof(ColorPointInfo))]
 [JsonSourceGenerationOptions(
     WriteIndented = true,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
@@ -57,4 +62,45 @@ internal record MonitorInfo(
     int? ManufactureWeek = null);
 
 internal record MonitorReference(int Index, string Name, string DeviceName, bool IsPrimary = false);
+
+internal record MonitorInfoResponse(
+    bool Success,
+    MonitorReference Monitor,
+    string Status,
+    string? CurrentInput = null,
+    string? CurrentInputCode = null,
+    EdidInfo? Edid = null,
+    string? ErrorMessage = null);
+
+internal record EdidInfo(
+    byte? VersionMajor,
+    byte? VersionMinor,
+    string? ManufacturerId,
+    string? ManufacturerName,
+    string? ModelName,
+    string? SerialNumber,
+    string? ProductCode,
+    int? ManufactureYear,
+    int? ManufactureWeek,
+    bool? IsDigitalInput,
+    string? VideoInputType,
+    FeaturesInfo? Features,
+    ChromaticityInfo? Chromaticity);
+
+internal record FeaturesInfo(
+    string DisplayType,
+    bool DpmsStandby,
+    bool DpmsSuspend,
+    bool DpmsActiveOff,
+    bool DefaultColorSpace,
+    bool PreferredTimingMode,
+    bool ContinuousFrequency);
+
+internal record ChromaticityInfo(
+    ColorPointInfo Red,
+    ColorPointInfo Green,
+    ColorPointInfo Blue,
+    ColorPointInfo White);
+
+internal record ColorPointInfo(double X, double Y);
 

@@ -3,6 +3,68 @@ using System.Text;
 namespace DDCSwitch;
 
 /// <summary>
+/// Represents EDID version information.
+/// </summary>
+/// <param name="Major">Major version number</param>
+/// <param name="Minor">Minor version number</param>
+public record EdidVersion(byte Major, byte Minor)
+{
+    public override string ToString() => $"{Major}.{Minor}";
+}
+
+/// <summary>
+/// Represents video input definition from EDID.
+/// </summary>
+/// <param name="IsDigital">True if digital input, false if analog</param>
+/// <param name="RawValue">Raw byte value from EDID</param>
+public record VideoInputDefinition(bool IsDigital, byte RawValue)
+{
+    public override string ToString() => IsDigital ? "Digital" : "Analog";
+}
+
+/// <summary>
+/// Represents supported display features from EDID.
+/// </summary>
+public record SupportedFeatures(
+    bool DpmsStandby,
+    bool DpmsSuspend,
+    bool DpmsActiveOff,
+    byte DisplayType,
+    bool DefaultColorSpace,
+    bool PreferredTimingMode,
+    bool ContinuousFrequency,
+    byte RawValue)
+{
+    public string DisplayTypeDescription => DisplayType switch
+    {
+        0 => "Monochrome or Grayscale",
+        1 => "RGB Color",
+        2 => "Non-RGB Color",
+        3 => "Undefined",
+        _ => "Unknown"
+    };
+}
+
+/// <summary>
+/// Represents chromaticity coordinates for a color point.
+/// </summary>
+/// <param name="X">X coordinate (0.0 to 1.0)</param>
+/// <param name="Y">Y coordinate (0.0 to 1.0)</param>
+public record ColorPoint(double X, double Y)
+{
+    public override string ToString() => $"x={X:F4}, y={Y:F4}";
+}
+
+/// <summary>
+/// Represents complete chromaticity information from EDID.
+/// </summary>
+public record ChromaticityCoordinates(
+    ColorPoint Red,
+    ColorPoint Green,
+    ColorPoint Blue,
+    ColorPoint White);
+
+/// <summary>
 /// Parses EDID (Extended Display Identification Data) blocks to extract monitor information.
 /// </summary>
 public static class EdidParser
@@ -194,7 +256,35 @@ public static class EdidParser
             }
         }
         
+        // If no descriptor serial found, try numeric serial at bytes 12-15
+        var numericSerial = ParseNumericSerialNumber(edid);
+        if (numericSerial.HasValue && numericSerial.Value != 0)
+        {
+            return numericSerial.Value.ToString();
+        }
+        
         return null;
+    }
+
+    /// <summary>
+    /// Parses the numeric serial number from EDID.
+    /// </summary>
+    /// <param name="edid">EDID data (at least 16 bytes)</param>
+    /// <returns>Numeric serial number or null if invalid</returns>
+    public static uint? ParseNumericSerialNumber(byte[] edid)
+    {
+        if (edid.Length < 16) return null;
+        
+        try
+        {
+            // Serial number is at bytes 12-15 (little-endian, 32-bit)
+            uint serial = (uint)(edid[12] | (edid[13] << 8) | (edid[14] << 16) | (edid[15] << 24));
+            return serial;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -303,5 +393,137 @@ public static class EdidParser
                edid[5] == 0xFF &&
                edid[6] == 0xFF &&
                edid[7] == 0x00;
+    }
+
+    /// <summary>
+    /// Parses EDID version and revision from EDID.
+    /// </summary>
+    /// <param name="edid">EDID data (at least 20 bytes)</param>
+    /// <returns>EDID version information or null if invalid</returns>
+    public static EdidVersion? ParseEdidVersion(byte[] edid)
+    {
+        if (edid.Length < 20) return null;
+
+        try
+        {
+            // EDID version is at bytes 18-19
+            byte major = edid[18];
+            byte minor = edid[19];
+            return new EdidVersion(major, minor);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Parses video input definition from EDID.
+    /// </summary>
+    /// <param name="edid">EDID data (at least 21 bytes)</param>
+    /// <returns>Video input definition or null if invalid</returns>
+    public static VideoInputDefinition? ParseVideoInputDefinition(byte[] edid)
+    {
+        if (edid.Length < 21) return null;
+
+        try
+        {
+            // Video input definition is at byte 20
+            byte value = edid[20];
+            bool isDigital = (value & 0x80) != 0; // Bit 7
+            return new VideoInputDefinition(isDigital, value);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Parses supported features from EDID.
+    /// </summary>
+    /// <param name="edid">EDID data (at least 25 bytes)</param>
+    /// <returns>Supported features information or null if invalid</returns>
+    public static SupportedFeatures? ParseSupportedFeatures(byte[] edid)
+    {
+        if (edid.Length < 25) return null;
+
+        try
+        {
+            // Supported features is at byte 24
+            byte value = edid[24];
+            
+            bool dpmsStandby = (value & 0x80) != 0;       // Bit 7
+            bool dpmsSuspend = (value & 0x40) != 0;       // Bit 6
+            bool dpmsActiveOff = (value & 0x20) != 0;     // Bit 5
+            byte displayType = (byte)((value >> 3) & 0x03); // Bits 4-3
+            bool defaultColorSpace = (value & 0x04) != 0; // Bit 2
+            bool preferredTimingMode = (value & 0x02) != 0; // Bit 1
+            bool continuousFrequency = (value & 0x01) != 0; // Bit 0
+
+            return new SupportedFeatures(
+                dpmsStandby,
+                dpmsSuspend,
+                dpmsActiveOff,
+                displayType,
+                defaultColorSpace,
+                preferredTimingMode,
+                continuousFrequency,
+                value);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Parses chromaticity coordinates (color points for red, green, blue, and white) from EDID.
+    /// </summary>
+    /// <param name="edid">EDID data (at least 35 bytes)</param>
+    /// <returns>Chromaticity coordinates or null if invalid</returns>
+    public static ChromaticityCoordinates? ParseChromaticity(byte[] edid)
+    {
+        if (edid.Length < 35) return null;
+
+        try
+        {
+            // Chromaticity data is stored in bytes 25-34
+            // Each coordinate is a 10-bit value split between two bytes
+            byte lsb = edid[25]; // Low-order bits for red/green X
+            byte lsb2 = edid[26]; // Low-order bits for red/green Y
+            
+            // Red X: bits 7-6 of byte 27 (MSB) + all 8 bits of byte 25 bits 1-0 (LSB)
+            // Red Y: bits 5-4 of byte 27 (MSB) + all 8 bits of byte 26 bits 1-0 (LSB)
+            int redXRaw = ((edid[27] & 0xC0) << 2) | ((lsb >> 6) & 0x03);
+            int redYRaw = ((edid[27] & 0x30) << 4) | ((lsb2 >> 6) & 0x03);
+            
+            // Green X: bits 7-6 of byte 28 + byte 25 bits 5-4
+            // Green Y: bits 5-4 of byte 28 + byte 26 bits 5-4
+            int greenXRaw = ((edid[28] & 0xC0) << 2) | ((lsb >> 4) & 0x03);
+            int greenYRaw = ((edid[28] & 0x30) << 4) | ((lsb2 >> 4) & 0x03);
+            
+            // Blue X: bits 7-6 of byte 29 + byte 25 bits 3-2
+            // Blue Y: bits 5-4 of byte 29 + byte 26 bits 3-2
+            int blueXRaw = ((edid[29] & 0xC0) << 2) | ((lsb >> 2) & 0x03);
+            int blueYRaw = ((edid[29] & 0x30) << 4) | ((lsb2 >> 2) & 0x03);
+            
+            // White X: bits 7-6 of byte 30 + byte 25 bits 1-0
+            // White Y: bits 5-4 of byte 30 + byte 26 bits 1-0
+            int whiteXRaw = ((edid[30] & 0xC0) << 2) | (lsb & 0x03);
+            int whiteYRaw = ((edid[30] & 0x30) << 4) | (lsb2 & 0x03);
+
+            // Convert 10-bit values to 0.0-1.0 range
+            var red = new ColorPoint(redXRaw / 1024.0, redYRaw / 1024.0);
+            var green = new ColorPoint(greenXRaw / 1024.0, greenYRaw / 1024.0);
+            var blue = new ColorPoint(blueXRaw / 1024.0, blueYRaw / 1024.0);
+            var white = new ColorPoint(whiteXRaw / 1024.0, whiteYRaw / 1024.0);
+
+            return new ChromaticityCoordinates(red, green, blue, white);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
