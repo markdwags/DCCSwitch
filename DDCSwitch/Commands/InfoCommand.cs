@@ -131,14 +131,30 @@ internal static class InfoCommand
             {
                 ConsoleOutputFormatter.WriteMonitorDetails(monitor);
 
+                // Current Status Panel
                 if (status == "ok")
                 {
-                    AnsiConsole.MarkupLine("  [bold underline yellow]Current Status[/]");
-                    ConsoleOutputFormatter.WriteMonitorInfo("Current Input", $"{currentInput} (0x{currentInputCode:X2})");
+                    var statusPanel = new Panel(
+                        $"[green]✓ DDC/CI Active[/]\n" +
+                        $"[cyan]Current Input:[/] [white]{currentInput}[/] [dim](0x{currentInputCode:X2})[/]")
+                    {
+                        Header = new PanelHeader("[bold green]📡 Current Status[/]", Justify.Left),
+                        Border = BoxBorder.Rounded,
+                        BorderStyle = new Style(Color.Green)
+                    };
+                    AnsiConsole.Write(statusPanel);
                 }
                 else
                 {
-                    AnsiConsole.MarkupLine("  [bold yellow]Warning:[/] [yellow]DDC/CI communication not available[/]");
+                    var warningPanel = new Panel(
+                        "[yellow]DDC/CI communication not available[/]\n" +
+                        "[dim]Input source switching may not be supported on this monitor[/]")
+                    {
+                        Header = new PanelHeader("[bold yellow]⚠ Warning[/]", Justify.Left),
+                        Border = BoxBorder.Rounded,
+                        BorderStyle = new Style(Color.Yellow)
+                    };
+                    AnsiConsole.Write(warningPanel);
                 }
 
                 AnsiConsole.WriteLine();
