@@ -1,6 +1,8 @@
 # ddcswitch Examples
 
-This document contains detailed examples and use cases for ddcswitch, including input switching, brightness/contrast control, comprehensive VCP feature access, EDID information retrieval, and automation.
+This document contains detailed examples and use cases for ddcswitch, including input switching, brightness/contrast control, comprehensive VCP feature access, EDID information retrieval, automation, and creative Windows integrations.
+
+ddcswitch's JSON output support and comprehensive VCP feature access opens up unique automation possibilities.
 
 ## Monitor Information (EDID)
 
@@ -1908,4 +1910,1055 @@ Write-Host "Synchronized $($okMonitors.Count) monitors" -ForegroundColor Cyan
 ```
 
 Happy switching and brightness controlling!
+
+## Creative Windows Integrations
+
+### Windows Subsystem for Linux (WSL) Integration
+
+Control Windows monitors from within WSL using ddcswitch:
+
+```bash
+# ~/.bashrc in WSL
+alias ddc='/mnt/c/Tools/ddcswitch.exe'
+alias ddc-work='ddc set 0 DP1 && ddc set 0 brightness 60%'
+alias ddc-game='ddc set 0 HDMI1 && ddc set 0 brightness 90%'
+
+# Function to get monitor info in WSL
+monitor_status() {
+    /mnt/c/Tools/ddcswitch.exe list --json | jq '.monitors[] | {index, name, currentInput, brightness, contrast}'
+}
+
+# Brightness control from Linux terminal
+set_brightness() {
+    /mnt/c/Tools/ddcswitch.exe set 0 brightness "$1%"
+    echo "Brightness set to $1%"
+}
+```
+
+### Windows Terminal Custom Actions
+
+Add ddcswitch commands to Windows Terminal settings.json:
+
+```json
+{
+    "actions": [
+        {
+            "command": {
+                "action": "wt",
+                "commandline": "ddcswitch set 0 HDMI1"
+            },
+            "keys": "ctrl+alt+h",
+            "name": "Switch to HDMI"
+        },
+        {
+            "command": {
+                "action": "wt", 
+                "commandline": "ddcswitch set 0 DP1"
+            },
+            "keys": "ctrl+alt+d",
+            "name": "Switch to DisplayPort"
+        },
+        {
+            "command": {
+                "action": "wt",
+                "commandline": "ddcswitch list --verbose"
+            },
+            "keys": "ctrl+alt+m",
+            "name": "Monitor Status"
+        }
+    ]
+}
+```
+
+### Microsoft Power Automate Desktop Integration
+
+Create automated workflows that respond to system events:
+
+```
+# Power Automate Desktop Flow: "Smart Monitor Control"
+
+# Trigger: When specific application launches
+IF Application.IsProcessRunning ProcessName: 'GameLauncher' THEN
+    # Switch to gaming setup
+    System.RunDOSCommand Command: 'ddcswitch set 0 HDMI1' 
+    System.RunDOSCommand Command: 'ddcswitch set 0 brightness 90%'
+    System.RunDOSCommand Command: 'ddcswitch set 0 contrast 85%'
+    
+    # Show notification
+    Display.ShowNotification Title: 'Gaming Mode' Message: 'Monitors configured for gaming'
+END
+
+# Trigger: When work hours begin (9 AM)
+IF DateTime.Now.Hour = 9 THEN
+    System.RunDOSCommand Command: 'ddcswitch set 0 DP1'
+    System.RunDOSCommand Command: 'ddcswitch set 0 brightness 60%'
+    Display.ShowNotification Title: 'Work Mode' Message: 'Monitors ready for productivity'
+END
+```
+
+### Windows Event Log Integration
+
+Monitor system events and respond with display changes:
+
+```powershell
+# monitor-event-handler.ps1
+# Register for system events and adjust monitors accordingly
+
+Register-WmiEvent -Query "SELECT * FROM Win32_VolumeChangeEvent WHERE EventType = 2" -Action {
+    # USB device connected - might be a console
+    Start-Sleep -Seconds 2
+    $result = ddcswitch list --json | ConvertFrom-Json
+    
+    # Check if we should auto-switch to console input
+    $gameConsoles = @("Xbox", "PlayStation", "Nintendo")
+    # Logic to detect console and switch input
+    ddcswitch set 0 HDMI1
+    Write-EventLog -LogName Application -Source "ddcswitch" -EventId 1001 -Message "Auto-switched to console input"
+}
+
+# Register for user session changes
+Register-WmiEvent -Query "SELECT * FROM Win32_SessionChangeEvent" -Action {
+    $event = $Event.SourceEventArgs.NewEvent
+    
+    switch ($event.Type) {
+        7 { # Session locked
+            ddcswitch set 0 brightness 10%  # Dim when locked
+        }
+        8 { # Session unlocked  
+            ddcswitch set 0 brightness 75%  # Restore brightness
+        }
+    }
+}
+```
+
+### Razer Synapse / Logitech G HUB Integration
+
+Use macro keys to control monitors:
+
+```csharp
+// Razer Synapse C# Script for macro key
+using System.Diagnostics;
+
+public void ExecuteMacro()
+{
+    // Gaming profile macro
+    Process.Start("ddcswitch.exe", "set 0 HDMI1");
+    System.Threading.Thread.Sleep(500);
+    Process.Start("ddcswitch.exe", "set 0 brightness 90%");
+    Process.Start("ddcswitch.exe", "set 0 contrast 85%");
+}
+```
+
+### OBS Studio Integration
+
+Control monitor settings during streaming:
+
+```lua
+-- OBS Studio Lua Script: monitor-control.lua
+obs = obslua
+
+function script_description()
+    return "Control monitor settings during streaming"
+end
+
+function on_scene_switch(event)
+    local scene_name = obs.obs_frontend_get_current_scene_name()
+    
+    if scene_name == "Gaming Scene" then
+        os.execute("ddcswitch set 0 HDMI1")
+        os.execute("ddcswitch set 0 brightness 95%")
+    elseif scene_name == "Just Chatting" then
+        os.execute("ddcswitch set 0 DP1") 
+        os.execute("ddcswitch set 0 brightness 70%")
+    end
+end
+
+function script_load(settings)
+    obs.obs_frontend_add_event_callback(on_scene_switch)
+end
+```
+
+### Discord Bot Integration
+
+Control monitors via Discord commands:
+
+```javascript
+// discord-monitor-bot.js
+const { Client, GatewayIntentBits } = require('discord.js');
+const { execSync } = require('child_process');
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+
+client.on('messageCreate', async message => {
+    if (!message.content.startsWith('!monitor')) return;
+    
+    const args = message.content.split(' ');
+    const command = args[1];
+    
+    try {
+        switch(command) {
+            case 'status':
+                const status = execSync('ddcswitch list --json').toString();
+                const data = JSON.parse(status);
+                const embed = {
+                    title: 'Monitor Status',
+                    fields: data.monitors.map(m => ({
+                        name: m.name,
+                        value: `Input: ${m.currentInput}\nBrightness: ${m.brightness || 'N/A'}`,
+                        inline: true
+                    }))
+                };
+                message.reply({ embeds: [embed] });
+                break;
+                
+            case 'gaming':
+                execSync('ddcswitch set 0 HDMI1');
+                execSync('ddcswitch set 0 brightness 90%');
+                message.reply('🎮 Gaming mode activated!');
+                break;
+                
+            case 'work':
+                execSync('ddcswitch set 0 DP1');
+                execSync('ddcswitch set 0 brightness 60%');
+                message.reply('💼 Work mode activated!');
+                break;
+        }
+    } catch (error) {
+        message.reply('❌ Monitor control failed');
+    }
+});
+
+client.login('YOUR_BOT_TOKEN');
+```
+
+### Home Assistant Integration
+
+Control monitors from your smart home system:
+
+```yaml
+# configuration.yaml
+shell_command:
+  monitor_gaming: "ddcswitch set 0 HDMI1 && ddcswitch set 0 brightness 90%"
+  monitor_work: "ddcswitch set 0 DP1 && ddcswitch set 0 brightness 60%"
+  monitor_movie: "ddcswitch set 0 HDMI1 && ddcswitch set 0 brightness 30%"
+
+sensor:
+  - platform: command_line
+    name: monitor_status
+    command: 'ddcswitch list --json'
+    value_template: '{{ value_json.monitors[0].currentInput }}'
+    json_attributes:
+      - monitors
+
+automation:
+  - alias: "Gaming Time"
+    trigger:
+      platform: time
+      at: "19:00:00"
+    action:
+      service: shell_command.monitor_gaming
+      
+  - alias: "Work Hours"  
+    trigger:
+      platform: time
+      at: "09:00:00"
+    action:
+      service: shell_command.monitor_work
+```
+
+### Twitch Chat Bot Integration
+
+Let viewers control your monitor settings:
+
+```python
+# twitch-monitor-bot.py
+import socket
+import subprocess
+import json
+import time
+
+class TwitchBot:
+    def __init__(self, token, channel):
+        self.token = token
+        self.channel = channel
+        self.sock = socket.socket()
+        
+    def connect(self):
+        self.sock.connect(('irc.chat.twitch.tv', 6667))
+        self.sock.send(f"PASS {self.token}\n".encode('utf-8'))
+        self.sock.send(f"NICK streambot\n".encode('utf-8'))
+        self.sock.send(f"JOIN {self.channel}\n".encode('utf-8'))
+        
+    def send_message(self, message):
+        self.sock.send(f"PRIVMSG {self.channel} :{message}\n".encode('utf-8'))
+        
+    def run_ddc(self, args):
+        try:
+            result = subprocess.run(['ddcswitch'] + args + ['--json'], 
+                                  capture_output=True, text=True)
+            return json.loads(result.stdout)
+        except:
+            return {'success': False}
+            
+    def handle_command(self, user, command):
+        # Only allow certain users or subscribers
+        if user not in ['streamer', 'moderator']:
+            return
+            
+        if command == '!brightness_up':
+            # Get current brightness and increase by 10%
+            current = self.run_ddc(['get', '0', 'brightness'])
+            if current['success']:
+                new_brightness = min(100, current['percentageValue'] + 10)
+                result = self.run_ddc(['set', '0', 'brightness', f'{new_brightness}%'])
+                if result['success']:
+                    self.send_message(f"Brightness increased to {new_brightness}%")
+                    
+        elif command == '!brightness_down':
+            current = self.run_ddc(['get', '0', 'brightness'])
+            if current['success']:
+                new_brightness = max(10, current['percentageValue'] - 10)
+                result = self.run_ddc(['set', '0', 'brightness', f'{new_brightness}%'])
+                if result['success']:
+                    self.send_message(f"Brightness decreased to {new_brightness}%")
+                    
+        elif command == '!monitor_status':
+            status = self.run_ddc(['list', '--verbose'])
+            if status['success']:
+                monitor = status['monitors'][0]
+                self.send_message(f"Monitor: {monitor['currentInput']}, "
+                                f"Brightness: {monitor.get('brightness', 'N/A')}")
+
+# Usage
+bot = TwitchBot('oauth:your_token', '#your_channel')
+bot.connect()
+# Add message parsing loop...
+```
+
+### Windows Sandbox Testing Environment
+
+Test monitor configurations safely:
+
+```xml
+<!-- monitor-test.wsb -->
+<Configuration>
+    <MappedFolders>
+        <MappedFolder>
+            <HostFolder>C:\Tools</HostFolder>
+            <SandboxFolder>C:\Tools</SandboxFolder>
+            <ReadOnly>true</ReadOnly>
+        </MappedFolder>
+    </MappedFolders>
+    <LogonCommand>
+        <Command>C:\Tools\ddcswitch.exe list --verbose</Command>
+    </LogonCommand>
+</Configuration>
+```
+
+### Microsoft Graph API Integration
+
+Control monitors based on calendar events:
+
+```csharp
+// CalendarMonitorController.cs
+using Microsoft.Graph;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+public class CalendarMonitorController
+{
+    private GraphServiceClient _graphClient;
+    
+    public async Task CheckUpcomingMeetings()
+    {
+        var events = await _graphClient.Me.Events
+            .Request()
+            .Filter($"start/dateTime ge '{DateTime.Now:yyyy-MM-ddTHH:mm:ss.fffK}'")
+            .Top(1)
+            .GetAsync();
+            
+        if (events.Any())
+        {
+            var nextMeeting = events.First();
+            var timeUntilMeeting = nextMeeting.Start.DateTime - DateTime.Now;
+            
+            if (timeUntilMeeting.TotalMinutes <= 5)
+            {
+                // Meeting starting soon - optimize for video calls
+                Process.Start("ddcswitch.exe", "set 0 DP1");        // Switch to PC
+                Process.Start("ddcswitch.exe", "set 0 brightness 80%"); // Good lighting
+                Process.Start("ddcswitch.exe", "set 0 contrast 75%");   // Clear video
+                
+                // Show notification
+                var notification = new ToastNotification("Meeting Mode", 
+                    "Monitor optimized for video call");
+                notification.Show();
+            }
+        }
+    }
+}
+```
+
+### Windows Performance Toolkit Integration
+
+Monitor performance impact of display changes:
+
+```powershell
+# performance-monitor.ps1
+# Track system performance during monitor operations
+
+function Measure-MonitorOperation {
+    param([string]$Operation)
+    
+    # Start performance counter
+    $cpu = Get-Counter "\Processor(_Total)\% Processor Time"
+    $startTime = Get-Date
+    
+    # Execute monitor command
+    $result = Invoke-Expression "ddcswitch $Operation --json" | ConvertFrom-Json
+    
+    $endTime = Get-Date
+    $duration = ($endTime - $startTime).TotalMilliseconds
+    
+    # Log performance data
+    $perfData = @{
+        Operation = $Operation
+        Success = $result.success
+        Duration = $duration
+        CPUBefore = $cpu.CounterSamples[0].CookedValue
+        Timestamp = $startTime
+    }
+    
+    $perfData | ConvertTo-Json | Out-File -Append "monitor-performance.log"
+    
+    Write-Host "Operation: $Operation completed in ${duration}ms" -ForegroundColor Green
+}
+
+# Test various operations
+Measure-MonitorOperation "list"
+Measure-MonitorOperation "set 0 HDMI1"
+Measure-MonitorOperation "set 0 brightness 75%"
+Measure-MonitorOperation "get 0"
+```
+
+### Chocolatey Package Hooks
+
+Automatically configure monitors when installing/updating software:
+
+```powershell
+# chocolateyinstall.ps1 for a gaming package
+$packageName = 'steam'
+
+# Install Steam normally...
+Install-ChocolateyPackage @packageArgs
+
+# Configure monitors for gaming after Steam install
+if (Get-Command ddcswitch -ErrorAction SilentlyContinue) {
+    Write-Host "Configuring monitors for gaming..." -ForegroundColor Green
+    
+    # Create gaming profile
+    $gamingScript = @"
+ddcswitch set 0 HDMI1
+ddcswitch set 0 brightness 90%
+ddcswitch set 0 contrast 85%
+Write-Host "Gaming profile activated!" -ForegroundColor Green
+"@
+    
+    $gamingScript | Out-File "$env:USERPROFILE\Desktop\Gaming-Mode.ps1"
+    Write-Host "Created Gaming-Mode.ps1 on desktop" -ForegroundColor Cyan
+}
+```
+
+### Windows Subsystem for Android (WSA) Integration
+
+Control monitors when Android apps launch:
+
+```bash
+#!/system/bin/sh
+# monitor-control.sh (in WSA)
+
+# Detect when gaming apps launch and signal Windows
+am monitor --gdb | while read line; do
+    if echo "$line" | grep -q "com.epicgames.fortnite"; then
+        # Signal Windows to switch to gaming mode
+        /mnt/c/Tools/ddcswitch.exe set 0 HDMI1
+        /mnt/c/Tools/ddcswitch.exe set 0 brightness 95%
+    fi
+done
+```
+
+### Microsoft Intune/MDM Integration
+
+Deploy monitor configurations across enterprise:
+
+```xml
+<!-- monitor-config.xml for Intune -->
+<SyncML>
+    <SyncBody>
+        <Add>
+            <CmdID>1</CmdID>
+            <Item>
+                <Target>
+                    <LocURI>./Device/Vendor/MSFT/Policy/Config/DeliveryOptimization/DODownloadMode</LocURI>
+                </Target>
+                <Meta>
+                    <Format xmlns="syncml:metinf">int</Format>
+                </Meta>
+                <Data>1</Data>
+            </Item>
+        </Add>
+        <Exec>
+            <CmdID>2</CmdID>
+            <Item>
+                <Target>
+                    <LocURI>./Device/Vendor/MSFT/Policy/Config/Update/ScheduledInstallTime</LocURI>
+                </Target>
+                <Meta>
+                    <Format xmlns="syncml:metinf">chr</Format>
+                </Meta>
+                <Data>ddcswitch set 0 brightness 60%</Data>
+            </Item>
+        </Exec>
+    </SyncBody>
+</SyncML>
+```
+
+### Windows Presentation Foundation (WPF) GUI
+
+Create a visual interface for ddcswitch:
+
+```csharp
+// MonitorControlGUI.xaml.cs
+using System;
+using System.Diagnostics;
+using System.Text.Json;
+using System.Windows;
+using System.Windows.Controls;
+
+public partial class MonitorControlWindow : Window
+{
+    public MonitorControlWindow()
+    {
+        InitializeComponent();
+        LoadMonitors();
+    }
+    
+    private void LoadMonitors()
+    {
+        try
+        {
+            var result = RunDDCCommand("list --json");
+            var data = JsonSerializer.Deserialize<MonitorListResponse>(result);
+            
+            MonitorComboBox.ItemsSource = data.Monitors;
+            MonitorComboBox.DisplayMemberPath = "Name";
+            MonitorComboBox.SelectedValuePath = "Index";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to load monitors: {ex.Message}");
+        }
+    }
+    
+    private void BrightnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (MonitorComboBox.SelectedValue != null)
+        {
+            var monitorIndex = MonitorComboBox.SelectedValue.ToString();
+            var brightness = (int)e.NewValue;
+            
+            RunDDCCommand($"set {monitorIndex} brightness {brightness}%");
+            BrightnessLabel.Content = $"Brightness: {brightness}%";
+        }
+    }
+    
+    private void InputButton_Click(object sender, RoutedEventArgs e)
+    {
+        var button = sender as Button;
+        var input = button.Tag.ToString();
+        var monitorIndex = MonitorComboBox.SelectedValue.ToString();
+        
+        RunDDCCommand($"set {monitorIndex} {input}");
+        StatusLabel.Content = $"Switched to {input}";
+    }
+    
+    private string RunDDCCommand(string args)
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "ddcswitch.exe",
+                Arguments = args,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+        
+        process.Start();
+        var output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+        
+        return output;
+    }
+}
+```
+
+### Windows Registry Integration
+
+Store and restore monitor preferences:
+
+```powershell
+# registry-monitor-profiles.ps1
+$registryPath = "HKCU:\Software\ddcswitch\Profiles"
+
+function Save-MonitorProfile {
+    param([string]$ProfileName)
+    
+    # Get current monitor state
+    $monitors = ddcswitch list --verbose --json | ConvertFrom-Json
+    
+    if (-not (Test-Path $registryPath)) {
+        New-Item -Path $registryPath -Force
+    }
+    
+    foreach ($monitor in $monitors.monitors) {
+        $profileKey = "$registryPath\$ProfileName\Monitor$($monitor.index)"
+        New-Item -Path $profileKey -Force
+        
+        Set-ItemProperty -Path $profileKey -Name "Input" -Value $monitor.currentInput
+        if ($monitor.brightness) {
+            Set-ItemProperty -Path $profileKey -Name "Brightness" -Value $monitor.brightness
+        }
+        if ($monitor.contrast) {
+            Set-ItemProperty -Path $profileKey -Name "Contrast" -Value $monitor.contrast
+        }
+    }
+    
+    Write-Host "Profile '$ProfileName' saved to registry" -ForegroundColor Green
+}
+
+function Restore-MonitorProfile {
+    param([string]$ProfileName)
+    
+    $profilePath = "$registryPath\$ProfileName"
+    if (-not (Test-Path $profilePath)) {
+        Write-Error "Profile '$ProfileName' not found"
+        return
+    }
+    
+    $monitorKeys = Get-ChildItem -Path $profilePath
+    foreach ($key in $monitorKeys) {
+        $monitorIndex = $key.Name -replace '.*Monitor(\d+)', '$1'
+        
+        $input = Get-ItemProperty -Path $key.PSPath -Name "Input" -ErrorAction SilentlyContinue
+        $brightness = Get-ItemProperty -Path $key.PSPath -Name "Brightness" -ErrorAction SilentlyContinue
+        $contrast = Get-ItemProperty -Path $key.PSPath -Name "Contrast" -ErrorAction SilentlyContinue
+        
+        if ($input) { ddcswitch set $monitorIndex $input.Input }
+        if ($brightness) { ddcswitch set $monitorIndex brightness $brightness.Brightness }
+        if ($contrast) { ddcswitch set $monitorIndex contrast $contrast.Contrast }
+    }
+    
+    Write-Host "Profile '$ProfileName' restored" -ForegroundColor Green
+}
+
+# Usage:
+# Save-MonitorProfile "Gaming"
+# Restore-MonitorProfile "Gaming"
+```
+
+## Windows Productivity Workflows
+
+### Focus Mode with Windows Focus Assist
+
+Combine Windows Focus Assist with monitor dimming for deep work:
+
+```powershell
+# focus-mode.ps1
+param([switch]$Enable, [switch]$Disable)
+
+if ($Enable) {
+    # Enable Focus Assist (Priority only)
+    $registryPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount"
+    # Set Focus Assist to Priority only mode
+    
+    # Dim all monitors for focus
+    $monitors = ddcswitch list --json | ConvertFrom-Json
+    foreach ($monitor in $monitors.monitors) {
+        if ($monitor.status -eq "ok") {
+            ddcswitch set $monitor.index brightness 40%
+        }
+    }
+    
+    Write-Host "🎯 Focus mode enabled - monitors dimmed, notifications limited" -ForegroundColor Blue
+    
+    # Set timer for break reminder
+    Start-Job -ScriptBlock {
+        Start-Sleep -Seconds 1800  # 30 minutes
+        [System.Windows.Forms.MessageBox]::Show("Time for a break!", "Focus Mode")
+    }
+}
+
+if ($Disable) {
+    # Restore normal brightness
+    $monitors = ddcswitch list --json | ConvertFrom-Json
+    foreach ($monitor in $monitors.monitors) {
+        if ($monitor.status -eq "ok") {
+            ddcswitch set $monitor.index brightness 75%
+        }
+    }
+    
+    Write-Host "✨ Focus mode disabled - normal brightness restored" -ForegroundColor Green
+}
+```
+
+### Pomodoro Timer Integration
+
+Automatically adjust monitor settings during work/break cycles:
+
+```csharp
+// PomodoroMonitorController.cs
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+public class PomodoroMonitorController
+{
+    private Timer _workTimer;
+    private Timer _breakTimer;
+    private bool _isWorkSession = true;
+    
+    public void StartPomodoro()
+    {
+        StartWorkSession();
+    }
+    
+    private void StartWorkSession()
+    {
+        _isWorkSession = true;
+        
+        // Work mode: Higher brightness, focus input
+        RunDDCCommand("set 0 DP1");           // PC input for work
+        RunDDCCommand("set 0 brightness 80%"); // Good brightness for productivity
+        RunDDCCommand("set 0 contrast 75%");   // Comfortable contrast
+        
+        ShowNotification("🍅 Work Session Started", "25 minutes of focused work");
+        
+        // Set 25-minute timer
+        _workTimer = new Timer(OnWorkSessionEnd, null, TimeSpan.FromMinutes(25), Timeout.InfiniteTimeSpan);
+    }
+    
+    private void OnWorkSessionEnd(object state)
+    {
+        _workTimer?.Dispose();
+        StartBreakSession();
+    }
+    
+    private void StartBreakSession()
+    {
+        _isWorkSession = false;
+        
+        // Break mode: Lower brightness, entertainment input
+        RunDDCCommand("set 0 brightness 50%"); // Dimmer for rest
+        RunDDCCommand("set 0 contrast 85%");   // Higher contrast for media
+        
+        ShowNotification("☕ Break Time!", "5 minutes to rest your eyes");
+        
+        // Set 5-minute timer
+        _breakTimer = new Timer(OnBreakSessionEnd, null, TimeSpan.FromMinutes(5), Timeout.InfiniteTimeSpan);
+    }
+    
+    private void OnBreakSessionEnd(object state)
+    {
+        _breakTimer?.Dispose();
+        StartWorkSession(); // Loop back to work
+    }
+    
+    private void RunDDCCommand(string args)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "ddcswitch.exe",
+            Arguments = args,
+            CreateNoWindow = true,
+            UseShellExecute = false
+        });
+    }
+    
+    private void ShowNotification(string title, string message)
+    {
+        var notification = new NotifyIcon
+        {
+            Icon = SystemIcons.Information,
+            BalloonTipTitle = title,
+            BalloonTipText = message,
+            Visible = true
+        };
+        notification.ShowBalloonTip(3000);
+    }
+}
+```
+
+### Eye Strain Reduction with Blue Light Filtering
+
+Combine with Windows Night Light for comprehensive eye care:
+
+```powershell
+# eye-care-scheduler.ps1
+# Automatically adjust monitors throughout the day for eye health
+
+function Set-EyeCareMode {
+    param([string]$Mode)
+    
+    switch ($Mode) {
+        "Morning" {
+            # Bright, energizing settings
+            ddcswitch set 0 brightness 85%
+            ddcswitch set 0 contrast 80%
+            # Enable Windows Night Light (warm colors)
+            reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount" /v "NightLightEnabled" /t REG_DWORD /d 0 /f
+            Write-Host "🌅 Morning mode: Bright and energizing" -ForegroundColor Yellow
+        }
+        
+        "Midday" {
+            # Maximum brightness for productivity
+            ddcswitch set 0 brightness 90%
+            ddcswitch set 0 contrast 75%
+            Write-Host "☀️ Midday mode: Maximum productivity" -ForegroundColor Green
+        }
+        
+        "Evening" {
+            # Reduced brightness, warmer colors
+            ddcswitch set 0 brightness 60%
+            ddcswitch set 0 contrast 70%
+            # Enable Night Light
+            reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount" /v "NightLightEnabled" /t REG_DWORD /d 1 /f
+            Write-Host "🌆 Evening mode: Reduced strain" -ForegroundColor Orange
+        }
+        
+        "Night" {
+            # Very dim for late work
+            ddcswitch set 0 brightness 25%
+            ddcswitch set 0 contrast 65%
+            Write-Host "🌙 Night mode: Minimal eye strain" -ForegroundColor Blue
+        }
+    }
+}
+
+# Schedule throughout the day
+$hour = (Get-Date).Hour
+
+if ($hour -ge 6 -and $hour -lt 10) {
+    Set-EyeCareMode "Morning"
+} elseif ($hour -ge 10 -and $hour -lt 16) {
+    Set-EyeCareMode "Midday"
+} elseif ($hour -ge 16 -and $hour -lt 20) {
+    Set-EyeCareMode "Evening"
+} else {
+    Set-EyeCareMode "Night"
+}
+```
+
+### Multi-Monitor Workspace Management
+
+Intelligent workspace switching based on active applications:
+
+```powershell
+# workspace-manager.ps1
+# Automatically configure monitors based on active applications
+
+function Get-ActiveApplication {
+    Add-Type @"
+        using System;
+        using System.Runtime.InteropServices;
+        using System.Text;
+        public class Win32 {
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetForegroundWindow();
+            [DllImport("user32.dll")]
+            public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+            [DllImport("user32.dll")]
+            public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+        }
+"@
+    
+    $hwnd = [Win32]::GetForegroundWindow()
+    $processId = 0
+    [Win32]::GetWindowThreadProcessId($hwnd, [ref]$processId)
+    
+    return Get-Process -Id $processId -ErrorAction SilentlyContinue
+}
+
+function Set-WorkspaceForApplication {
+    param([string]$ProcessName)
+    
+    $workspaceConfigs = @{
+        "Code" = @{
+            Description = "Visual Studio Code - Development"
+            Monitor0 = @{ Input = "DP1"; Brightness = 70; Contrast = 75 }
+            Monitor1 = @{ Input = "DP2"; Brightness = 65; Contrast = 75 }
+        }
+        "chrome" = @{
+            Description = "Web Browsing"
+            Monitor0 = @{ Input = "DP1"; Brightness = 75; Contrast = 80 }
+            Monitor1 = @{ Input = "DP2"; Brightness = 70; Contrast = 80 }
+        }
+        "Photoshop" = @{
+            Description = "Photo Editing - Color Accurate"
+            Monitor0 = @{ Input = "DP1"; Brightness = 80; Contrast = 85 }
+            Monitor1 = @{ Input = "DP2"; Brightness = 75; Contrast = 85 }
+        }
+        "Steam" = @{
+            Description = "Gaming Mode"
+            Monitor0 = @{ Input = "HDMI1"; Brightness = 95; Contrast = 90 }
+            Monitor1 = @{ Input = "HDMI2"; Brightness = 90; Contrast = 85 }
+        }
+        "obs64" = @{
+            Description = "Streaming Setup"
+            Monitor0 = @{ Input = "DP1"; Brightness = 85; Contrast = 80 }
+            Monitor1 = @{ Input = "HDMI1"; Brightness = 80; Contrast = 85 }
+        }
+    }
+    
+    if ($workspaceConfigs.ContainsKey($ProcessName)) {
+        $config = $workspaceConfigs[$ProcessName]
+        Write-Host "🖥️ Configuring workspace: $($config.Description)" -ForegroundColor Cyan
+        
+        # Apply to Monitor 0
+        if ($config.Monitor0) {
+            ddcswitch set 0 $config.Monitor0.Input
+            ddcswitch set 0 brightness "$($config.Monitor0.Brightness)%"
+            ddcswitch set 0 contrast "$($config.Monitor0.Contrast)%"
+        }
+        
+        # Apply to Monitor 1 if exists
+        if ($config.Monitor1) {
+            $monitors = ddcswitch list --json | ConvertFrom-Json
+            if ($monitors.monitors.Count -gt 1) {
+                ddcswitch set 1 $config.Monitor1.Input
+                ddcswitch set 1 brightness "$($config.Monitor1.Brightness)%"
+                ddcswitch set 1 contrast "$($config.Monitor1.Contrast)%"
+            }
+        }
+        
+        return $true
+    }
+    
+    return $false
+}
+
+# Monitor active application and adjust workspace
+$lastProcess = ""
+while ($true) {
+    $currentProcess = Get-ActiveApplication
+    
+    if ($currentProcess -and $currentProcess.ProcessName -ne $lastProcess) {
+        $configured = Set-WorkspaceForApplication $currentProcess.ProcessName
+        if ($configured) {
+            $lastProcess = $currentProcess.ProcessName
+        }
+    }
+    
+    Start-Sleep -Seconds 2
+}
+```
+
+### Meeting Room Display Management
+
+Automatically configure displays for presentations and video calls:
+
+```powershell
+# meeting-room-controller.ps1
+# Integrate with Outlook calendar for automatic display management
+
+Add-Type -AssemblyName Microsoft.Office.Interop.Outlook
+
+function Get-UpcomingMeeting {
+    $outlook = New-Object -ComObject Outlook.Application
+    $namespace = $outlook.GetNamespace("MAPI")
+    $calendar = $namespace.GetDefaultFolder(9) # Calendar folder
+    
+    $now = Get-Date
+    $endTime = $now.AddHours(1)
+    
+    $filter = "[Start] >= '$($now.ToString("MM/dd/yyyy HH:mm"))' AND [Start] <= '$($endTime.ToString("MM/dd/yyyy HH:mm"))'"
+    $appointments = $calendar.Items.Restrict($filter)
+    
+    return $appointments | Select-Object -First 1
+}
+
+function Set-PresentationMode {
+    Write-Host "📊 Activating Presentation Mode" -ForegroundColor Green
+    
+    # High brightness for projector visibility
+    ddcswitch set 0 brightness 100%
+    ddcswitch set 0 contrast 90%
+    
+    # Switch to presentation input (HDMI for projector)
+    ddcswitch set 0 HDMI1
+    
+    # Duplicate display for presenter view
+    DisplaySwitch.exe /duplicate
+    
+    # Disable screen saver
+    powercfg /change standby-timeout-ac 0
+    powercfg /change monitor-timeout-ac 0
+}
+
+function Set-VideoCallMode {
+    Write-Host "📹 Activating Video Call Mode" -ForegroundColor Blue
+    
+    # Optimal brightness for webcam lighting
+    ddcswitch set 0 brightness 85%
+    ddcswitch set 0 contrast 80%
+    
+    # PC input for video call software
+    ddcswitch set 0 DP1
+    
+    # Extend displays for notes/chat
+    DisplaySwitch.exe /extend
+}
+
+function Set-NormalMode {
+    Write-Host "💼 Returning to Normal Mode" -ForegroundColor Gray
+    
+    # Standard work brightness
+    ddcswitch set 0 brightness 70%
+    ddcswitch set 0 contrast 75%
+    
+    # Restore power settings
+    powercfg /change standby-timeout-ac 15
+    powercfg /change monitor-timeout-ac 10
+}
+
+# Check for upcoming meetings
+$meeting = Get-UpcomingMeeting
+
+if ($meeting) {
+    $timeUntilMeeting = ($meeting.Start - (Get-Date)).TotalMinutes
+    
+    if ($timeUntilMeeting -le 5 -and $timeUntilMeeting -gt 0) {
+        if ($meeting.Subject -match "presentation|demo|training") {
+            Set-PresentationMode
+        } elseif ($meeting.Subject -match "call|meeting|standup|sync") {
+            Set-VideoCallMode
+        }
+        
+        # Schedule return to normal mode after meeting
+        $meetingDuration = ($meeting.End - $meeting.Start).TotalMinutes
+        Start-Job -ScriptBlock {
+            param($Duration)
+            Start-Sleep -Seconds ($Duration * 60)
+            & "meeting-room-controller.ps1" -RestoreNormal
+        } -ArgumentList $meetingDuration
+    }
+}
+```
+
+These creative integrations showcase ddcswitch's unique position in the Windows ecosystem, leveraging its JSON output and comprehensive VCP support for automation scenarios that weren't possible with traditional DDC/CI tools.
 

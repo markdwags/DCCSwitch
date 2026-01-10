@@ -54,7 +54,7 @@ def generate_all_features_list(features):
 def main():
     script_dir = Path(__file__).parent
     json_file = script_dir.parent / 'DDCSwitch' / 'VcpFeatureData.json'
-    output_file = script_dir.parent / 'DDCSwitch' / 'VcpFeature.Generated.cs'
+    output_file = script_dir.parent / 'DDCSwitch' / 'VcpFeatures' / 'VcpFeature.Generated.cs'
     
     print(f"Loading {json_file}...")
     with open(json_file, 'r', encoding='utf-8') as f:
