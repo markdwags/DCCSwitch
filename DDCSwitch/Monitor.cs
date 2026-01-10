@@ -13,7 +13,17 @@ public class Monitor(int index, string name, string deviceName, bool isPrimary, 
     public string DeviceName { get; } = deviceName;
     public bool IsPrimary { get; } = isPrimary;
 
-    // EDID properties
+    // Enhanced name resolution with DDC/CI priority
+    public string ResolvedName { get; private set; } = name; // Initialize with Windows name
+    public bool NameFromDdcCi { get; private set; }
+    public bool NameFromEdid { get; private set; }
+
+    // EDID properties (enhanced with registry conflict resolution)
+    public ParsedEdidInfo? ParsedEdid { get; private set; }
+    public List<RegistryEdidEntry>? AlternativeRegistryEntries { get; private set; }
+    public bool HasRegistryConflicts => AlternativeRegistryEntries?.Count > 1;
+
+    // Legacy EDID properties (for backward compatibility)
     public string? ManufacturerId { get; private set; }
     public string? ManufacturerName { get; private set; }
     public string? ModelName { get; private set; }
@@ -26,37 +36,154 @@ public class Monitor(int index, string name, string deviceName, bool isPrimary, 
     public SupportedFeatures? SupportedFeatures { get; private set; }
     public ChromaticityCoordinates? Chromaticity { get; private set; }
 
+    // DDC/CI identification properties
+    public MonitorIdentityInfo? DdcCiIdentity { get; private set; }
+    public VcpCapabilityInfo? VcpCapabilities { get; private set; }
+
     private IntPtr Handle { get; } = handle;
     private bool _disposed;
 
     /// <summary>
-    /// Loads EDID data from registry and populates EDID properties.
+    /// Loads EDID data from registry with enhanced conflict resolution and populates EDID properties.
     /// </summary>
     public void LoadEdidData()
     {
         try
         {
-            var edid = NativeMethods.GetEdidFromRegistry(DeviceName);
-            if (edid == null || edid.Length < 128) return;
-
-            ManufacturerId = EdidParser.ParseManufacturerId(edid);
-            if (ManufacturerId != null)
+            // Use the enhanced registry method with monitor description matching first
+            var edidData = NativeMethods.GetEdidFromRegistryEnhanced(DeviceName, Handle, Name);
+            if (edidData != null && edidData.Length >= 128)
             {
-                ManufacturerName = EdidParser.GetManufacturerName(ManufacturerId);
+                ParsedEdid = EdidParser.ParseFromBytes(edidData, true);
             }
-            ModelName = EdidParser.ParseModelName(edid);
-            SerialNumber = EdidParser.ParseSerialNumber(edid);
-            ProductCode = EdidParser.ParseProductCode(edid);
-            ManufactureYear = EdidParser.ParseManufactureYear(edid);
-            ManufactureWeek = EdidParser.ParseManufactureWeek(edid);
-            EdidVersion = EdidParser.ParseEdidVersion(edid);
-            VideoInputDefinition = EdidParser.ParseVideoInputDefinition(edid);
-            SupportedFeatures = EdidParser.ParseSupportedFeatures(edid);
-            Chromaticity = EdidParser.ParseChromaticity(edid);
+            else
+            {
+                // Fallback to active registry parsing
+                ParsedEdid = EdidParser.ParseFromActiveRegistry(DeviceName, Handle);
+            }
+
+            // Final fallback to legacy method
+            if (ParsedEdid == null)
+            {
+                ParsedEdid = EdidParser.ParseFromRegistry(DeviceName);
+            }
+
+            // Load alternative registry entries for conflict detection
+            if (ParsedEdid != null)
+            {
+                string? hardwareId = ExtractHardwareIdFromDeviceName(DeviceName);
+                if (hardwareId != null)
+                {
+                    AlternativeRegistryEntries = EdidParser.FindAllRegistryEntries(hardwareId);
+                }
+            }
+
+            // Populate legacy properties for backward compatibility
+            if (ParsedEdid != null)
+            {
+                ManufacturerId = ParsedEdid.ManufacturerCode;
+                ManufacturerName = ParsedEdid.ManufacturerName;
+                ProductCode = ParsedEdid.ProductCode;
+                ManufactureYear = ParsedEdid.ManufactureYear;
+                ManufactureWeek = ParsedEdid.ManufactureWeek;
+                
+                // Parse additional legacy properties from raw EDID data
+                var edid = ParsedEdid.RawData;
+                ModelName = EdidParser.ParseModelName(edid);
+                SerialNumber = EdidParser.ParseSerialNumber(edid);
+                EdidVersion = EdidParser.ParseEdidVersion(edid);
+                VideoInputDefinition = EdidParser.ParseVideoInputDefinition(edid);
+                SupportedFeatures = EdidParser.ParseSupportedFeatures(edid);
+                Chromaticity = EdidParser.ParseChromaticity(edid);
+            }
+
+            // Resolve monitor name with DDC/CI priority
+            ResolveMonitorName();
         }
         catch
         {
             // Graceful degradation - EDID properties remain null
+            ResolvedName = Name; // Fallback to Windows name
+        }
+    }
+
+    /// <summary>
+    /// Resolves the monitor name using DDC/CI first, then EDID, then Windows fallback.
+    /// </summary>
+    private void ResolveMonitorName()
+    {
+        try
+        {
+            // Load DDC/CI identity if not already loaded
+            if (DdcCiIdentity == null)
+            {
+                LoadDdcCiIdentity();
+            }
+
+            // Resolve name with priority: DDC/CI > EDID > Windows
+            ResolvedName = MonitorNameResolver.ResolveMonitorName(this, DdcCiIdentity, ParsedEdid);
+            
+            // Set flags to indicate name source
+            NameFromDdcCi = MonitorNameResolver.HasNameFromDdcCi(DdcCiIdentity);
+            NameFromEdid = !NameFromDdcCi && MonitorNameResolver.HasNameFromEdid(ParsedEdid);
+        }
+        catch
+        {
+            // Fallback to Windows name
+            ResolvedName = MonitorNameResolver.GetFallbackName(this);
+            NameFromDdcCi = false;
+            NameFromEdid = false;
+        }
+    }
+
+    /// <summary>
+    /// Extracts hardware ID from Windows device name (simplified implementation).
+    /// </summary>
+    /// <param name="deviceName">Device name (e.g., \\.\DISPLAY1)</param>
+    /// <returns>Hardware ID or null if cannot be extracted</returns>
+    private static string? ExtractHardwareIdFromDeviceName(string deviceName)
+    {
+        if (string.IsNullOrEmpty(deviceName))
+            return null;
+
+        // Extract display number from device name (e.g., \\.\DISPLAY1 -> 1)
+        string displayNum = deviceName.Replace(@"\\.\DISPLAY", "");
+        if (int.TryParse(displayNum, out int displayIndex))
+        {
+            // Use display index as a simple hardware ID approximation
+            return $"DISPLAY{displayIndex}";
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Loads DDC/CI identity information and populates DDC/CI properties.
+    /// </summary>
+    public void LoadDdcCiIdentity()
+    {
+        try
+        {
+            DdcCiIdentity = DdcCiMonitorIdentifier.GetIdentityViaDdcCi(this);
+        }
+        catch
+        {
+            // Graceful degradation - DDC/CI identity remains null
+        }
+    }
+
+    /// <summary>
+    /// Loads VCP capability information and populates VCP properties.
+    /// </summary>
+    public void LoadVcpCapabilities()
+    {
+        try
+        {
+            VcpCapabilities = VcpAnalyzer.AnalyzeCapabilities(this);
+        }
+        catch
+        {
+            // Graceful degradation - VCP capabilities remain null
         }
     }
 

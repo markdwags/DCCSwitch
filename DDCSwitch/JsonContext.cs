@@ -14,9 +14,19 @@ namespace DDCSwitch;
 [JsonSerializable(typeof(MonitorReference))]
 [JsonSerializable(typeof(MonitorInfoResponse))]
 [JsonSerializable(typeof(EdidInfo))]
+[JsonSerializable(typeof(ParsedEdidInfo))]
+[JsonSerializable(typeof(RegistryEdidEntry))]
+[JsonSerializable(typeof(EdidColorInfo))]
 [JsonSerializable(typeof(FeaturesInfo))]
 [JsonSerializable(typeof(ChromaticityInfo))]
 [JsonSerializable(typeof(ColorPointInfo))]
+[JsonSerializable(typeof(MonitorIdentityInfo))]
+[JsonSerializable(typeof(VcpVersionInfo))]
+[JsonSerializable(typeof(VcpTestResult))]
+[JsonSerializable(typeof(VcpCapabilityInfo))]
+[JsonSerializable(typeof(DdcCiStatus))]
+[JsonSerializable(typeof(HardwareInfo))]
+[JsonSerializable(typeof(ConnectionType))]
 [JsonSourceGenerationOptions(
     WriteIndented = true,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,

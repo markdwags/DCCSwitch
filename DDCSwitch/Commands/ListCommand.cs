@@ -118,7 +118,7 @@ internal static class ListCommand
 
             return new MonitorInfo(
                 monitor.Index,
-                monitor.Name,
+                monitor.ResolvedName,
                 monitor.DeviceName,
                 monitor.IsPrimary,
                 inputName,
@@ -254,7 +254,7 @@ internal static class ListCommand
             var row = new List<string>
             {
                 monitor.IsPrimary ? $"[bold cyan]{monitor.Index}[/] [yellow]●[/]" : $"[cyan]{monitor.Index}[/]",
-                monitor.Name,
+                monitor.ResolvedName,
                 $"[dim]{monitor.DeviceName}[/]",
                 inputInfo
             };

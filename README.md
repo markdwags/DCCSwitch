@@ -272,6 +272,16 @@ Contributions welcome! Please open issues for bugs or feature requests.
 
 MIT License - see LICENSE file for details
 
+## Disclaimer and Warranty
+
+**NO WARRANTY**: This software is provided "AS IS" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. The entire risk as to the quality and performance of the software is with you.
+
+**LIMITATION OF LIABILITY**: In no event shall the authors, copyright holders, or contributors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including but not limited to procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
+
+**MONITOR DAMAGE**: The authors and contributors of this software are not responsible for any damage to monitors, display devices, or other hardware that may result from the use of this software. DDC/CI commands can potentially affect monitor settings in ways that may cause temporary or permanent changes to display behavior. Users assume all risk when using this software to control monitor settings.
+
+**USE AT YOUR OWN RISK**: By using this software, you acknowledge that you understand the risks involved in sending DDC/CI commands to your monitors and that you use this software entirely at your own risk. It is recommended to test commands carefully and ensure you can restore your monitor settings manually if needed.
+
 ## Acknowledgments
 
 - Inspired by [ddcutil](https://www.ddcutil.com) for Linux

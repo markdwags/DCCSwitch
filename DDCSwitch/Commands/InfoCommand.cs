@@ -87,7 +87,7 @@ internal static class InfoCommand
             {
                 var monitorRef = new MonitorReference(
                     monitor.Index,
-                    monitor.Name,
+                    monitor.ResolvedName,
                     monitor.DeviceName,
                     monitor.IsPrimary);
 
@@ -166,7 +166,7 @@ internal static class InfoCommand
         {
             if (jsonOutput)
             {
-                var monitorRef = new MonitorReference(monitor.Index, monitor.Name, monitor.DeviceName, monitor.IsPrimary);
+                var monitorRef = new MonitorReference(monitor.Index, monitor.ResolvedName, monitor.DeviceName, monitor.IsPrimary);
                 var error = new ErrorResponse(false, $"Failed to retrieve monitor information: {ex.Message}", monitorRef);
                 Console.WriteLine(JsonSerializer.Serialize(error, JsonContext.Default.ErrorResponse));
             }
